@@ -13,8 +13,8 @@ Axis variation table:
 | `uint16`	| `<reserved>`	| Permanently reserved; set to zero. |
 | `uint16`	| `axisCount`	| The number of variation axes for this font. This must be the same number as axisCount in the 'fvar' table. |
 | `SegmentMaps`	| `axisSegmentMaps[axisCount]`	| The segment maps array — one segment map for each axis, in the order of axes specified in the 'fvar' table. |
-| `Offset32To<DeltaSetIndexMap>` | `axisIdxMap` | Offset from beginning of the table, to optional DeltaSetIndexMap storing variation index mapping. |
-| `Offset32To<ItemVariationStore>` | `varStore` | Offset from beginning of the table, to optional ItemVariationStore storing variations. |
+| `Offset32To<DeltaSetIndexMap>` | **`axisIdxMap`** | Offset from beginning of the table, to optional DeltaSetIndexMap storing variation index mapping. |
+| `Offset32To<ItemVariationStore>` | **`varStore`** | Offset from beginning of the table, to optional ItemVariationStore storing variations. |
 
  `SegmentMaps` is the same as in `avar` [version 1.0](https://docs.microsoft.com/en-us/typography/opentype/spec/avar#table-formats).
 
@@ -24,18 +24,30 @@ The table format for `avar` table version 2 is the same as `avar` table version 
 
 Processing of axis values in a `avar` version 2 table starts off the same as a `avar` version 1 table. That is, axis coordinates are normalized and then mapped according to `axisSegmentMaps`. After that, the following algorithm is applied to produce the final normalized axis coordinates:
 
-```
-    hb_vector_t<int> out;
-    out.alloc (coords_length);
-    for (unsigned i = 0; i < coords_length; i++)
+```c++
+    // let coords be the vector of current normalized coordinates.
+
+    std::vector<int> out;
+    for (unsigned i = 0; i < coords.size(); i++)
     {
       int v = coords[i];
-      uint32_t varidx = varidx_map.map (i);
-      float delta = var_store.get_delta (varidx, coords, coords_length, var_store_cache);
-      v += roundf (delta);
-      v = hb_clamp (v, -(1<<14), +(1<<14));
-      out.push (v);
+      uint32_t varidx = i;
+      
+      if (axisIdxMap != 0)
+        varidx = (this+axisIdxMap).map(varidx);
+      
+      float delta = 0;
+      
+      if (varStore != 0)
+        delta = (this+varStore).get_delta (varidx, coords);
+
+      v += std::roundf (delta);
+      v = std::clamp (v, -(1<<14), +(1<<14));
+
+      out.push_back (v);
     }
-    for (unsigned i = 0; i < coords_length; i++)
+    for (unsigned i = 0; i < coords.size(); i++)
       coords[i] = out[i];
 ```
+
+
