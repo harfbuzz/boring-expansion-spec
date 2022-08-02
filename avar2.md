@@ -8,12 +8,10 @@ Axis variation table:
 
 | Type	| Name	| Description |
 | ------|-------|-------------|
-| uint16	| majorVersion	| Major version number of the axis variations table — set to 2.
-| uint16	| minorVersion	| Minor version number of the axis variations table — set to 0.
-| uint16	| <reserved>	| Permanently reserved; set to zero.
-| uint16	| axisCount	| The number of variation axes for this font. This must be the same number as axisCount in the 'fvar' table.
-| SegmentMaps	| axisSegmentMaps[axisCount]	| The segment maps array — one segment map for each axis, in the order of axes specified in the 'fvar' table.
-| Offset32To<DeltaSetIndexMap> | axisIdxMap ||
-| Offset32To<ItemVariationStore> | varStore ||
-
-
+| uint16	| majorVersion	| Major version number of the axis variations table — set to 2. |
+| uint16	| minorVersion	| Minor version number of the axis variations table — set to 0. |
+| uint16	| <reserved>	| Permanently reserved; set to zero. |
+| uint16	| axisCount	| The number of variation axes for this font. This must be the same number as axisCount in the 'fvar' table. |
+| SegmentMaps	| axisSegmentMaps[axisCount]	| The segment maps array — one segment map for each axis, in the order of axes specified in the 'fvar' table. |
+| Offset32To<DeltaSetIndexMap> | axisIdxMap | Offset from beginning of the table, to optional DeltaSetIndexMap storing variation index mapping. |
+| Offset32To<ItemVariationStore> | varStore | Offset from beginning of the table, to optional ItemVariationStore storing variations. |
