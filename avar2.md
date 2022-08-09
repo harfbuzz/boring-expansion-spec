@@ -102,7 +102,7 @@ However, in fonts with more than one design axis, this approach lacks the flexib
 
 While with OpenType 1.8 it is possible to set up a designspace like this, it has the significant drawback that many applications and systems expect all Bold weights to be at `wght`=700 and all Condensed weights to be at `wdth`=75, whatever the values of other axes. Thus, in practice, many OpenType 1.8 fonts encode numerous additional masters that ensure the design is as intended at all designspace locations. This not only impacts the data footprint significantly, but also adds to the maintenance burden of the font.
 
-Using `avar` version 2 we can apply deltas to axis values anywhere in the designspace, thus “warping” it to resolve the issue described. As with variation deltas in general, we also benefit from interpolation when axis values are influenced by a delta but are not exactly at the location of the delta. Each delta value is encoded as F2DOT14. Its interpolated value is determined by the standard OpenType variations algorithm, then added to the value obtained from the standard normalization process. Thus, assuming the Bold Condensed instance at (700,75) has normalized coordinates (1,-1) and assuming the designspace location (677,81) has normalized coordinates ((677-400)/(700-400), -1 + (81-75)/(100-75)) = (0.9233,-0.76), then `avar2` needs a delta set with peaks at (-1,1), thus with region ((-1,-1,0),(0,1,1)) and with delta values:
+Using `avar` version 2 we can apply deltas to axis values anywhere in the designspace, thus “warping” it to resolve the issue described. As with variation deltas in general, we also benefit from interpolation when axis values are influenced by a delta but are not exactly at the location of the delta. Each delta value is encoded as F2DOT14. Its interpolated value is determined by the standard OpenType variations algorithm, then added to the value obtained from the standard normalization process. Thus, assuming the Bold Condensed instance at (700,75) has normalized coordinates (1,-1) and assuming the designspace location (677,81) has normalized coordinates ((677-400)/(700-400), -1 + (81-75)/(100-75)) = (0.9233,-0.76), then the `ItemVariationStore` needs a delta set with peaks at (-1,1), thus with region ((-1,-1,0),(0,1,1)) and the following delta values:
 
 * `wght` -0.0767
 * `wdth` +0.24
@@ -114,7 +114,15 @@ The result of implementing designspace warping this way is that we preserve the 
 
 ## 2. Duplication of axis values for non-linear interpolation
 
-TKTK
+Certain variable fonts encode delta sets in such a way that, when multiple axes are synchronized, outline points move in curves rather than in straight lines. This technique was [invented by Underware](https://underware.nl/case-studies/hoi/) and [presented in 2018](https://www.youtube.com/watch?v=YVMukTiElUQ) under the name HOI (higher order interpolation). The details of the non-linear encoding need not concern us here, but a practical drawback under OpenType 1.8 is that it requires users to set multiple design axes to identical values in order to obtain valid instances. When axes are not synchronized, the resulting glyphs are severely distorted and useless. Synchronization using JavaScript has been proposed as a solution. A clever exploit of the CFF2 format, allowing a single axis to perform all the necessary non-linear adjustment of outline points, has also been demonstrated (but this method cannot be adapted to adjust delta values in an `ItemVariationStore` non-linearly).
+
+The `avar` version 2 table provides a solution to the synchonization problem, such that a user adjusts one “primary” axis and that value is cloned to other subordinate axes. Ideally the subordinate axes have the Hidden flag set in `fvar` to discourage manual operation. For a font with 3 axes requiring identical values, if the first axis is considered primary, then the other two can encode delta sets in `avar`’s `ItemVariationStore` to clone the value of the first axis. Assuming the subordinate axes have the same minimum, default and maximum values as the primary axis, each subordinate axis requires either one or two delta sets to clone the negative and positive regions of the normalized value of the primary axis:
+
+* If the axes use only the normalized region [0,1] then one delta set per subordinate axis is needed, referring to the region (0,1,1) of the primary axis and having the delta value of 1. This is the common case.
+
+* If the axes use only the normalized region [-1,0] then one delta set per subordinate axis is needed, referring to the region (-1,-1,0) of the primary axis and having the delta value of -1.
+
+* If the axes use both the normalized regions [-1,0] and [0,1] then two delta sets per subordinate axis are needed, one referring to the region (0,1,1) of the primary axis and having the delta value of 1, the other referring to the region (-1,-1,0) of the primary axis and having the delta value of -1.
 
 
 ## 3. Simplified controls for parametric fonts without redundant data
