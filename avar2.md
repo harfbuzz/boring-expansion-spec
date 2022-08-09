@@ -30,7 +30,9 @@ Axis variation table:
 | `Offset32To<DeltaSetIndexMap>` | **`axisIdxMap`** | Offset from beginning of the table, to optional DeltaSetIndexMap storing variation index mapping. |
 | `Offset32To<ItemVariationStore>` | **`varStore`** | Offset from beginning of the table, to optional ItemVariationStore storing variations. |
 
- The table format for `avar` table version 2 is the same as `avar` table version 1 followed by two extra members `axisIdxMap` and `varStore`. It is expected that implementations that handle only version 1 with ignore the entire table by checking the `majorVersion` value.
+The table format for `avar` table version 2 is the same as `avar` table version 1 followed by two extra members `axisIdxMap` and `varStore`. It is expected that implementations that handle only version 1 with ignore the entire table by checking the `majorVersion` value.
+
+Delta values are in the range [-2,2). However, in the `ItemVariationData` they are stored as their value left-shifted 14 bits (i.e. multiplied by 16,384) in one or two bytes, as `int16` (16-bit signed integers) or `int8` (8 bit signed integers). The LONG_WORDS flag should not be set. For the purposes of calculating interpolated delta values, implementations of `ItemVariationStore` can use existing methods of handling `int16` and `int8` values, only at the end dividing by 16,384 to get the actual delta value.
 
 # Processing
 
