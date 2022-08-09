@@ -32,7 +32,7 @@ Axis variation table:
 
 The table format for `avar` table version 2 is the same as `avar` table version 1 followed by two extra members `axisIdxMap` and `varStore`. It is expected that implementations that handle only version 1 with ignore the entire table by checking the `majorVersion` value.
 
-Delta values are in the range [-2,2). However, in the `ItemVariationData` they are stored as their value left-shifted 14 bits (i.e. multiplied by 16,384) in one or two bytes, as `int16` (16-bit signed integers) or `int8` (8 bit signed integers). The LONG_WORDS flag should not be set. For the purposes of calculating interpolated delta values, implementations of `ItemVariationStore` can use existing methods of handling `int16` and `int8` values, only at the end dividing by 16,384 to get the actual delta value.
+Delta values are in the range [-2,2). However, in the `ItemVariationData` they are stored as their true value left-shifted 14 bits (i.e. multiplied by 16,384) in one or two bytes, as `int16` (16-bit signed integer) or `int8` (8 bit signed integer). The LONG_WORDS flag should not be set. For the purposes of calculating interpolated delta values, implementations of `ItemVariationStore` can use existing methods of handling `int16` and `int8` values, only at the end dividing by 16,384 to get the actual delta value.
 
 # Processing
 
@@ -104,7 +104,15 @@ However, in fonts with more than one design axis, this approach lacks the flexib
 
 While with OpenType 1.8 it is possible to set up a designspace like this, it has the significant drawback that many applications and systems expect all Bold weights to be at `wght`=700 and all Condensed weights to be at `wdth`=75, whatever the values of other axes. Thus, in practice, many OpenType 1.8 fonts encode numerous additional masters that ensure the design is as intended at all designspace locations. This not only impacts the data footprint significantly, but also adds to the maintenance burden of the font.
 
-Using `avar` version 2 we can apply deltas to axis values anywhere in the designspace, thus “warping” it to resolve the issue described. As with variation deltas in general, we also benefit from interpolation when axis values are influenced by a delta but are not exactly at the location of the delta. Each delta value is encoded as F2DOT14. Its interpolated value is determined by the standard OpenType variations algorithm, then added to the value obtained from the standard normalization process. Thus, assuming the Bold Condensed instance at (700,75) has normalized coordinates (1,-1) and assuming the designspace location (677,81) has normalized coordinates ((677-400)/(700-400), -1 + (81-75)/(100-75)) = (0.9233,-0.76), then the `ItemVariationStore` needs a delta set with peaks at (-1,1), thus with region ((-1,-1,0),(0,1,1)) and the following delta values:
+Furthermore, there are many cases where a type designer does not intend to offer instances at certain combinations of the axis extremes. For example, a Black Condensed instance is often difficult to design, and many type families omit it. Desired behaviour may be for the font to provide the same instance for the Black Condensed as it does for the Bold Condensed. [A 2019 discussion in the Glyphs forum](https://forum.glyphsapp.com/t/variable-with-2-axis-in-6-masters/11958/3) summarizes the problem, and again comes up with the only possible solution of data duplication:
+
+> *PascalZoghbi:* [describing the intended result] The weight axes are between 100 and 900 in the Normal and Wide master, but it only goes up to 700 in the Condensed master. …  
+> *mekkablue:* No matter what you do, Glyphs 2 requires a rectangular master setup. I would post-process the file with TTX, and insert an avar table.  
+> *PascalZoghbi:* Duplicating the Bold 700 and making it Black 900 solved the problem for now. The quick easy fix. The problem is that it makes the file heavier.
+
+Luc(as) de Groot analyses the same problem in his [Typo Labs 2018 talk](https://www.youtube.com/watch?v=I75Efo7whrs&t=35m48s), where he calls for “virtual masters”.
+
+Using `avar` version 2 we can apply deltas to axis values anywhere in the designspace, thus “warping” it to resolve the issues described. As with variation deltas in general, we also benefit from interpolation when axis values are influenced by a delta but are not exactly at the location of the delta. Each delta value is encoded as F2DOT14. Its interpolated value is determined by the standard OpenType variations algorithm, then added to the value obtained from the standard normalization process. Thus, assuming the Bold Condensed instance at (700,75) has normalized coordinates (1,-1) and assuming the designspace location (677,81) has normalized coordinates ((677-400)/(700-400), -1 + (81-75)/(100-75)) = (0.9233,-0.76), then the `ItemVariationStore` needs a delta set with peaks at (-1,1), thus with region ((-1,-1,0),(0,1,1)) and the following delta values:
 
 * `wght` -0.0767
 * `wdth` +0.24
