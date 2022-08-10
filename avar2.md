@@ -36,7 +36,22 @@ Delta values are in the range [-2,2). However, in the `ItemVariationData` they a
 
 # Processing
 
-Processing of axis values in a `avar` version 2 table starts off the same as a `avar` version 1 table. That is, axis coordinates are normalized and then mapped according to `axisSegmentMaps`.
+Processing of an axis value in a `avar` version 2 table starts off the same as in an `avar` version 1 table. That is, axis coordinates are normalized and then mapped according to `axisSegmentMaps`. Then the `avar` version 2 algorithm is applied to obtain the new axis value. Thus we have three steps:
+
+1. Initial normalization to convert user values to normalized values in the range [-1,1].
+2. Remapping of normalized values under `avar` version 1 to new values also in the range [-1,1].
+3. Remapping of normalized values under `avar` version 2 to new values clamped to the range [-1,1].
+
+The value obtained in step 3 is the final normalized value for the axis, and is to be used in the standard variation process described in [Algorithm for Interpolation of Instance Values](https://docs.microsoft.com/en-us/typography/opentype/spec/otvaroverview#algorithm-for-interpolation-of-instance-values) to obtain scalars for delta sets.
+
+
+
+Example, assuming an axis with minimum 300, default 400 and maxmium 700, and with an avar table that has v1 mappings of -1 to -1, 0 to 0, 0.5 to 0.4, 1 to 1:
+
+1. User value of 625 converts to (625-400)/(700-400) = 0.75
+2. 
+
+
 
 After that, the following algorithm is applied to produce the final normalized axis coordinates:
 
@@ -65,6 +80,11 @@ After that, the following algorithm is applied to produce the final normalized a
     for (unsigned i = 0; i < coords.size(); i++)
       coords[i] = out[i];
 ```
+
+## Reverse processing
+
+Normally it is not possible for an application to obtain normalized axis values directly, these being private to the font engine. In fonts with an `avar` version 2 table, it may be useful to know the axis values that would invoke the same instance if the font engine did not support `avar` version 2. Such data is potentially valuable with parametric fonts, where users may wish to know the settings of the parametric axes for a particular value 
+
 
 # Discussion
 
@@ -137,9 +157,9 @@ The `avar` version 2 table provides a solution to the synchonization problem, su
 
 ## 3. Simplified controls for parametric fonts without redundant data
 
-For many years, parametric fonts have promised both extreme flexibility and a very compact data footprint. The [Type Network Variations Proposal](https://variationsguide.typenetwork.com) of 2017, explored in the fonts [Amstelvar](https://github.com/googlefonts/amstelvar), [Roboto Flex](https://github.com/googlefonts/roboto-flex) and others, demonstrates the potential for usable fonts with large character sets. That flexibility comes from a designspace of many axes – sometimes 10 or more – which naturally raises issues of control. Faced with 10 sliders, users are unlikely to be able to find the instance they want, and indeed will very likely get “lost” in a unusable region of the designspace.
+For many years, parametric fonts have promised both extreme flexibility and a compact data footprint. The [Type Network Variations Proposal](https://variationsguide.typenetwork.com) of 2017, explored in the fonts [Amstelvar](https://github.com/googlefonts/amstelvar), [Roboto Flex](https://github.com/googlefonts/roboto-flex) and others, demonstrates the potential for usable parametric fonts with large character sets. That flexibility comes from a designspace of many axes – sometimes 10 or more – which naturally raises issues of control. Faced with 10 sliders, users are unlikely to be able to find the instance they want, and indeed will very likely get “lost” in a unusable region of the designspace.
 
-In OpenType 1.8, the solution to getting “lost” is to include “blended” axes that combine the deltas of parametric axes in such a way that they function in exactly the same way as they would in a non-parametric font. The blended axes are exposed using the registered axes of `wght`, `wdth`, `opsz`, etc., or well-defined custom axes, and they are encoded in the standard OpenType 1.8 manner using `gvar` and related data. The major problem with such fonts is their large data footprint, as the blended axes replicate much of what the parametric axes do. For a font containing both parametric and blended axes, the problem is particularly acute, so the parametric axes may be omitted — thereby removing core functionality. In such cases the parametric nature of the font is thus reduced to a convenience of sources.
+In OpenType 1.8, the solution to getting “lost” is to include “blended” axes that combine the deltas of parametric axes in such a way that they function in exactly the same way as they would in a non-parametric font. The blended axes are exposed using the registered axes of `wght`, `wdth`, `opsz`, etc., or well specified custom axes, and they are encoded in the standard OpenType 1.8 manner using `gvar` and related data. The major problem with such fonts is their large data footprint, as the blended axes effectively replicate much of what the parametric axes do. For a font containing both parametric and blended axes, the problem is particularly acute, so the parametric axes may be omitted — thereby removing core functionality. In such cases the parametric nature of the font is thus reduced to a convenience of sources.
 
-The `avar` table version 2 provides a method to deploy a purely parametric font with user-friendly axes, while avoiding the data bloat of blended axes. The user axes, for example `wght` and `wdth`, on their own do nothing (i.e. they have no `gvar` or similar data), but they control the parametric axes by means of `avar`. The blending of parametric into user-facing effectively happens live in the font engine. The parametric axes are expected have the Hidden flag set in `fvar` to discourage (but not block) manual operation.
+The `avar` table version 2 provides a method to deploy a purely parametric font with user-friendly axes, while avoiding the data bloat of blended axes. The user axes, for example `wght` and `wdth`, on their own do nothing (i.e. they have no `gvar` or similar data), but they control the parametric axes by means of `avar`. The blending of parametric values into user-facing values effectively happens live in the font engine. The parametric axes are expected to have the Hidden flag set in `fvar` to discourage (but not block) manual operation.
 
