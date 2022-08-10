@@ -12,7 +12,7 @@ In many cases, `avar` version 2 data does not offer brand new functionality but 
 
 Use cases include:
 
-* warped variable font designspaces to reflect a designer’s intention accurately;
+* warped variable font designspaces to reflect a typeface designer’s intention accurately;
 * parametric fonts with intuitive control methods and a much reduced data footprint;
 * offering simpler methods of control for specialized variable fonts.
 
@@ -36,24 +36,17 @@ Delta values are in the range [-2,2). However, in the `ItemVariationData` they a
 
 # Processing
 
-Processing of an axis value in a `avar` version 2 table starts off the same as in an `avar` version 1 table. That is, axis coordinates are normalized and then mapped according to `axisSegmentMaps`. Then the `avar` version 2 algorithm is applied to obtain the new axis value. Thus we have three steps:
+Processing of an axis value in an `avar` version 2 table happens in 3 stages:
 
-1. Initial normalization to convert user values to normalized values in the range [-1,1].
-2. Remapping of normalized values under `avar` version 1 to new values also in the range [-1,1].
-3. Remapping of normalized values under `avar` version 2 to new values clamped to the range [-1,1].
+1. Initial normalization to convert user coordinates to initial normalized coordinates in the range [-1,1].
+2. Remapping of initial normalized coordinates via the `axisSegmentMaps` of `avar` version 1, providing intermediate coordinates also in the range [-1,1].
+3. Adding interpolated deltas to intermediate axis coordinates via `avar` version 2, providing final coordinates also in the range [-1,1].
 
-The value obtained in step 3 is the final normalized value for the axis, and is to be used in the standard variation process described in [Algorithm for Interpolation of Instance Values](https://docs.microsoft.com/en-us/typography/opentype/spec/otvaroverview#algorithm-for-interpolation-of-instance-values) to obtain scalars for delta sets.
+Step 3 above deserves explaining in more detail. The `varStore` takes as its input the position in the variation space defined by the set of intermediate axis coordinates obtained in step 2. Each `ItemVariationData` structure in `varStore`, thanks to its regions interacting with the position in variation space, can be assigned a scalar, so that an interpolated delta may be calculated for each delta value. Each interpolated delta is added to the intermediate value of a particular axis, the axis index being defined by `axisIdxMap`. Delta values are encoded as if they are integer values although they represent values smaller by a factor of 2^14, compatible with the F2DOT14 format for normalized axis coordinates (i.e. 1.0 is represented as the integer 16384 and -1.0 as -16384). After the summing operations for all `ItemVariationData` structures, axis values are clamped to to the range [-1,1], giving final coordinates.
 
+The set of final axis coordinates obtained by step 3 is used in the standard variation process described in [Algorithm for Interpolation of Instance Values](https://docs.microsoft.com/en-us/typography/opentype/spec/otvaroverview#algorithm-for-interpolation-of-instance-values), applying to all `gvar` and `ItemVariationStore` data in the font (except that in the `avar` table itself).
 
-
-Example, assuming an axis with minimum 300, default 400 and maxmium 700, and with an avar table that has v1 mappings of -1 to -1, 0 to 0, 0.5 to 0.4, 1 to 1:
-
-1. User value of 625 converts to (625-400)/(700-400) = 0.75
-2. 
-
-
-
-After that, the following algorithm is applied to produce the final normalized axis coordinates:
+The following algorithm implements step 3 above, producing the final normalized axis coordinates:
 
 ```c++
     // let coords be the vector of current normalized coordinates.
@@ -81,9 +74,16 @@ After that, the following algorithm is applied to produce the final normalized a
       coords[i] = out[i];
 ```
 
-## Reverse processing
+## Inverse avar processing
 
-Normally it is not possible for an application to obtain normalized axis values directly, these being private to the font engine. In fonts with an `avar` version 2 table, it may be useful to know the axis values that would invoke the same instance if the font engine did not support `avar` version 2. Such data is potentially valuable with parametric fonts, where users may wish to know the settings of the parametric axes for a particular value 
+Normally it is not possible for an application to obtain normalized axis values directly, these being private to the font engine. In fonts with an `avar` version 2 table, however, it can be useful to know the axis values that would invoke a given instance if the font engine did not support `avar` version 2. Use cases for this data include:
+
+* informing users of the effective settings of parametric axes;
+* providing a polyfill for `avar` version 2.
+
+The solution is for the application to implement the `avar` algorithms, both version 1 and version 2. This requires not only access to the binary `avar` table, but also knowledge of the font’s axis extents as defined in the `fvar` table. Once an application has a complete set of final normalized values as defined above, the inverse of the `avar` version 1 algorithm can be applied to obtain effective user values for all axes. (Care must be taken to avoid a divide-by-zero error in implementing an inverse `avar` version 1 mapping, in the case where consecutive `toCoordinate` values are identical.)
+
+Almost all fonts can provide a valid set of user values for a given set of final normalized values. Exceptions are those fonts that encode deltas in a region that is not accessible without `avar` version 2, namely those fonts where the `fvar` definition of an axis normally precludes an active negative region or a active positive region by having its default equal to its minimum or its maximum respectively. Such cases are expected to be rare.
 
 
 # Discussion
