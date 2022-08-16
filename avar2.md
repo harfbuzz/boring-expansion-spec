@@ -32,7 +32,9 @@ The table format for `avar` version 2 is the same as `avar` version 1, appended 
 
 `axisIndexMap` is a *DeltaSetIndexMap* structure that maps the axis indices implied in `fvar` to indices used in `varStore`. The outer index identifies an *ItemVariationData* structure in `varStore`. The inner index identifies a *deltaSet* within an *ItemVariationData*.
 
-`varStore` is an *ItemVariationStore* structure that points to a *VariationRegions* array and a list of *ItemVariationData* structures. Each *ItemVariationData* specifies a subset of *VariationRegions* and an array of *deltaSets*. Each *deltaSet* specifies a delta value for each region, typically in (but not limited to) the range [-1.0, 1.0].
+`varStore` is an *ItemVariationStore* structure that points to a *VariationRegions* array and a list of *ItemVariationData* structures. Each *ItemVariationData* specifies a subset of *VariationRegions* and an array of *deltaSets*. Each *deltaSet* specifies a delta value for each region.
+
+Delta values are typically in (but not limited to) the range [-1.0, 1.0].
 
 Delta values are stored as if they were signed integers by multiplying their true value by 16384. Thus 1.0 is stored as 16384; -1.0 is stored as -16384.
 
