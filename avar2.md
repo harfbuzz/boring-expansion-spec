@@ -173,9 +173,11 @@ Almost all fonts can provide a valid set of user axis coordinates for a given se
 
 Since many `avar` version 2 fonts have axes not not intended for manual adjustment, it is recommended that such axes set the “hidden” flag in `VariationAxisRecord` of the [`fvar`](https://docs.microsoft.com/en-us/typography/opentype/spec/fvar) table.
 
-## Efficient axisIdxMap and ItemVariationData construction
+## Efficient ItemVariationStore construction
 
-In order to reduce proliferation of zero deltas, it is recommended to store in `axisIndexMap` only those axes that are remapped by `avar` version 2. For the same reason, if there are multiple different types of axis mapping affecting different sets of axes, consider using multiple *ItemVariationData* structures.
+For axes that do not have `avar` version 2 adjustments, either use the special value 0xffff for both outer and inner indices in `axisIndexMap` or reorder the axes such that the non-participating axes are at the end and `axisIndexMap` can have fewer entries.
+
+To reduce proliferation of zero deltas, consider grouping axes in terms of the axes they depend upon. Each group can be represented by its own *ItemVariationData* structure, thus using smaller *deltaSet*s that do not refer to irrelevant axes.
 
 ## Other notes
 
