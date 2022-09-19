@@ -17,5 +17,19 @@ A Variable Composite glyph starts with the standard glyph header with a `numberO
 ## Variable Component Record
 
 
+| type | name | notes |
+|-|-|-|
+| uint16 | flags | see below |
+| uint8 or uint16 | numAxes | This is a uint16 if bit 3 of `flags` is set, else a uint8 |
+| uint8 or uint16 | axisIndices[numAxes] | This is a uint16 if bit 3 of `flags` is set, else a uint8<br/>The most significant bit of each axisIndex tells whether this axis has a VarIdx in the VarIdxs array below. Bits 0..6 (uint8) or 0..14 (uint16) form the axis index. |
+| Coord16 | axisValues[numAxes] | The axis value for each axis |
+| Angle16 | Rotation | Optional, only present if it 5 of `flags` is set |
+| Scale16 | ScaleX | Optional, only present if it 6 of `flags` is set |
+| Scale16 | ScaleY | Optional, only present if it 7 of `flags` is set |
+| Angle16 | SkewX | Optional, only present if it 8 of `flags` is set |
+| Angle16 | SkewY | Optional, only present if it 9 of `flags` is set |
+| Int16 | TCenterX | Optional, only present if it 10 of `flags` is set |
+| int16 |  TCenterY | Optional, only present if it 11 of `flags` is set |
+
 
 
