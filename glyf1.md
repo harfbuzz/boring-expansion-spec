@@ -4,3 +4,8 @@ The glyf data table ([`glyf`](https://docs.microsoft.com/en-us/typography/openty
 
 * Variable Components.
 
+## Variable Components
+
+This proposal is mainly based on BlackFoundry's [Variable Components](https://github.com/BlackFoundryCom/variable-components-spec) and [Storing Variable Components in UFO files](https://github.com/BlackFoundryCom/variable-components-in-ufo).
+
+
