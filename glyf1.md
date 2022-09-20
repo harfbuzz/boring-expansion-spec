@@ -32,4 +32,58 @@ A Variable Composite glyph starts with the standard glyph header with a `numberO
 | int16 |  TCenterY | Optional, only present if it 11 of `flags` is set |
 
 
+### Transformation
+
+The transformation data consists of individual optional fields, which can be
+used to construct a transformation matrix.
+
+Transformation fields:
+
+| name | default value |
+|-|-|
+| Rotation | 0 |
+| ScaleX | 1 |
+| ScaleY | 1 |
+| SkewX | 0 |
+| SkewY | 0 |
+| TCenterX | 0 |
+| TCenterY | 0 |
+
+The `TCenterX` and `TCenterY` values represent the “center of transformation”.
+This is separate from the component offset as stored in the `glyf` table.
+
+Details of how to build a transformation matrix, as pseudo-Python/fontTools
+code, where `(X, Y)` is the component offset from the `glyf` table:
+
+```python
+# Using fontTools.misc.transform.Transform
+t = Transform()  # Identity
+t = t.translate(X + TCenterX, Y + TCenterY)
+t = t.rotate(Rotation)
+t = t.scale(ScaleX, ScaleY)
+t = t.skew(SkewX, SkewY)
+t = t.translate(-TCenterX, -TCenterX)
+```
+
+Component flags:
+
+| bit number | meaning |
+|-|-|
+| 0..2 | Number of integer bits for ScaleX and ScaleY, mask: 0x07 |
+| 3 | axis indices are shorts (clear = bytes, set = shorts) |
+| 4 | Transformation fields have VarIdx |
+| 5 | have Rotation |
+| 6 | have ScaleX |
+| 7 | have ScaleY |
+| 8 | have SkewX |
+| 9 | have SkewY |
+| 10 | have TCenterX |
+| 11 | have TCenterY |
+| 12 | If ScaleY is missing: take value from ScaleX (to be discussed here: https://github.com/BlackFoundryCom/variable-components-spec/issues/2) |
+| 13 | (reserved, set to 0) |
+| 14 | (reserved, set to 0) |
+| 15 | (reserved, set to 0) |
+
+
+
 
