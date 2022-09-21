@@ -34,7 +34,7 @@ A Variable Composite glyph starts with the standard glyph header with a `numberO
 | FWORD |  TCenterY | Optional, only present if it 11 of `flags` is set |
 
 
-### Transformation
+### Variable Component Transformation
 
 The transformation data consists of individual optional fields, which can be
 used to construct a transformation matrix.
@@ -67,7 +67,7 @@ t = t.skew(SkewX, SkewY)
 t = t.translate(-TCenterX, -TCenterX)
 ```
 
-### Variable Component flags
+### Variable Component Flags
 
 | bit number | meaning |
 |-|-|
