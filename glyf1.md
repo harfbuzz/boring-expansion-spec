@@ -32,6 +32,7 @@ A Variable Composite glyph starts with the standard glyph header with a `numberO
 | Angle16 | SkewY | Optional, only present if it 9 of `flags` is set |
 | FWORD | TCenterX | Optional, only present if it 10 of `flags` is set |
 | FWORD |  TCenterY | Optional, only present if it 11 of `flags` is set |
+| GlyphID16 | gid | Referenced glyph ID |
 
 
 ### Variable Component Transformation
