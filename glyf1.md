@@ -67,7 +67,7 @@ t = t.skew(SkewX, SkewY)
 t = t.translate(-TCenterX, -TCenterX)
 ```
 
-Component flags:
+### Variable Component flags
 
 | bit number | meaning |
 |-|-|
