@@ -88,6 +88,10 @@ t = t.translate(-TCenterX, -TCenterX)
 | 14 | (reserved, set to 0) |
 | 15 | (reserved, set to 0) |
 
+## Processing
 
+Variations of component records are processed this way: For each composite record, a vector of coordinate points is prepared, and its variation applied from the `gvar` table. The coordinate points are a concatenation of those for each variable component in order.
+
+The coordinate points for each variable component consist of those of each axis value, represented as the X value of a coordinate point, followed by five points representing the transformation (regardless of which transformation components are encoded according to the flags). The five points encode, in order, in their X,Y components, the following transformation components: (`TranslateX,`TranslateY`), (`Rotation`,0), (`ScaleX`,`ScaleY`), (`SkewX`,`SkewY`), (`TCenterX`,`TCenterY`).
 
 
