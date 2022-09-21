@@ -20,16 +20,18 @@ A Variable Composite glyph starts with the standard glyph header with a `numberO
 | type | name | notes |
 |-|-|-|
 | uint16 | flags | see below |
-| uint8 or uint16 | numAxes | This is a uint16 if bit 3 of `flags` is set, else a uint8 |
-| uint8 or uint16 | axisIndices[numAxes] | This is a uint16 if bit 3 of `flags` is set, else a uint8<br/>The most significant bit of each axisIndex tells whether this axis has a VarIdx in the VarIdxs array below. Bits 0..6 (uint8) or 0..14 (uint16) form the axis index. |
+| uint8 or uint16 | numAxes | This is a uint16 if bit 1 of `flags` is set, else a uint8 |
+| uint8 or uint16 | axisIndices[numAxes] | This is a uint16 if bit 1 of `flags` is set, else a uint8. |
 | Coord16 | axisValues[numAxes] | The axis value for each axis |
+| FWORD | TranslateX | Optional, only present if it 3 of `flags` is set |
+| FWORD |  TranslateY | Optional, only present if it 4 of `flags` is set |
 | Angle16 | Rotation | Optional, only present if it 5 of `flags` is set |
-| Scale16 | ScaleX | Optional, only present if it 6 of `flags` is set |
-| Scale16 | ScaleY | Optional, only present if it 7 of `flags` is set |
+| F4DOT12 | ScaleX | Optional, only present if it 6 of `flags` is set |
+| F4DOT12 | ScaleY | Optional, only present if it 7 of `flags` is set |
 | Angle16 | SkewX | Optional, only present if it 8 of `flags` is set |
 | Angle16 | SkewY | Optional, only present if it 9 of `flags` is set |
-| Int16 | TCenterX | Optional, only present if it 10 of `flags` is set |
-| int16 |  TCenterY | Optional, only present if it 11 of `flags` is set |
+| FWORD | TCenterX | Optional, only present if it 10 of `flags` is set |
+| FWORD |  TCenterY | Optional, only present if it 11 of `flags` is set |
 
 
 ### Transformation
@@ -41,6 +43,8 @@ Transformation fields:
 
 | name | default value |
 |-|-|
+| TranslateX | 0 |
+| TranslateY | 0 |
 | Rotation | 0 |
 | ScaleX | 1 |
 | ScaleY | 1 |
@@ -50,15 +54,13 @@ Transformation fields:
 | TCenterY | 0 |
 
 The `TCenterX` and `TCenterY` values represent the “center of transformation”.
-This is separate from the component offset as stored in the `glyf` table.
 
-Details of how to build a transformation matrix, as pseudo-Python/fontTools
-code, where `(X, Y)` is the component offset from the `glyf` table:
+Details of how to build a transformation matrix, as pseudo-Python code:
 
 ```python
 # Using fontTools.misc.transform.Transform
 t = Transform()  # Identity
-t = t.translate(X + TCenterX, Y + TCenterY)
+t = t.translate(TranslateX + TCenterX, TranslateY + TCenterY)
 t = t.rotate(Rotation)
 t = t.scale(ScaleX, ScaleY)
 t = t.skew(SkewX, SkewY)
@@ -69,9 +71,11 @@ Component flags:
 
 | bit number | meaning |
 |-|-|
-| 0..2 | Number of integer bits for ScaleX and ScaleY, mask: 0x07 |
-| 3 | axis indices are shorts (clear = bytes, set = shorts) |
-| 4 | Transformation fields have VarIdx |
+| 0 | USE_MY_METRICS |
+| 1 | axis indices are shorts (clear = bytes, set = shorts) |
+| 2 | If ScaleY is missing: take value from ScaleX (to be discussed here: https://github.com/BlackFoundryCom/variable-components-spec/issues/2) |
+| 3 | have TranslateX |
+| 4 | have TranslateY |
 | 5 | have Rotation |
 | 6 | have ScaleX |
 | 7 | have ScaleY |
@@ -79,7 +83,7 @@ Component flags:
 | 9 | have SkewY |
 | 10 | have TCenterX |
 | 11 | have TCenterY |
-| 12 | If ScaleY is missing: take value from ScaleX (to be discussed here: https://github.com/BlackFoundryCom/variable-components-spec/issues/2) |
+| 12 | (reserved, set to 0) |
 | 13 | (reserved, set to 0) |
 | 14 | (reserved, set to 0) |
 | 15 | (reserved, set to 0) |
