@@ -64,7 +64,7 @@ t = Transform()  # Identity
 t = t.translate(TranslateX + TCenterX, TranslateY + TCenterY)
 t = t.rotate(Rotation)
 t = t.scale(ScaleX, ScaleY)
-t = t.skew(SkewX, SkewY)
+t = t.skew(-SkewX, SkewY)
 t = t.translate(-TCenterX, -TCenterX)
 ```
 
