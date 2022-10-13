@@ -21,8 +21,8 @@ A Variable Composite glyph starts with the standard glyph header with a `numberO
 |-|-|-|
 | uint16 | flags | see below |
 | GlyphID16 | gid | Referenced glyph ID |
-| uint8 or uint16 | numAxes | This is a uint16 if bit 1 of `flags` is set, else a uint8 |
-| uint8 or uint16 | axisIndices[numAxes] | This is a uint16 if bit 1 of `flags` is set, else a uint8. |
+| uint8 | numAxes | Number of axes to follow |
+| uint8 or uint16 | axisIndices[numAxes] | This is a uint16 if bit 1 of `flags` is set, else a uint8 |
 | Coord16 | axisValues[numAxes] | The axis value for each axis |
 | FWORD | TranslateX | Optional, only present if it 3 of `flags` is set |
 | FWORD |  TranslateY | Optional, only present if it 4 of `flags` is set |
