@@ -20,7 +20,7 @@ A Variable Composite glyph starts with the standard glyph header with a `numberO
 | type | name | notes |
 |-|-|-|
 | uint16 | flags | see below |
-| GlyphID16 | gid | Referenced glyph ID |
+| GlyphID16 or GlyphID24 | gid | This is a GlyphID16 if bit 12 of `flags` is clear, else GlyphID24 |
 | uint8 | numAxes | Number of axes to follow |
 | uint8 or uint16 | axisIndices[numAxes] | This is a uint16 if bit 1 of `flags` is set, else a uint8 |
 | F2DOT14 | axisValues[numAxes] | The axis value for each axis |
@@ -84,7 +84,7 @@ t = t.translate(-TCenterX, -TCenterX)
 | 9 | have SkewY |
 | 10 | have TCenterX |
 | 11 | have TCenterY |
-| 12 | (reserved, set to 0) |
+| 12 | gid is 24 bit |
 | 13 | (reserved, set to 0) |
 | 14 | (reserved, set to 0) |
 | 15 | (reserved, set to 0) |
