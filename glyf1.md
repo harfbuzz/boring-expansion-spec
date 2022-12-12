@@ -85,7 +85,7 @@ t = t.translate(-TCenterX, -TCenterX)
 | 10 | have TCenterX |
 | 11 | have TCenterY |
 | 12 | gid is 24 bit |
-| 13 | (reserved, set to 0) |
+| 13 | axis indices have variation |
 | 14 | (reserved, set to 0) |
 | 15 | (reserved, set to 0) |
 
@@ -93,6 +93,6 @@ t = t.translate(-TCenterX, -TCenterX)
 
 Variations of component records are processed this way: For each composite record, a vector of coordinate points is prepared, and its variation applied from the `gvar` table. The coordinate points are a concatenation of those for each variable component in order.
 
-The coordinate points for each variable component consist of those of each axis value, represented as the X value of a coordinate point, followed by five points representing the transformation (regardless of which transformation components are encoded according to the flags). The five points encode, in order, in their X,Y components, the following transformation components: (`TranslateX`,`TranslateY`), (`Rotation`,0), (`ScaleX`,`ScaleY`), (`SkewX`,`SkewY`), (`TCenterX`,`TCenterY`).
+The coordinate points for each variable component consist of those of each axis value if flag bit 13 is set, represented as the X value of a coordinate point; followed by up to five points representing the transformation (regardless of which transformation components are encoded according to the flags). The five points encode, in order, in their X,Y components, the following transformation components: (`TranslateX`,`TranslateY`), (`Rotation`,0), (`ScaleX`,`ScaleY`), (`SkewX`,`SkewY`), (`TCenterX`,`TCenterY`). Only the transformation components present accordint to the flag bits are encoded.
 
 
