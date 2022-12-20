@@ -27,8 +27,8 @@ A Variable Composite glyph starts with the standard glyph header with a `numberO
 | FWORD | TranslateX | Optional, only present if it 3 of `flags` is set |
 | FWORD |  TranslateY | Optional, only present if it 4 of `flags` is set |
 | F2DOT14 | Rotation | Optional, only present if it 5 of `flags` is set |
-| F4DOT12 | ScaleX | Optional, only present if it 6 of `flags` is set |
-| F4DOT12 | ScaleY | Optional, only present if it 7 of `flags` is set |
+| F6DOT10 | ScaleX | Optional, only present if it 6 of `flags` is set |
+| F6DOT10 | ScaleY | Optional, only present if it 7 of `flags` is set |
 | F2DOT14 | SkewX | Optional, only present if it 8 of `flags` is set |
 | F2DOT14 | SkewY | Optional, only present if it 9 of `flags` is set |
 | FWORD | TCenterX | Optional, only present if it 10 of `flags` is set |
