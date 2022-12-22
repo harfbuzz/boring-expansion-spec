@@ -95,4 +95,6 @@ Variations of component records are processed this way: For each composite recor
 
 The coordinate points for each variable component consist of those of each axis value if flag bit 13 is set, represented as the X value of a coordinate point; followed by up to five points representing the transformation (regardless of which transformation components are encoded according to the flags). The five points encode, in order, in their X,Y components, the following transformation components: (`TranslateX`,`TranslateY`), (`Rotation`,0), (`ScaleX`,`ScaleY`), (`SkewX`,`SkewY`), (`TCenterX`,`TCenterY`). Only the transformation components present according to the flag bits are encoded.
 
+The component glyphs to be loaded use coordinate values specified, transposed on those of the font's. The current glyph's coordinates are ignored.
+
 
