@@ -65,7 +65,7 @@ t = t.translate(TranslateX + TCenterX, TranslateY + TCenterY)
 t = t.rotate(Rotation)
 t = t.scale(ScaleX, ScaleY)
 t = t.skew(-SkewX, SkewY)
-t = t.translate(-TCenterX, -TCenterX)
+t = t.translate(-TCenterX, -TCenterY)
 ```
 
 ### Variable Component Flags
