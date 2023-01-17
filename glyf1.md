@@ -74,7 +74,7 @@ t = t.translate(-TCenterX, -TCenterY)
 |-|-|
 | 0 | USE_MY_METRICS |
 | 1 | axis indices are shorts (clear = bytes, set = shorts) |
-| 2 | If ScaleY is missing: take value from ScaleX (to be discussed here: https://github.com/BlackFoundryCom/variable-components-spec/issues/2) |
+| 2 | If ScaleY is missing: take value from ScaleX |
 | 3 | have TranslateX |
 | 4 | have TranslateY |
 | 5 | have Rotation |
