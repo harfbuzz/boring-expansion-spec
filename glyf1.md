@@ -72,9 +72,9 @@ t = t.translate(-TCenterX, -TCenterY)
 
 | bit number | meaning |
 |-|-|
-| 0 | USE_MY_METRICS |
+| 0 | Use my metrics |
 | 1 | axis indices are shorts (clear = bytes, set = shorts) |
-| 2 | If ScaleY is missing: take value from ScaleX |
+| 2 | if ScaleY is missing: take value from ScaleX |
 | 3 | have TranslateX |
 | 4 | have TranslateY |
 | 5 | have Rotation |
@@ -86,7 +86,7 @@ t = t.translate(-TCenterX, -TCenterY)
 | 11 | have TCenterY |
 | 12 | gid is 24 bit |
 | 13 | axis indices have variation |
-| 14 | (reserved, set to 0) |
+| 14 | reset unspecified axes |
 | 15 | (reserved, set to 0) |
 
 ## Processing
@@ -95,6 +95,6 @@ Variations of component records are processed this way: For each composite recor
 
 The coordinate points for each variable component consist of those of each axis value if flag bit 13 is set, represented as the X value of a coordinate point; followed by up to five points representing the transformation. The five points encode, in order, in their X,Y components, the following transformation components: (`TranslateX`,`TranslateY`), (`Rotation`,0), (`ScaleX`,`ScaleY`), (`SkewX`,`SkewY`), (`TCenterX`,`TCenterY`). Only the transformation components present according to the flag bits are encoded.
 
-The component glyphs to be loaded use coordinate values specified, transposed on those of the font's. The current glyph's coordinates are ignored.
+The component glyphs to be loaded use coordinate values specified. For any unspecified axis, the value used depends on flag bit 14. If the flag is clear, then the currently set axis value from the font is used. If the flag is set the current glyph's coordinates (which themselves might come from the font or its own parent glyph) are used.
 
 
