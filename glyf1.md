@@ -62,9 +62,9 @@ Details of how to build a transformation matrix, as pseudo-Python code:
 # Using fontTools.misc.transform.Transform
 t = Transform()  # Identity
 t = t.translate(TranslateX + TCenterX, TranslateY + TCenterY)
-t = t.rotate(Rotation)
+t = t.rotate(Rotation * math.pi)
 t = t.scale(ScaleX, ScaleY)
-t = t.skew(-SkewX, SkewY)
+t = t.skew(-SkewX * math.pi, SkewY * math.pi)
 t = t.translate(-TCenterX, -TCenterY)
 ```
 
