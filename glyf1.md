@@ -11,7 +11,7 @@ In `glyf` table format 1, the old-style Simple and Composite glyphs exist as wel
 
 ## Variable Composite Description
 
-A Variable Composite glyph starts with the standard glyph header with a `numberOfContours` of -2, followed by a number of Variable Component records.
+A Variable Composite glyph starts with the standard glyph header with a `numberOfContours` of -2, followed by a number of Variable Component records. Each Variable Component record is at least five bytes long.
 
 
 ## Variable Component Record
