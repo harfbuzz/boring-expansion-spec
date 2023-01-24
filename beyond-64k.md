@@ -16,13 +16,27 @@ The `numGlyphs` field of the `maxp` table for a font with more than 65,535 glyph
 
 ## `loca` / `glyf` tables
 
-The `loca` / `glyf` tables are not required to have the same number of glyphs as specified in the `maxp` table. In fact, the length of the `loca` table now determines the number of glyphs in the font, which can be larger than `numGlyphs.maxp`.
+The `loca` / `glyf` tables are not required to have the same number of glyphs as specified in the `maxp` table. In fact, the length of the `loca` table now determines the number of glyphs in the font, which can be larger than `numGlyphs.maxp`. [issue](https://github.com/harfbuzz/boring-expansion-spec/issues/8)
 
-Glyph table composites that need to access glyphs with glyph IDs larger than 65,535 will have to use the [VarComposites](https://github.com/harfbuzz/boring-expansion-spec/blob/main/glyf1.md) format which supports 24-bit GIDs.
+Glyph table composites that need to access glyphs with glyph IDs larger than 65,535 will have to use the [VarComposites](https://github.com/harfbuzz/boring-expansion-spec/blob/main/glyf1.md) format which supports 24-bit GIDs. [issue](https://github.com/harfbuzz/boring-expansion-spec/issues/59)
 
 ## `cmap` table
 
+The `cmap` formats 12 and 13 subtables already support 32-bit glyph indices.
+
+A new sub-table format 16 will be added which is similar to format 14 but uses 24-bit glyph indices:
+```
+struct UVSMapping24 {
+  uint24 unicodeValue;
+  uint24 glyphID;
+};
+```
+The rest of format 16 subtable is similar to format 14.
+
+[issue](https://github.com/harfbuzz/boring-expansion-spec/issues/13)
+
 ## `hmtx` / `vmtx` tables
+
 
 
 ## `VORG` table
