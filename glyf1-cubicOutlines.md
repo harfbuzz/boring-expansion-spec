@@ -7,3 +7,10 @@ In `glyf` table format 0, glyph outlines use quadratic Bezier curve segments.
 In `glyf` table format 1, glyph outlines can mix quadratic and cubic Bezier curve segments.
 
 ## Specification
+
+Add the following flag to the [Simple Glyph Description](https://learn.microsoft.com/en-us/typography/opentype/spec/glyf#simple-glyph-description) section's _Simple Glyph Flags_:
+| Mask | Name  | Description |
+|------|-------|-------------|
+| 0x80 | CUBIC | Bit 7: Off-curve point belongs to a cubic-Bezier segment |
+
+## Processing
