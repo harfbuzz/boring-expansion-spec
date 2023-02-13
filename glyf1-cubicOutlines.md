@@ -19,4 +19,6 @@ The number of consecutive cubic off-curve points _must_ be even. Moreover, all t
 
 Every successive two off-curve points that have the `CUBIC` bit set define a cubic Bezier segment. Within any consecutive set of cubic off-curve points, an implied on-curve point is inserted at the mid-point between every second off-curve point and the next one.
 
+If there are no on-curve points and all (even number of) off-curve points are `CUBIC`, the first off-curve point is considered the first control-point of a cubic-Bezier.
+
 As in the `glyf` version 0 table, an implied on-curve point is inserted between any two neighboring quadratic off-curve points.
