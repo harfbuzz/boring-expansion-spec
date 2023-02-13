@@ -19,8 +19,8 @@ The `CUBIC` flag _must_ only be used on off-curve points. It is _reserved_ and m
 
 ## Processing
 
-Every successive two off-curve points that have the `CUBIC` bit set define a cubic Bezier segment, and an implied on-curve point is inserted at the mid-point of the second off-curve point of a segment and the first off-curve point of the next segment.
+Every successive two off-curve points that have the `CUBIC` bit set define a cubic Bezier segment.
 
-TODO: Fully specify implied on-curve points.
+Within any consecutive set of cubic off-curve points, an implied on-curve point is inserted at the mid-point of the second off-curve point of a cubic segment and the first off-curve point of the next segment.
 
-TODO: Expand
+An implied on-curve point is inserted between any quadratic off-curve point neighboring a cubic off-curve points. And like the `glyf` version 0 table, an implied on-curve point is inserted between any two neighboring quadratic off-curve points.
