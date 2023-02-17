@@ -3,12 +3,24 @@
 ## What do we want to change?
 
 1. Break the 65k glyph limit on glyphs in a single font file
+   * [why?](#1-break-the-65k-glyph-limit)
+   * [spec proposal](./beyond-64k.md)
 1. Enable cubic curves in `glyf` outlines
+   * [why?](#2-enable-cubic-curves-in-glyf-outlines)
+   * [spec proposal](./glyf1-cubicOutlines.md)
 1. Enable components to take advantage of variations
+   * [why?](#3-enable-components-to-take-advantage-of-variations)
+   * [spec proposal](./glyf1-varComposites.md)
 1. Enhance core variation capability
    1. Improve support for user-facing vs internal axis distinction and the mapping between them
+      * [why?](#4i-user-facing-vs-internal-axes)
+      * [spec proposal](./avar2.md)
    1. Explicitly support non-linear interpolation
+      * [why?](#4ii-explicitly-support-non-linear-interpolation)
+      * _no spec proposal so far_
    1. Efficient storage of sparse variation data
+      * [why?](#4iii-efficient-storage-fo-sparse-variation-data)
+      * _no spec proposal so far_
 
 ## Why?
 
