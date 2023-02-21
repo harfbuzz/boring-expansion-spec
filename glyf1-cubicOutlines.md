@@ -17,7 +17,7 @@ Add the following flag to the [Simple Glyph Description](https://learn.microsoft
 
 Currently, there are several restrictions on how the `CUBIC` flag can be used. If any of the conditions below are not met, the behavior is undefined.
 
-The number of consecutive cubic off-curve points within a contour (with wrap-around, if permitted) _must_ be even.
+The number of consecutive cubic off-curve points within a contour _must_ be even.
 
 All the off-curve points between two on-curve points (with wrap-around) `must` either have the `CUBIC` flag clear, or have the `CUBIC` flag set.
 
