@@ -5,16 +5,20 @@
 1. Break the 65k glyph limit on glyphs in a single font file
    * [why?](#1-break-the-65k-glyph-limit)
    * [spec proposal](./beyond-64k.md)
+   * [test fonts](https://drive.google.com/drive/folders/1iRBebQS5z0bjG3EBGZ53ZB6TOBg3LhUb)
 1. Enable cubic curves in `glyf` outlines
    * [why?](#2-enable-cubic-curves-in-glyf-outlines)
    * [spec proposal](./glyf1-cubicOutlines.md)
+   * [test fonts](https://drive.google.com/drive/folders/1SdoQYRz-4K9x5mB5LxGBFYmj9UpF_MOf)
 1. Enable components to take advantage of variations
    * [why?](#3-enable-components-to-take-advantage-of-variations)
    * [spec proposal](./glyf1-varComposites.md)
+   * [test fonts](https://github.com/googlefonts/smarties/tree/main/fonts)
 1. Enhance core variation capability
    1. Improve support for user-facing vs internal axis distinction and the mapping between them
       * [why?](#4i-user-facing-vs-internal-axes)
       * [spec proposal](./avar2.md)
+      * [test fonts](https://drive.google.com/drive/folders/1OjZFadiSKwzPnGWWCmNwscJN8bsjfqR0)
    1. Explicitly support non-linear interpolation
       * [why?](#4ii-explicitly-support-non-linear-interpolation)
       * _no spec proposal so far_
