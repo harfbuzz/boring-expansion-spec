@@ -17,17 +17,15 @@ Add the following flag to the [Simple Glyph Description](https://learn.microsoft
 
 Currently, there are several restrictions on how the `CUBIC` flag can be used. If any of the conditions below are not met, the behavior is undefined.
 
-The number of consecutive cubic off-curve points within a contour _must_ be even.
+The number of consecutive cubic off-curve points within a contour (without wrap-around) _must_ be even.
 
 All the off-curve points between two on-curve points (with wrap-around) `must` either have the `CUBIC` flag clear, or have the `CUBIC` flag set.
 
 The `CUBIC` flag _must_ only be used on off-curve points. It is _reserved_ and _must_ be set to zero, for on-curve points.
 
-A contour _must not_ start _and_ end in cubic off-curve points. That is, if a contour starts with cubic off-curve points, then the end point of the contour _must_ be an on-curve point, and simiarly, if the contour ends with cubic off-curve points, then the start point of the contour _must_ be an on-curve point.
-
 ## Processing
 
-Every successive two off-curve points that have the `CUBIC` bit set define a cubic Bezier segment. Within any consecutive set of cubic off-curve points, an implied on-curve point is inserted at the mid-point between every second off-curve point and the next one.
+Every successive two off-curve points that have the `CUBIC` bit set define a cubic Bezier segment. Within any consecutive set of cubic off-curve points within a contour (with wrap-around), an implied on-curve point is inserted at the mid-point between every second off-curve point and the next one.
 
 If there are no on-curve points and all (even number of) off-curve points are `CUBIC`, the first off-curve point is considered the first control-point of a cubic-Bezier, and implied on-curve points are inserted between the every second point and the next one as usual.
 
