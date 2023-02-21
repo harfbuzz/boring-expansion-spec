@@ -13,7 +13,17 @@ Add the following flag to the [Simple Glyph Description](https://learn.microsoft
 |------|-------|-------------|
 | 0x80 | `CUBIC` | Bit 7: Off-curve point belongs to a cubic-Bezier segment |
 
-The number of consecutive cubic off-curve points _must_ be even. Moreover, all the off-curve points between two on-curve points `must` either have the `CUBIC` flag clear, or have the `CUBIC` flag set. The `CUBIC` flag _must_ only be used on off-curve points. It is _reserved_ and must be set to zero, for on-curve points. If any of these conditions is not met, the behavior is undefined.
+### Restrictions
+
+Currently, there are several restrictions on how the `CUBIC` flag can be used. If any of the conditions below are not met, the behavior is undefined.
+
+The number of consecutive cubic off-curve points within a contour (with wrap-around, if permitted) _must_ be even.
+
+All the off-curve points between two on-curve points (with wrap-around) `must` either have the `CUBIC` flag clear, or have the `CUBIC` flag set.
+
+The `CUBIC` flag _must_ only be used on off-curve points. It is _reserved_ and _must_ be set to zero, for on-curve points.
+
+A contour _must not_ start _and_ end in cubic off-curve points. That is, if a contour starts with cubic off-curve points, then the end point of the contour _must_ be an on-curve point, and simiarly, if the contour ends with cubic off-curve points, then the start point of the contour _must_ be an on-curve point.
 
 ## Processing
 
