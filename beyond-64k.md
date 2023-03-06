@@ -100,6 +100,49 @@ The number of glyphs referenced by the table is the number of glyphs in the font
 
 ### `GDEF` / `GSUB` / `GPOS` tables
 
+#### `GDEF` version 2
+
+The main `GDEF` struct is augmented with a version 2 to alleviate offset-overflows when classDef and other structs grow large:
+```
+struct GDEFVersion2 {
+  Version version; // 0x00020000
+  Offset24To<ClassDef> glyphClassDef;
+  Offset24To<AttachList> attachList;
+  Offset24To<LigCaretList> ligCaretList;
+  Offset24To<ClassDef> markAttachClassDef;
+  Offset24To<MarkGlyphSets> markGlyphSets;
+  Offset32To<ItemVariationStore> varStore;
+};
+```
+Note that the varStore offset is 32bit, for compatibility with 0x00010003 version.
+
+[issue](https://github.com/harfbuzz/boring-expansion-spec/issues/36)
+
+
+#### `GSUB`
+
+The following sections when combined, fully cover the `GSUB` table extension:
+* `GSUB` / `GPOS` version 2
+* `Coverage` / `ClassDef` formats 3 & 4
+* `GSUB` `SingleSubst` formats 3 & 4
+* `GSUB` `MultipleSubst` / `AlternateSubst` format 2
+* `GSUB` `LigatureSubst` format 2
+* `GSUB` / `GPOS` `(Chain)Context` format 4 & 5
+
+[issue](https://github.com/harfbuzz/boring-expansion-spec/issues/35)
+
+
+#### `GPOS`
+
+The following sections when combined, fully cover the `GSUB` table extension:
+* `GSUB` / `GPOS` version 2
+* `Coverage` / `ClassDef` formats 3 & 4
+* `GPOS` `PairPos` formats 3 & 4
+* `GPOS` `MarkBasePos` / `MarkLigPos` / `MarkMarkPos` format 2
+* `GSUB` / `GPOS` `(Chain)Context` format 4 & 5
+
+[issue](https://github.com/harfbuzz/boring-expansion-spec/issues/39)
+
 
 #### `GSUB` / `GPOS` version 2
 
@@ -121,25 +164,6 @@ using LookupList24 = List16OfOffsetTo<Lookup, uint24>;
 ```
 
 [issue](https://github.com/harfbuzz/boring-expansion-spec/issues/58)
-
-
-#### `GDEF` version 2
-
-The main `GDEF` struct is augmented with a version 2 to alleviate offset-overflows when classDef and other structs grow large:
-```
-struct GDEFVersion2 {
-  Version version; // 0x00020000
-  Offset24To<ClassDef> glyphClassDef;
-  Offset24To<AttachList> attachList;
-  Offset24To<LigCaretList> ligCaretList;
-  Offset24To<ClassDef> markAttachClassDef;
-  Offset24To<MarkGlyphSets> markGlyphSets;
-  Offset32To<ItemVariationStore> varStore;
-};
-```
-Note that the varStore offset is 32bit, for compatibility with 0x00010003 version.
-
-[issue](https://github.com/harfbuzz/boring-expansion-spec/issues/36)
 
 
 #### `Coverage` / `ClassDef` formats 3 & 4
