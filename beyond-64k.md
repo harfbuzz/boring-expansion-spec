@@ -110,7 +110,11 @@ No changes needed.
 
 ### `VORG` table
 
-TODO
+Currently the length of the `VORG` table is determined from its major/minor version and the subsequent content. The only currently defined version 1.0 can only encode 16bit glyph indices. Here is how we expand the table's definition to encode glyph vertical origin for glyph indices beyond `maxp.numGlyphs`:
+
+Derive the length of the table from the version number and the table struct, then derive the excess bytes, then follow the same algorithm for deriving advance-width in the hmtx/vmtx expansion and use those numbers as vertical origin instead.
+
+[issue](https://github.com/harfbuzz/boring-expansion-spec/issues/11)
 
 
 ### `COLR` table
