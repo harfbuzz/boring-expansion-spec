@@ -26,6 +26,30 @@ The `loca` / `glyf` tables are not required to have the same number of glyphs as
 
 Glyph table composites that need to access glyphs with glyph IDs larger than 65,535 will have to use the [VarComposites](https://github.com/harfbuzz/boring-expansion-spec/blob/main/glyf1.md) format which supports 24-bit GIDs. [issue](https://github.com/harfbuzz/boring-expansion-spec/issues/59)
 
+#### Composite glyphs
+
+Add a new flag to allow encoding 24bit glyph indices in composite glyphs:
+
+```
+enum ComponentGlyphFlags
+    ARG_1_AND_2_ARE_WORDS       = 0x0001,
+    ARGS_ARE_XY_VALUES          = 0x0002,
+    ROUND_XY_TO_GRID            = 0x0004,
+    WE_HAVE_A_SCALE             = 0x0008,
+    MORE_COMPONENTS             = 0x0020,
+    WE_HAVE_AN_X_AND_Y_SCALE    = 0x0040,
+    WE_HAVE_A_TWO_BY_TWO        = 0x0080,
+    WE_HAVE_INSTRUCTIONS        = 0x0100,
+    USE_MY_METRICS              = 0x0200,
+    OVERLAP_COMPOUND            = 0x0400,
+    SCALED_COMPONENT_OFFSET     = 0x0800,
+    UNSCALED_COMPONENT_OFFSET   = 0x1000,
+    GID_IS_24BIT                = 0x2000
+};
+```
+
+[issue](https://github.com/harfbuzz/boring-expansion-spec/issues/59)
+
 
 ### `cmap` table
 
