@@ -72,7 +72,8 @@ The number of glyphs referenced by the table is the number of glyphs in the font
 
 ### `GDEF` / `GSUB` / `GPOS` tables
 
-#### GSUB / GPOS version 2
+
+#### `GSUB` / `GPOS` version 2
 
 The main `GSUB` / `GPOS` structs currently result in an offset-overflow with more than ~3k lookups. They are augmented with a version 2 that alleviates this problem:
 ```
@@ -86,9 +87,31 @@ struct GSUBGPOSVersion2 {
 ```
 Note that the last item is a 32bit offset, for compatibility with version 0x00010001 tables.
 
-were LookupList24 is a list16 of offset24 to Lookup structures:
+`LookupList24` is a `List16` of `Offset24` to `Lookup` structures:
 ```
 using LookupList24 = List16OfOffsetTo<Lookup, uint24>;
 ```
 
 [issue](https://github.com/harfbuzz/boring-expansion-spec/issues/58)
+
+
+#### `GEF` version 2
+
+The main `GDEF` struct is augmented with a version 2 to alleviate offset-overflows when classDef and other structs grow large:
+```
+struct GDEFVersion2 {
+  Version version; // 0x00020000
+  Offset24To<ClassDef> glyphClassDef;
+  Offset24To<AttachList> attachList;
+  Offset24To<LigCaretList> ligCaretList;
+  Offset24To<ClassDef> markAttachClassDef;
+  Offset24To<MarkGlyphSets> markGlyphSets;
+  Offset32To<ItemVariationStore> varStore;
+};
+```
+Note that the varStore offset is 32bit, for compatibility with 0x00010003 version.
+
+[issue](https://github.com/harfbuzz/boring-expansion-spec/issues/36)
+
+
+#### 
