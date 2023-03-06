@@ -52,6 +52,21 @@ enum ComponentGlyphFlags
 [issue](https://github.com/harfbuzz/boring-expansion-spec/issues/59)
 
 
+### `gvar` table
+
+Currently the `gvar` table encodes a `uint16 glyphCount` that must match "the number of glyphs stored elsewhere in the font." That field is then used in a subsequent array:
+
+| Type | Name | Description |
+| ------- | --------- | ----------------- |
+| Offset16 or Offset32 | glyphVariationDataOffsets[glyphCount+1] | Offsets from the start of the GlyphVariationData array to each GlyphVariationData table. |
+
+We deprecate the `glyphCount` field, and make the array size match the number of glyphs stored elsewhere in the font instead.
+
+This allows us to expand `gvar` without needing to bump to table format 2, which we like to reserve for more extensive table overhaul.
+
+[issue](https://github.com/harfbuzz/boring-expansion-spec/issues/85)
+
+
 ### `cmap` table
 
 The `cmap` formats 12 and 13 subtables already support 32-bit glyph indices.
