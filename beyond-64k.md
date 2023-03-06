@@ -62,7 +62,9 @@ TODO
 
 ### `COLR` table
 
-TODO
+To be done as part of `COLRv2`.
+
+[Issue](https://github.com/harfbuzz/boring-expansion-spec/issues/47)
 
 
 ### `sbix` table
