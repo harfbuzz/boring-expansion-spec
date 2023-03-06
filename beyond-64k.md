@@ -22,7 +22,9 @@ The `numGlyphs` field of the `maxp` table for a font with more than 65,535 glyph
 
 ### `loca` / `glyf` tables
 
-The `loca` / `glyf` tables are not required to have the same number of glyphs as specified in the `maxp` table. In fact, the length of the `loca` table now determines the number of glyphs in the font, which can be larger than `numGlyphs.maxp`. [issue](https://github.com/harfbuzz/boring-expansion-spec/issues/8)
+The `loca` / `glyf` tables are not required to have the same number of glyphs as specified in the `maxp` table. In fact, the length of the `loca` table now determines the number of glyphs in the font, which can be larger than `numGlyphs.maxp`.
+
+[issue](https://github.com/harfbuzz/boring-expansion-spec/issues/8)
 
 
 #### Composite glyphs
