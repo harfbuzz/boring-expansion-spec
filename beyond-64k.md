@@ -48,6 +48,11 @@ The rest of format 16 subtable is similar to format 14.
 TODO
 
 
+### `HVAR` / `VVAR` tables
+
+TODO
+
+
 ### `VORG` table
 
 TODO
