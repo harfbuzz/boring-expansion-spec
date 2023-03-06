@@ -87,18 +87,21 @@ Let B be the excess bytes at the end of the `hmtx` table beyond the `2 * hhea.nu
 - If B is empty, use the last advanceWidth in the `hmtx` table for all extra glyphs.
 - Treat B as an array of `uint16` advance-width numbers of glyph indices starting at `maxp.numGlyphs`. For any glyph index that is in range in the font but out of range in this array, use the last item of the array.
 
-No lsb (leftside-bearing) is encoded for glyphs beyond `maxp.numGlyphs`.
+No `lsb` (leftside-bearing) is encoded for glyphs beyond `maxp.numGlyphs`.
 
 [issue](https://github.com/harfbuzz/boring-expansion-spec/issues/7)
 
-#### lsb offsetting of glyphs
 
-TODO
+#### `lsb` offsetting of glyphs
+
+It is an undocumented behavior of OpenType that glyphs from the `glyf` table are shifted by `lsb - xMin` when rasterized. Since our extension to the `hmtx` table does _not_ encode `lsb` for new gids, no shifting is done for such glyphs. In other words, the `lsb` of such glyphs is assumed to be the same as `xMin`.
 
 
-#### tsb and vertical glyphs
+#### `tsb` and vertical glyphs
 
-TODO
+The vertical origin of glyphs in the `glyf` table is computed based on `tsb` encoded in the `vmtx` table. Since our extension to the `vmtx` table does not encode `tsb` for new glyphs, the `VORG` table _must_ be used to encode vertical glyph origins instead.
+
+[issue](https://github.com/harfbuzz/boring-expansion-spec/issues/10)
 
 
 ### `HVAR` / `VVAR` tables
