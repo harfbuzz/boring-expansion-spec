@@ -189,7 +189,7 @@ Note that the last item is a 32bit offset, for compatibility with version 0x0001
 
 `LookupList24` is a `List16` of `Offset24` to `Lookup` structures:
 ```
-using LookupList24 = List16OfOffsetTo<Lookup, uint24>;
+using LookupList24 = List16OfOffse24tTo<Lookup>;
 ```
 
 [issue](https://github.com/harfbuzz/boring-expansion-spec/issues/58)
@@ -287,7 +287,7 @@ struct LigatureSubstFormat2 {
 };
 
 struct LigatureSet24 {
-  Array16Of<OffsetTo<Ligature24>> ligatures;
+  Array16Of<Offset16To<Ligature24>> ligatures;
 };
 
 struct Ligature24 {
@@ -395,7 +395,7 @@ struct ContextFormat4 {
 };
 
 struct GlyphRuleSet24 {
-  Array16Of<OffsetTo<GlyphRule24>> rules;
+  Array16Of<Offset16To<GlyphRule24>> rules;
 };
 
 struct GlyphRule24 {
@@ -413,7 +413,7 @@ struct ChainContextFormat4 {
 };
 
 struct ChainGlyphRuleSet24 {
-  Array16Of<OffsetTo<ChainGlyphRule24>> rules;
+  Array16Of<Offset16To<ChainGlyphRule24>> rules;
 };
 
 struct ChainGlyphRule24 {
