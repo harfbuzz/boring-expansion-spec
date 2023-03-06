@@ -24,7 +24,6 @@ The `numGlyphs` field of the `maxp` table for a font with more than 65,535 glyph
 
 The `loca` / `glyf` tables are not required to have the same number of glyphs as specified in the `maxp` table. In fact, the length of the `loca` table now determines the number of glyphs in the font, which can be larger than `numGlyphs.maxp`. [issue](https://github.com/harfbuzz/boring-expansion-spec/issues/8)
 
-Glyph table composites that need to access glyphs with glyph IDs larger than 65,535 will have to use the [VarComposites](https://github.com/harfbuzz/boring-expansion-spec/blob/main/glyf1.md) format which supports 24-bit GIDs. [issue](https://github.com/harfbuzz/boring-expansion-spec/issues/59)
 
 
 #### Composite glyphs
