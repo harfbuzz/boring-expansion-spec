@@ -50,7 +50,9 @@ TODO
 
 ### `HVAR` / `VVAR` tables
 
-TODO
+No changes needed.
+
+[Issue](https://github.com/harfbuzz/boring-expansion-spec/issues/12)
 
 
 ### `VORG` table
