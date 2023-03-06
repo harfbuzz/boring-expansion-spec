@@ -69,7 +69,23 @@ The rest of format 16 subtable is similar to format 14.
 
 ### `hmtx` / `vmtx` tables
 
-TODO
+Below we discuss `hmtx`. The case of `vmtx` is similar.
+
+Currently the `hmtx` table length is determined by `hhea`/`maxp` in the following way:
+
+* `hhea.metricDataFormat` is required to be 0 for the current format;
+* `hmtx` is required to be `2 * hhea.numberOfHMetrics + 2 * maxp.numGlyphs` bytes long.
+
+We describe how we to relax the second requirement, to allow encoding advance width of arbitrary number of glyphs in the `hmtx` table, regardless of the value of `maxp.numGlyphs`.
+
+This is how an advance width is assigned to glyph indices beyond `maxp.numGlyphs`:
+
+Let B be the excess bytes at the end of the `hmtx` table beyond the `2 * hhea.numberOfHMetrics + 2 * maxp.numGlyphs` bytes.
+
+- If the length of B is odd, ignore the last byte of B.
+- Treat B as an array of `uint16` advance-width numbers of glyph indices starting at `maxp.numGlyphs`. For any glyph index that is in range in the font but out of range in this array, use the last item of the array.
+
+[issue](https://github.com/harfbuzz/boring-expansion-spec/issues/7)
 
 
 ### `HVAR` / `VVAR` tables
