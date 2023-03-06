@@ -95,7 +95,7 @@ using LookupList24 = List16OfOffsetTo<Lookup, uint24>;
 [issue](https://github.com/harfbuzz/boring-expansion-spec/issues/58)
 
 
-#### `GEF` version 2
+#### `GDEF` version 2
 
 The main `GDEF` struct is augmented with a version 2 to alleviate offset-overflows when classDef and other structs grow large:
 ```
@@ -112,6 +112,195 @@ struct GDEFVersion2 {
 Note that the varStore offset is 32bit, for compatibility with 0x00010003 version.
 
 [issue](https://github.com/harfbuzz/boring-expansion-spec/issues/36)
+
+
+#### `Coverage` / `ClassDef` formats 3 & 4
+
+Coverage and ClassDef tables are augmented with formats 3 and 4 to allow for gid24, which parallel formats 1 & 2 respectively:
+```
+struct CoverageFormat3 {
+  uint16 format; // == 3
+  Array16Of<GlyphID24> glyphs;
+};
+
+struct CoverageFormat4 {
+  uint16 format; // == 4
+  Array16Of<Range24Record> ranges;
+};
+
+struct ClassDefFormat3 {
+  uint16 format; // == 3
+  GlyphID24 startGlyphID;
+  Array24Of<uint16> classes;
+};
+
+struct ClassDefFormat4 {
+  uint16 format; // == 4
+  Array24Of<Range24Record> ranges;
+};
+
+struct Range24Record {
+  GlyphID24 startGlyphID;
+  GlyphID24 endGlyphID;
+  uint16 value;
+};
+```
+
+[issue](https://github.com/harfbuzz/boring-expansion-spec/issues/30)
+
+
+#### `GSUB` `SingleSubst` formats 3 & 4
+
+Clarify that in format 1, delta addition math only affects the lower 16bits of the gid. Format 3 delta addition math is module 2^24.
+
+Two new formats, 3 & 4, are introduced, that parallel formats 1 & 2 respectively:
+```
+struct SingleSubstFormat3 {
+  uint16 format; // == 3
+  Offset24To<Coverage> coverage;
+  int24 deltaGlyphID;
+};
+
+struct SingleSubstFormat4 {
+  uint16 format; // == 4
+  Offset24To<Coverage> coverage;
+  Array16Of<GlyphID24> substitutes;
+};
+```
+
+[issue](https://github.com/harfbuzz/boring-expansion-spec/issues/31)
+
+
+#### `GSUB` `MultipleSubst` / `AlternateSubst` format 2
+
+Format 2 is introduced to enable gid24:
+```
+struct MultipleSubstFormat2 {
+  uint16 format; // == 2
+  Offset24To<Coverage> coverage;
+  Array16Of<Offset24To<Sequence24>> sequences;
+};
+
+typedef ArrayOf<GlyphID24> Sequence24;
+
+struct AlternateSubstFormat2 {
+  uint16 format; // == 2
+  Offset24To<Coverage> coverage;
+  Array16Of<Offset24To<AlternateSet24>> alternateSets;
+};
+
+typedef ArrayOf<GlyphID24> AlternateSet24;
+```
+
+[issue](https://github.com/harfbuzz/boring-expansion-spec/issues/32)
+
+
+#### `GSUB` `LigatureSubst` format 2
+
+Format 2 is introduced to enable gid24:
+```
+struct LigatureSubstFormat2 {
+  uint16 format; == 2
+  Offset24To<Coverage> coverage;
+  Array16Of<Offset24To<LigatureSet24>> ligatureSets;
+};
+
+struct LigatureSet24 {
+  ArrayOf<OffsetTo<Ligature24>> ligatures;
+};
+
+struct Ligature24 {
+  GlyphID24 ligatureGlyph;
+  uint16 componentCount;
+  GlyphID24 componentGlyphIDs[componentCount - 1];
+};
+```
+
+[issue](https://github.com/harfbuzz/boring-expansion-spec/issues/33)
+
+
+#### `GPOS` `PairPos` formats 3 & 4
+
+Two new formats, 3 & 4, are introduced that parallel formats 1 & 2.
+
+Format 4 is only introduced to alleviate offset-overflow issues and is not otherwise needed for gid24 support.
+
+```
+struct PosFormat3 {
+  uint16 format; == 3
+  Offset24To<Coverage> coverage;
+  uint16 valueFormat1;
+  uint16 valueFormat2;
+  Array16Of<Offset24To<PairSet24>> pairSets;
+};
+
+struct PairSet24 {
+  uint24 pairValueCount;
+  PairValueRecord24 pairValueRecords[pairValueCount];
+};
+
+struct PairValueRecord24 {
+  GlyphID24 secondGlyph;
+  ValueRecord valueRecord1;
+  ValueRecord valueRecord2;
+};
+```
+
+```
+struct PosFormat4 {
+  uint16 format; == 4
+  Offset24To<Coverage> coverage;
+  uint16 valueFormat1;
+  uint16 valueFormat2;
+  Offset24To<ClassDef> classDef1;  
+  Offset24To<ClassDef> classDef2;
+  uint16 class1Count;
+  uint16 class2Count;
+  Class1Record class1Records[class1Count];
+};
+```
+
+[issue](https://github.com/harfbuzz/boring-expansion-spec/issues/38)
+
+
+#### `GPOS` `MarkBasePos` / `MarkLigPos` / `MarkMarkPos` format 2
+
+Format 2 is introduce just to alleviate offset-overflow issues at the top-level structure. All downstream structures are reused:
+```
+
+The Coverage table parts are covered in #30.
+
+Add one new format of each, just to upgrade offsets of the top-level subtable to 24bit. All downstream structs are reused and not expanded.
+
+struct MarkBasePosFormat2 {
+  uint16 format; // == 2
+  Offset24To<Coverage> markCoverage;
+  Offset24To<Coverage> baseCoverage;
+  uint16 markClassCount;
+  Offset24To<MarkArray> markArray;
+  Offset24To<BaseArray> baseArray;
+};
+
+struct MarkLigaturePosFormat2 {
+  uint16 format; // == 2
+  Offset24To<Coverage> markCoverage;
+  Offset24To<Coverage> ligatureCoverage;
+  uint16 markClassCount;
+  Offset24To<MarkArray> markArray;
+  Offset24To<LigatureArray> ligatureArray;
+};
+
+struct MarkMarkPosFormat2 {
+  uint16 format; // == 2
+  Offset24To<Coverage> mark1Coverage;
+  Offset24To<Coverage> mark2Coverage;
+  uint16 markClassCount;
+  Offset24To<MarkArray> mark1Array;
+  Offset24To<Mark2Array> mark2Array;
+};
+```
+
+[issue](https://github.com/harfbuzz/boring-expansion-spec/issues/40)
 
 
 #### 
