@@ -52,7 +52,7 @@ TODO
 
 No changes needed.
 
-[Issue](https://github.com/harfbuzz/boring-expansion-spec/issues/12)
+[issue](https://github.com/harfbuzz/boring-expansion-spec/issues/12)
 
 
 ### `VORG` table
@@ -64,7 +64,7 @@ TODO
 
 To be done as part of `COLRv2`.
 
-[Issue](https://github.com/harfbuzz/boring-expansion-spec/issues/47)
+[issue](https://github.com/harfbuzz/boring-expansion-spec/issues/47)
 
 
 ### `sbix` table
