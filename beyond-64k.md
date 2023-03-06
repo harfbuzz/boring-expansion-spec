@@ -26,6 +26,7 @@ The `loca` / `glyf` tables are not required to have the same number of glyphs as
 
 Glyph table composites that need to access glyphs with glyph IDs larger than 65,535 will have to use the [VarComposites](https://github.com/harfbuzz/boring-expansion-spec/blob/main/glyf1.md) format which supports 24-bit GIDs. [issue](https://github.com/harfbuzz/boring-expansion-spec/issues/59)
 
+
 #### Composite glyphs
 
 Add a new flag to allow encoding 24bit glyph indices in composite glyphs:
@@ -83,9 +84,21 @@ This is how an advance width is assigned to glyph indices beyond `maxp.numGlyphs
 Let B be the excess bytes at the end of the `hmtx` table beyond the `2 * hhea.numberOfHMetrics + 2 * maxp.numGlyphs` bytes.
 
 - If the length of B is odd, ignore the last byte of B.
+- If B is empty, use the last advanceWidth in the `hmtx` table for all extra glyphs.
 - Treat B as an array of `uint16` advance-width numbers of glyph indices starting at `maxp.numGlyphs`. For any glyph index that is in range in the font but out of range in this array, use the last item of the array.
 
+No lsb (leftside-bearing) is encoded for glyphs beyond `maxp.numGlyphs`.
+
 [issue](https://github.com/harfbuzz/boring-expansion-spec/issues/7)
+
+#### lsb offsetting of glyphs
+
+TODO
+
+
+#### tsb and vertical glyphs
+
+TODO
 
 
 ### `HVAR` / `VVAR` tables
@@ -249,7 +262,7 @@ struct MultipleSubstFormat2 {
   Array16Of<Offset24To<Sequence24>> sequences;
 };
 
-typedef ArrayOf<GlyphID24> Sequence24;
+typedef Array16Of<GlyphID24> Sequence24;
 
 struct AlternateSubstFormat2 {
   uint16 format; // == 2
@@ -257,7 +270,7 @@ struct AlternateSubstFormat2 {
   Array16Of<Offset24To<AlternateSet24>> alternateSets;
 };
 
-typedef ArrayOf<GlyphID24> AlternateSet24;
+typedef Array16Of<GlyphID24> AlternateSet24;
 ```
 
 [issue](https://github.com/harfbuzz/boring-expansion-spec/issues/32)
@@ -274,7 +287,7 @@ struct LigatureSubstFormat2 {
 };
 
 struct LigatureSet24 {
-  ArrayOf<OffsetTo<Ligature24>> ligatures;
+  Array16Of<OffsetTo<Ligature24>> ligatures;
 };
 
 struct Ligature24 {
@@ -378,11 +391,11 @@ Add `Context` and `ChainContext` format 4 that parallels format 1 for gid24:
 struct ContextFormat4 {
   uint16 format; == 4
   Offset24To<Coverage> coverage;
-  ArrayOf<Offset24To<GlyphRuleSet24>> ruleSets;
+  Array16Of<Offset24To<GlyphRuleSet24>> ruleSets;
 };
 
 struct GlyphRuleSet24 {
-  ArrayOf<OffsetTo<GlyphRule24>> rules;
+  Array16Of<OffsetTo<GlyphRule24>> rules;
 };
 
 struct GlyphRule24 {
@@ -396,11 +409,11 @@ struct GlyphRule24 {
 struct ChainContextFormat4 {
   uint16 format; == 4
   Offset24To<Coverage> coverage;
-  ArrayOf<Offset24To<ChainGlyphRuleSet24>> ruleSets;
+  Array16Of<Offset24To<ChainGlyphRuleSet24>> ruleSets;
 };
 
 struct ChainGlyphRuleSet24 {
-  ArrayOf<OffsetTo<ChainGlyphRule24>> rules;
+  Array16Of<OffsetTo<ChainGlyphRule24>> rules;
 };
 
 struct ChainGlyphRule24 {
@@ -421,7 +434,7 @@ struct ContextFormat5 {
   uint16 format; == 5
   Offset24To<Coverage> coverage;
   Offset24To<ClassDef> classDef;
-  ArrayOf<Offset24To<ClassRuleSet>> ruleSets;
+  Array16Of<Offset24To<ClassRuleSet>> ruleSets;
 };
 ```
 ```
@@ -431,7 +444,7 @@ struct ChainContextFormat5 {
   Offset24To<ClassDef> backtrackClassDef;
   Offset24To<ClassDef> inputClassDef;
   Offset24To<ClassDef> lookaheadClassDef;
-  ArrayOf<Offset24To<ClassRuleSet>> ruleSets;
+  Array16Of<Offset24To<ClassRuleSet>> ruleSets;
 };
 ```
 The `RuleSet` and `ChainRuleSet` are _not_ extended, because they are class-based, not glyph-based, so no extension is necessary.
