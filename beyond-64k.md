@@ -17,7 +17,7 @@ While extending tables to encode 24-bit glyph indices, many tables are also exte
 
 ### `maxp` table
 
-The `numGlyphs` field of the `maxp` table for a font with more than 65,535 glyphs should be set to 65,535.
+The `numGlyphs` field of the `maxp` table for a font with more than 65,535 glyphs should be set to 65,535, although this is not required for the functioning of the design.
 
 
 ### `loca` / `glyf` tables
