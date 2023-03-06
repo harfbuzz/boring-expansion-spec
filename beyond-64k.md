@@ -303,4 +303,71 @@ struct MarkMarkPosFormat2 {
 [issue](https://github.com/harfbuzz/boring-expansion-spec/issues/40)
 
 
-#### 
+#### `GSUB` / `GPOS` `(Chain)Context` format 4 & 5
+
+Add `Context` and `ChainContext` format 4 that parallels format 1 for gid24:
+```
+struct ContextFormat4 {
+  uint16 format; == 4
+  Offset24To<Coverage> coverage;
+  ArrayOf<Offset24To<GlyphRuleSet24>> ruleSets;
+};
+
+struct GlyphRuleSet24 {
+  ArrayOf<OffsetTo<GlyphRule24>> rules;
+};
+
+struct GlyphRule24 {
+  uint16 glyphCount;
+  GlyphID24 glyphs[inputGlyphCount - 1];
+  uint16 seqLookupCount;
+  SequenceLookupRecord seqLookupRecords[seqLookupCount];
+};
+```
+```
+struct ChainContextFormat4 {
+  uint16 format; == 4
+  Offset24To<Coverage> coverage;
+  ArrayOf<Offset24To<ChainGlyphRuleSet24>> ruleSets;
+};
+
+struct ChainGlyphRuleSet24 {
+  ArrayOf<OffsetTo<ChainGlyphRule24>> rules;
+};
+
+struct ChainGlyphRule24 {
+  uint16 backtrackGlyphCount; 
+  GlyphID24 backtrackGlyphs[backtrackGlyphCount];
+  uint16 inputGlyphCount;
+  GlyphID24 inputGlyphs[inputGlyphCount - 1];
+  uint16 lookaheadGlyphCount;
+  GlyphID24 lookaheadGlyphs[lookaheadGlyphCount];
+  uint16 seqLookupCount;
+  SequenceLookupRecord seqLookupRecords[seqLookupCount];
+};
+```
+
+Add `Context` and `ChainContext` format 5 that parallels format 2 for offset-overflow alleviation:
+```
+struct ContextFormat5 {
+  uint16 format; == 5
+  Offset24To<Coverage> coverage;
+  Offset24To<ClassDef> classDef;
+  ArrayOf<Offset24To<ClassRuleSet>> ruleSets;
+};
+```
+```
+struct ChainContextFormat5 {
+  uint16 format; == 5
+  Offset24To<Coverage> coverage;
+  Offset24To<ClassDef> backtrackClassDef;
+  Offset24To<ClassDef> inputClassDef;
+  Offset24To<ClassDef> lookaheadClassDef;
+  ArrayOf<Offset24To<ClassRuleSet>> ruleSets;
+};
+```
+The `RuleSet` and `ChainRuleSet` are _not_ extended, because they are class-based, not glyph-based, so no extension is necessary.
+
+Format 3 (Coverage-based format) is _not_ extended, because it only encodes one rule, so overflows are unlikely.
+
+[issue](https://github.com/harfbuzz/boring-expansion-spec/issues/34)
