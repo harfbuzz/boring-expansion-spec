@@ -67,6 +67,28 @@ TODO
 
 The number of glyphs referenced by the table is the number of glyphs in the font as defined earlier. Same applies to non-OpenType tables `kerx` and `morx`.
 
+[issue](https://github.com/harfbuzz/boring-expansion-spec/issues/44)
+
 
 ### `GDEF` / `GSUB` / `GPOS` tables
 
+#### GSUB / GPOS version 2
+
+The main `GSUB` / `GPOS` structs currently result in an offset-overflow with more than ~3k lookups. They are augmented with a version 2 that alleviates this problem:
+```
+struct GSUBGPOSVersion2 {
+  Version version; // 0x00020000
+  Offset24To<ScriptList> scripts;
+  Offset24To<FeatureList> features;
+  Offset24To<LookupList24> lookups;
+  Offset32To<FeatureVariations> featureVars;
+};
+```
+Note that the last item is a 32bit offset, for compatibility with version 0x00010001 tables.
+
+were LookupList24 is a list16 of offset24 to Lookup structures:
+```
+using LookupList24 = List16OfOffsetTo<Lookup, uint24>;
+```
+
+[issue](https://github.com/harfbuzz/boring-expansion-spec/issues/58)
