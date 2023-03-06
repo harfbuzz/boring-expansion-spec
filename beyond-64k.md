@@ -2,6 +2,7 @@
 
 This proposal enables fonts that have more than 65,535 glyphs.
 
+
 ## Design
 
 We propose extending the number of glyphs in the font from 65,535 (16-bit) to 16,777,216 (24-bit).
@@ -10,17 +11,23 @@ Currently the number of glyphs in the font is encoded in the `maxp` table and is
 
 While extending tables to encode 24-bit glyph indices, many tables are also extended to use 24-bit offsets instead of 16-bit offsets to allow for larger tables necessary for the larger number of glyphs.
 
-## `maxp` table
+
+## Per-table changes
+
+
+### `maxp` table
 
 The `numGlyphs` field of the `maxp` table for a font with more than 65,535 glyphs should be set to 65,535.
 
-## `loca` / `glyf` tables
+
+### `loca` / `glyf` tables
 
 The `loca` / `glyf` tables are not required to have the same number of glyphs as specified in the `maxp` table. In fact, the length of the `loca` table now determines the number of glyphs in the font, which can be larger than `numGlyphs.maxp`. [issue](https://github.com/harfbuzz/boring-expansion-spec/issues/8)
 
 Glyph table composites that need to access glyphs with glyph IDs larger than 65,535 will have to use the [VarComposites](https://github.com/harfbuzz/boring-expansion-spec/blob/main/glyf1.md) format which supports 24-bit GIDs. [issue](https://github.com/harfbuzz/boring-expansion-spec/issues/59)
 
-## `cmap` table
+
+### `cmap` table
 
 The `cmap` formats 12 and 13 subtables already support 32-bit glyph indices.
 
@@ -35,13 +42,26 @@ The rest of format 16 subtable is similar to format 14.
 
 [issue](https://github.com/harfbuzz/boring-expansion-spec/issues/13)
 
-## `hmtx` / `vmtx` tables
+
+### `hmtx` / `vmtx` tables
+
+TODO
 
 
+### `VORG` table
 
-## `VORG` table
+TODO
 
-## `COLR` table
 
-## `GDEF` / `GSUB` / `GPOS` tables
+### `COLR` table
+
+TODO
+
+
+### `sbix` table
+
+The number of glyphs referenced by the table is the number of glyphs in the font as defined earlier. Same applies to non-OpenType tables `kerx` and `morx`.
+
+
+### `GDEF` / `GSUB` / `GPOS` tables
 
