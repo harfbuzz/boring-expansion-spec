@@ -29,10 +29,10 @@ It is recommended to allow reference to axes by tag rather than by name.
 
 ```xml
 <axes>
-    <axis tag="wght" name="Weight" minimum="100" maximum="900" default="100">
-      <map input="100" output="22"/>
-      <map input="600" output="115"/>
-      <map input="900" output="185"/>
+    <axis tag="wght" name="Weight" minimum="100" maximum="900" default="400">
+      <map input="200" output="220"/>
+      <map input="600" output="615"/>
+      <map input="700" output="720"/>
     </axis>
 </axes>
 ```
