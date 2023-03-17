@@ -71,7 +71,7 @@ Subtracting the normalized input value from the normalized output value gives:
 
 So for the region defined by `wght` [400, 700, 900], `wdth` [100, 150, 200] we have a delta set of [-0.1, 0.1] for the axes `wght` and `wdth`.
 
-This region covers the whole “upper right quadrant” of the designspace, so we did not need to specify min and max. To be explicit and to demonstrate the use of min and max, we could have written the following to define exactly the same region and therefore the same action for the compiler:
+This region covers the whole “upper right quadrant” of the designspace, so we did not need to specify min and max. (If xvalue > default, we use axis default and axis max as dimension min and max; if xvalue < default, we use axis min and axis default as dimension min and max.) To be explicit and to demonstrate the use of min and max, we could have written the following to define exactly the same region and therefore the same action for the compiler:
 
 
 ```xml
@@ -155,6 +155,14 @@ This .designspace is for a HOI font with 1 user axis and 2 hidden subservient ax
 ## Further notes
 
 It will likely be a common occurence that we wish to add avar2 table to a compiled font. Such fonts will not have any UFO data to work with, so if a .designspace document is used to generate the avar2 table, we’ll need to allow it to have an empty <source> section, or for the <source> section to contain a reference to a compiled font file.
+
+Mappings for avar1 may be combined with avar2. The avar1 maps are within each `<axis>` element, the avar2 maps are at the same level. If an avar2 map was representable as avar1, the compiled would be free to use that option.
+
+We might also consider the following:
+* a relative mode, in case you want to work in deltas, with suggested representations within `<output><dimension>`:
+  * `mode="absolute"` (default), `mode="relative"` (deltas, optional)
+  * use `xdelta` instead of `xvalue`
+* allow direct specification of normalized coordinates
 
 ## Comparison of other XML methods of representing/implying variation math
 
