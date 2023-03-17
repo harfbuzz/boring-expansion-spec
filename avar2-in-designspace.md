@@ -156,7 +156,35 @@ This .designspace is for a HOI font with 1 user axis and 2 hidden subservient ax
 
 It will likely be a common occurence that we wish to add avar2 table to a compiled font. Such fonts will not have any UFO data to work with, so if a .designspace document is used to generate the avar2 table, we’ll need to allow it to have an empty <source> section, or for the <source> section to contain a reference to a compiled font file.
 
-Mappings for avar1 may be combined with avar2. The avar1 maps are within each `<axis>` element, the avar2 maps are at the same level. If an avar2 map was representable as avar1, the compiled would be free to use that option.
+Mappings for avar1 may be combined with avar2. The avar1 maps are within each `<axis>` element, the avar2 maps are at the same level, something like this:
+
+```xml
+  <axis tag="wght" name="Weight" minimum="100" maximum="900" default="400">
+      <map input="200" output="220"/> <!-- avar1 -->
+      <map input="600" output="615"/> <!-- avar1 -->
+      <map input="700" output="720"/> <!-- avar1 -->
+  </axis>
+  <axis tag="wdth" name="Width" minimum="50" maximum="200" default="100">
+      <map input="70" output="80"/> <!-- avar1 -->
+      <map input="150" output="160"/> <!-- avar1 -->
+      <map input="180" output="190"/>  <!-- avar1 -->
+  </axis>
+
+  <map> <!-- avar2 -->
+    <region>
+      <input>
+        <dimension name="Weight" xvalue="700" />
+        <dimension name="Width" xvalue="150" />
+      </input>
+      <output>
+        <dimension name="Weight" xvalue="650" />
+        <dimension name="Width" xvalue="140" />
+      </output>
+    </region>
+  </map>
+```
+
+If an avar2 map was representable as avar1, the compiled would be free to use that option.
 
 We might also consider the following:
 * a relative mode, in case you want to work in deltas, with suggested representations within `<output><dimension>`:
