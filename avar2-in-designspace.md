@@ -1,4 +1,4 @@
-# designspace with avar2
+# Representing avar2 data in designspace documents
 
 This document discusses the representation of the `avar` version 2 table (“avar2”) in .designspace documents.
 
