@@ -120,7 +120,7 @@ Subtracting the normalized input value from the normalized output value gives:
 * `wght`: 0.5 - 0.6 = -0.1
 * `wdth`: 0.4 - 0.5 = -0.1
 
-So for the region defined by `wght` [400, 700, 900], `wdth` [100, 150, 200] we have a delta set of [-0.1, 0.1] for the axes `wght` and `wdth`.
+So for the region defined by `wght` [400, 700, 900], `wdth` [100, 150, 200] we have a delta set of [-0.1, -0.1] for the axes `wght` and `wdth`.
 
 This region covers the whole “upper right quadrant” of the designspace, so we did not need to specify min and max. To be explicit and to demonstrate the use of min and max, we could have written the following to define exactly the same region and therefore the same action for the compiler:
 
