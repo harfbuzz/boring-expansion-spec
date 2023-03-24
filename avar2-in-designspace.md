@@ -1,6 +1,6 @@
 # Proposal for representing avar2 mappings in designspace documents
 
-This document discusses the representation of the `avar` version 2 table (“avar2”) in .designspace documents.
+This document discusses the representation of the `avar` version 2 table (“avar2”) in [.designspace documents]([url](https://github.com/fonttools/fonttools/blob/main/Doc/source/designspaceLib/xml.rst)).
 
 ## Introduction
 
