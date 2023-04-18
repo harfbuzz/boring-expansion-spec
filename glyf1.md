@@ -4,3 +4,5 @@ The glyf data table ([`glyf`](https://docs.microsoft.com/en-us/typography/openty
 
 * **Cubic-Bezier Outlines:** [Proposal](glyf1-cubicOutlines.md).
 * **Variable Composites / Components:** [Proposal](glyf1-varComposites.md).
+
+**Note:** Format 1 `glyf` table is backwards-compatible with format 0, in that any format 0 `glyf` table is a valid format 1 table as well.
