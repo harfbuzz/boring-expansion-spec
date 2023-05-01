@@ -31,7 +31,7 @@ Ideally the representation can be adopted later for full-power variation math on
 ```xml
 <axes>
     <axis tag="wght" name="Weight" minimum="100" maximum="900" default="400">
-      <map input="100" output="120"/>
+      <map input="110" output="120"/>
       <map input="600" output="650"/>
       <map input="800" output="780"/>
     </axis>
