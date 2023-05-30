@@ -4,27 +4,21 @@ This document discusses the representation of the `avar` version 2 table (“ava
 
 ## Introduction
 
-*There is currently no representation in .designspace that represents arbitrary variations math.*
+A .designspace document is a human-readable XML document used for compiling variable fonts from sources, and also as a source document for generating instances of variable fonts. The axes to be used in the variable font are specified. Optionally, “avar mappings” can be included. These modify the font’s internal axis values (the “output” axes) depending on the axis locations set by users (the “input” axes), presenting users with more intuitive axis controls. The [avar table version 1](https://learn.microsoft.com/en-us/typography/opentype/spec/avar) (avar1), in use for many years, is limited to single-axis mappings; each axis has its own set of mappings, with no interaction beween axes.
 
-This fact means it is not immediately clear what kind of representation is suitable for avar2. In a compiled font, avar2 data uses the *ItemVariationStore* structure, which enables full OpenType Variations math. In other words, the avar2 definition allows arbitrary regions to be created in a designspace, in which scalars (values between 0 and 1) are calculated depending on user-specified location; those scalars are then multiplied by a delta value which is then added to the location of a single axis; typically the deltas come in “delta sets”, where it is specified which delta applies to which axis location.
+The avar table version 2 (avar2) is a way to express complex relationships beween the set of “input” axis values (controlled by the user) and the set of “output” axis values (used internally by the font). In particular, avar2 represents a many-to-many relationship between input and output axis locations. In other words, multiple axes’ input locations can influence a single output location, and a single input location can influence multiple output locations.
 
-This flexibility of variation math may be contrasted with the limited representation of variation of glyph outline points in a .designspace document, where a list of sources is specified, each with its designspace location, the compiler determining the deltas.
-
-A further difference between ItemVariationStore and .designspace is that deltas are in normalized 2.14 coordinates rather than int16 user coordinates. If a .designspace document is intended to be readable by humans, normalized coordinates are a poor choice, and even deltas of any kind are novel compared with the absolute values of \<source\>\<location\>\<dimension\>.
+The avar2 table uses variation math itself to express relationships betewen input and output axes, making use of the the ItemVariationStore structure to represent active regions and deltas. These concepts are somewhat alien to .designspace authors, so in .designspace documents, we use a VariationModel solver to determine regions and deltas. The VariationModel solver acts the same way when compiling glyph sources into a variable font, resolving their designspace locations into variation regions.
 
 ## Goals
 
-Allow complete variations math to be specified in .designspace documents in a manner suitable for avar2.
+* Try to build on the avar1 representation, avoiding new terminology if possible.
 
-Try to make the avar2 representation similar-ish to avar1, avoiding new terminology if possible.
+* Represent avar2 in absolute user coordinates, so no explicit delta values and no normalized coordinates. (A significant benefit of absolute coordinates in .designspace is that it is easy to choose a different default source. It is not clear whether this benefit can be retained in avar2 representations.)
 
-Represent avar2 in absolute user coordinates, so no explicit delta values and no normalized coordinates. (A significant benefit of absolute coordinates in .designspace is that it is easy to choose a different default source. It is not clear whether this benefit can be retained in avar2 representations.)
+* Avoid explicit terminology of *ItemVariationStore* objects: regions, deltas. Avoid discussion of compiler optimizations of ItemVariationStore.
 
-One thing that should surely *not* be in .designspace is multiple *ItemVariationData* objects. Splitting varation data into multiple ItemVariationData objects is a compiler implementation detail.
-
-The avar2 use-case classes already identified (distortion, parametric, HOI, fences) are not representable in the “sources/masters” style. We need to allow the min, peak, max style of variation region specification. It seems therefore that these two approaches to the representation of variation need to be somehow combined.
-
-Ideally the representation can be adopted later for full-power variation math on outline points and metrics values.
+* Try to avoid explicit specification of minimum and maximum values of a region. Leave that to the VariationModel solver.
 
 ## avar1 representation (example for reference)
 
@@ -43,31 +37,35 @@ Ideally the representation can be adopted later for full-power variation math on
 ```
 
 ## avar2 representation
-The proposed syntax is to keep the mappings definition within the \<axes\> element, and reuse the \<map\> element of avar1 by bringing it up to the same level as the \<axis\> elements, and redefining its contents as follows.
+The proposed syntax keeps the mappings definition within the \<axes\> element, and retains the \<map\> element in avar1 mappings without change. A new \<mappings\> element is introducted at the same level as the \<axis\> elements, and its contents is as follows.
 
-1. The \<map\> element contains one or more \<region\> elements.
+1. The \<mappings\> element contains one or more \<mapping\> elements.
 
-2. Each \<region\> element contains one \<input\> element and one \<output\> element.
+2. Each \<mapping\> element contains one \<input\> element and one \<output\> element.
 
-3. The \<input\> element contains one or more \<dimension\> elements and thereby defines a variation region as defined in the OpenType Variations specification. Regions are defined by specifying a subset of axes, and assigning each axis a minimum, a peak and a maximum (the familiar tent function of variation math). The \<dimension\> element specifies an axis and its tent function. In cases where default and an extreme may be implied from a given peak, minimum and maximum may be omitted.
+3. The \<input\> element contains one or more \<dimension\> elements, where each \<dimension\> element specifies an absolute location on a single axis. The _tag_ attribute defines the axis, and the _xvalue_ attritube defines the location. Within an \<input\> element, each axis is referenced either once or not at all.
 
-4. The number of \<dimension\> elements within an \<input\> or \<output\> element is often less than the number of axes, as is normal in variation math.
+4. The \<output\> element contains one or more \<dimension\> elements, where each \<dimension\> element specifies either an absolute location or a delta on a single axis. The _tag_ attribute defines the axis, the _xvalue_ attritube defines the location, and the _delta_ attribute defines the delta. Within an \<output\> element, each axis is referenced either once or not at all. If the _delta_ attribute is used, it is a value in the range [-1,1].
 
-5. The \<output\> element contains one or more \<dimension\> elements, each of which specifies an absolute location (or maybe a relative delta) on one axis in the designspace.
+5. The number of \<dimension\> elements within an \<input\> or \<output\> element is often less than the number of axes, as is normal in variation math.
 
 6. The set of \<input\> axes may be disjoint from the set of \<output\> axes.
 
-7. A region where \<input\> contains a single axis and \<output\> contains the same single axis is equivalent to the \<map\> mappings of avar1, except that in avar2, the delta may cause the value to cross over the default.
+7. A region where \<input\> contains a single axis and \<output\> contains the same single axis is equivalent to the \<map\> mappings of avar1 (except that in avar2 there are no restrictions regarding mapping from one side of the default to the other).
 
-8. Allow axis tag as well as axis name.
+8. Allow axis tag as well as axis name is allowed to identify axes.
 
-Here follows a generic example of avar2 \<map\> where AX_0, AX_2 and AX_4 values are adjusted when the user designspace location is within the region specified as determined by its AX_0, AX_1 and AX_2 values:
+9. Each output axis has either an explicit or implicit delta value. If implicit, the avar2 compiler normalizes the input and output xvalues to 2.14, then subtracts the normalized input value from the normalized output value, yielding the delta value. If there is no input for an axis, the axis default value is used as input. When storing deltas in _ItemVariationStore_, the compiler first multiplies the delta by 16384 to become an int16 value.
+
+10. The \<input\> element defines a variation region as defined in the OpenType spefication. Regions involving custom minimum and maximum values are not expressed explicitly, but are handled by a VariationModel solver.
+
+Here follows a generic example of avar2 \<mappings\> where AX_0, AX_2 and AX_4 values are adjusted when the user designspace location is within the region specified as determined by its AX_0, AX_1 and AX_2 values:
 
 ```xml
-  <map>
-    <region>
+  <mappings>
+    <mapping>
       <input>
-        <dimension tag="AX_0" minimum="700" xvalue="800" maximum="900"/>
+        <dimension tag="AX_0" xvalue="800" />
         <dimension tag="AX_1" xvalue="150" />
         <dimension tag="AX_2" xvalue="75" />
       </input>
@@ -76,8 +74,8 @@ Here follows a generic example of avar2 \<map\> where AX_0, AX_2 and AX_4 values
         <dimension tag="AX_2" xvalue="140" />
         <dimension tag="AX_4" xvalue="140" />
       </output>
-    </region>
-  </map>
+    </mapping>
+  </mappings>
 ```
 
 
@@ -92,8 +90,8 @@ Here follow some suggestions for how to represent the distortion, parametric and
   <axis tag="wght" name="Weight" minimum="100" maximum="900" default="400"></axis>
   <axis tag="wdth" name="Width" minimum="50" maximum="200" default="100"></axis>
 
-  <map>
-    <region>
+  <mappings>
+    <mapping>
       <input>
         <dimension name="Weight" xvalue="700" />
         <dimension name="Width" xvalue="150" />
@@ -102,15 +100,15 @@ Here follow some suggestions for how to represent the distortion, parametric and
         <dimension name="Weight" xvalue="650" />
         <dimension name="Width" xvalue="140" />
       </output>
-    </region>
-  </map>
+    </mapping>
+  </mappings>
 
 </axes>
 ```
 
-This example distorts the location (wght=700, wdth=150) to (wght=650, wdth=140), a 2-dimensional mapping not possible with avar1. Due to variations “tent” math, the effect is 1x at that location, reducing to 0x (no change) at the edges of the quadrant.
+This example distorts the location (wght=700, wdth=150) to (wght=650, wdth=140), a 2-dimensional mapping not possible with avar1. Due to variations math, the delta acts with a 1x scalar at (wght=700, wdth=150), reducing to 0x (no change) at the edges of the quadrant.
 
-To determine delta values, the compiler normalizes input xvalue and output xvalue to 2.14 using the normal avar1 process, then subtracts the normalized input value from the normalized output value. If there an output for an axis but no input, the axis default value is used. Normalizing input and output xvalues gives:
+To determine delta values, the compiler normalizes input xvalue and output xvalue to 2.14 using the normal avar1 process, then subtracts the normalized input value from the normalized output value. If there is an output for an axis but no input, the axis default value is used. Normalizing input and output xvalues gives:
 * `wght` input: 700 → (700-400)/(900-400) = 0.6
 * `wght` output: 650 → (650-400)/(900-400) = 0.5
 * `wdth` input: 150 → (150-100)/(200-100) = 0.5
@@ -122,24 +120,7 @@ Subtracting the normalized input value from the normalized output value gives:
 
 So for the region defined by `wght` [400, 700, 900], `wdth` [100, 150, 200] we have a delta set of [-0.1, -0.1] for the axes `wght` and `wdth`.
 
-This region covers the whole “upper right quadrant” of the designspace, so we did not need to specify min and max. To be explicit and to demonstrate the use of min and max, we could have written the following to define exactly the same region and therefore the same action for the compiler:
-
-
-```xml
-  <map>
-    <region>
-      <input>
-        <dimension name="Weight" min="400" xvalue="700" max="900"/>
-        <dimension name="Width" min="100" xvalue="150" max="200"/>
-      </input>
-      <output>
-        <dimension name="Weight" xvalue="650" />
-        <dimension name="Width" xvalue="140" />
-      </output>
-    </region>
-  </map>
-
-```
+This region covers the whole “upper right quadrant” of the designspace.
 
 ### Parametric use case
 
@@ -158,8 +139,8 @@ For clarity only a single region is represented, that being from default to max 
   <axis tag="YTUC" name="YTUC" minimum="500" maximum="1000" default="750" hidden="1"></axis>
   <axis tag="YTLC" name="YTLC" minimum="420" maximum="570" default="500" hidden="1"></axis>
 
-  <map>
-    <region>
+  <mappings>
+    <mapping>
       <input>
         <dimension name="Weight" xvalue="900" />
       </input>
@@ -168,8 +149,8 @@ For clarity only a single region is represented, that being from default to max 
         <dimension name="XTRA" xvalue="370" />
         <dimension name="YOPQ" xvalue="132" />
       </output>
-    </region>
-  </map>
+    </mapping>
+  </mappings>
 
 </axes>
 ```
@@ -201,8 +182,8 @@ This .designspace is for a HOI font with 1 user axis and 2 hidden subservient ax
   <axis tag="HOI1" name="HOI1" minimum="0" maximum="1000" default="0" hidden="1"></axis>
   <axis tag="HOI2" name="HOI2" minimum="0" maximum="1000" default="0" hidden="1"></axis>
 
-  <map>
-    <region>
+  <mappings>
+    <mapping>
       <input>
         <dimension name="Animate" xvalue="1000" />
       </input>
@@ -210,8 +191,8 @@ This .designspace is for a HOI font with 1 user axis and 2 hidden subservient ax
         <dimension name="HOI1" xvalue="1000" />
         <dimension name="HOI2" xvalue="1000" />
       </output>
-    </region>
-  </map>
+    </mapping>
+  </mappings>
 
 </axes>
 ```
@@ -228,10 +209,10 @@ It will likely be a common occurence that we wish to add avar2 table to a compil
     </sources>
     <axes>
 		<!-- axis elements omitted, implied by the font -->
-		<map>
+		  <mappings>
 			<!-- avar2 mappings here -->
-		</map>
-	</axes>
+		  </mappings>
+    </axes>
 ```
 ### Combining avar1 and avar2 tables in the same font
 
@@ -249,8 +230,8 @@ The avar2 specification allows for mappings for avar1 to coexist with mappings f
       <map input="180" output="190"/>  <!-- avar1 -->
   </axis>
 
-  <map> <!-- avar2 -->
-    <region>
+  <mappings> <!-- avar2 -->
+    <mapping>
       <input>
         <dimension name="Weight" xvalue="700" />
         <dimension name="Width" xvalue="150" />
@@ -259,8 +240,8 @@ The avar2 specification allows for mappings for avar1 to coexist with mappings f
         <dimension name="Weight" xvalue="650" />
         <dimension name="Width" xvalue="140" />
       </output>
-    </region>
-  </map>
+    </mapping>
+  </mappings>
 ```
 
 ### Compiler optimizations
