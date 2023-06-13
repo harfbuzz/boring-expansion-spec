@@ -86,6 +86,11 @@ for all axes rather than only the axes that contribute to the result.
 
 Upgrade the variation stores to only consume bytes for axes that influence the result.
 
+## ISO Submissions
+
+* WG03_otf-improvements ([docx](iso_docs/WG03_otf-improvements.docx?raw=true), [pdf](iso_docs/WG03_otf-improvements.pdf?raw=true))
+   * MPEG document identifier: m62947, submitted April 2023
+   * Initial submission to spur ISO discussion
 
 ## References
 
