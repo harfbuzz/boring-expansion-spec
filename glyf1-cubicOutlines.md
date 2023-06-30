@@ -18,7 +18,7 @@ Add the following flag to the [Simple Glyph Description](https://learn.microsoft
 Currently, there are several restrictions on how the `CUBIC` flag can be used. If any of the conditions below are not met, the behavior is undefined.
 
 In the text below, wrap-around in a contour means whether the point after the last point of the contour is considered to be the first point of the contour, and symmetrically, the point before the first point of the contour is considered to be the last point of the contour. When we say "without wrap-around", no such consideration is made.
-h 
+
 The number of consecutive cubic off-curve points within a contour, without wrap-around, _must_ be even.
 
 All the off-curve points between two on-curve points, with wrap-around, `must` either have the `CUBIC` flag clear, or have the `CUBIC` flag set.
