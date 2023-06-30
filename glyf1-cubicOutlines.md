@@ -18,7 +18,7 @@ Add the following flag to the [Simple Glyph Description](https://learn.microsoft
 Currently, there are several restrictions on how the `CUBIC` flag can be used. If any of the conditions below are not met, the behavior is undefined.
 
 In the text below, wrap-around in a contour means whether the point after the last point of the contour is considered to be the first point of the contour, and symmetrically, the point before the first point of the contour is considered to be the last point of the contour. When we say "without wrap-around", no such consideration is made.
-
+h 
 The number of consecutive cubic off-curve points within a contour, without wrap-around, _must_ be even.
 
 All the off-curve points between two on-curve points, with wrap-around, `must` either have the `CUBIC` flag clear, or have the `CUBIC` flag set.
@@ -32,3 +32,7 @@ Every successive two off-curve points that have the `CUBIC` bit set define a cub
 If there are no on-curve points and all (even number of) off-curve points are `CUBIC`, the first off-curve point is considered the first control-point of a cubic-Bezier, and implied on-curve points are inserted between the every second point and the next one as usual.
 
 As in the `glyf` version 0 table, an implied on-curve point is inserted between any two neighboring quadratic off-curve points.
+
+## Hinting
+
+Hinting works exactly the same for quadratic-in-glyf, with points addressed by index number.
