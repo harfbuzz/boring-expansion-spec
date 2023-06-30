@@ -32,3 +32,7 @@ Every successive two off-curve points that have the `CUBIC` bit set define a cub
 If there are no on-curve points and all (even number of) off-curve points are `CUBIC`, the first off-curve point is considered the first control-point of a cubic-Bezier, and implied on-curve points are inserted between the every second point and the next one as usual.
 
 As in the `glyf` version 0 table, an implied on-curve point is inserted between any two neighboring quadratic off-curve points.
+
+## Hinting
+
+Hinting works exactly the same for quadratic-in-glyf, with points addressed by index number.
