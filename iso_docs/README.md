@@ -6,6 +6,14 @@ The documents in this folder were submitted to ISO for duscussion.
 The docx (Microsoft Word) files are authoritative;
 other formats are for convenience but were not submitted to ISO.
 
+## 2023-08 (August 2023)
+
+The AVAR 2 proposal was accepted by the ISO Working Group, and is now part of
+the OpenFont Working Draft. The text here is taken from that Working Draft
+(Draft 7):
+    * [m64287-avar2-combined-wd7.odt - LibreOffice file](m64287-avar2-combined-wd7.odt)
+    * [m64287-avar2-combined-wd7.pdf - PDF exported from LibreOffice](m64287-avar2-combined-wd7.pdf)
+
 ## 2023-07 (July 2023)
 
 m64287 combined, _Updating AVAR table in OFF to support the needs of modern computing platforms._
