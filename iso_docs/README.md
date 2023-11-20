@@ -10,10 +10,10 @@ other formats are for convenience but were not submitted to ISO.
 
 The proposal from September, revised after an informal _ad hoc_ committee meeting by telephone in Octoner 2023.
 The main changes from the September draft are:
-* Text for the main new or changed tables such as GLYF is copied from the existing text (such as for glyf) and updated; this adds substantially to the number of pages. Updated text is highlighted in yellow.
-* The headers for GSUB, GPOS and GDEF are now minor revisions to the pre-existing headers, not entirely new versions, and are made compatible.
-* Some more tables, notably sbix, have been handled.
-* Sub-tables and new fields now have names like _dancingPaul2_ instead of _dancingPaul32_.
+   * Text for the main new or changed tables such as GLYF is copied from the existing text (such as for glyf) and updated; this adds substantially to the number of pages. Updated text is highlighted in yellow.
+   * The headers for GSUB, GPOS and GDEF are now minor revisions to the pre-existing headers, not entirely new versions, and are made compatible.
+   * Some more tables, notably sbix, have been handled.
+   * Sub-tables and new fields now have names like _dancingPaul2_ instead of _dancingPaul32_.
 
 The files are here:
    * [WG03-beyond-64k-glyphs-2023-11-20.odt - LibreOffice file](WG03-beyond-64k-glyphs-2023-11-20.odt)
