@@ -80,6 +80,22 @@ t = t.skew(-SkewX * math.pi, SkewY * math.pi)
 t = t.translate(-TCenterX, -TCenterY)
 ```
 
+## `VARC` table
+```
+struct VARC
+{
+  uint16_t major; // 1
+  uint16_t minor; // 0
+  Offset32To<Coverage> coverage;
+  Offset32To<MultiItemVariationStore>
+  Offset32To<CFF2IndexOf<VarCompositeGlyphRecord>> glyphRecords;
+};
+
+struct VarCompositeGlyphRecord
+{
+  VarComponentGlyphRecord[] components;
+};
+
 ## Processing
 
 Variations of composite glyphs are processed this way: For each composite glyph, a vector of coordinate points is prepared, and its variation applied from the `gvar` table. The coordinate points for the composite glyph are a concatenation of those for each variable component in order. For the purposes of `gvar` delta IUP calculations, each point is considered to be in its own contour.
