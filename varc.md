@@ -3,9 +3,23 @@
 ## Variable Composite Description
 
 A Variable Composite record is a concatenation of Variable Component records.
-
+```
+struct VarCompositeGlyph
+{
+  VarComponent components[];
+};
+```
 
 ## Variable Component Record
+
+```
+struct VarComponent
+{
+  uint16 flags;
+  uint16 numAxes;
+  variable
+}
+```
 
 | type | name | notes |
 |-|-|-|
@@ -88,7 +102,7 @@ struct VARC
   uint16_t minor; // 0
   Offset32To<Coverage> coverage;
   Offset32To<MultiItemVariationStore>
-  Offset32To<CFF2IndexOf<VarCompositeGlyphRecord>> glyphRecords;
+  Offset32To<CFF2IndexOf<VarCompositeGlyph>> glyphRecords;
 };
 
 struct VarCompositeGlyphRecord
@@ -104,7 +118,32 @@ This design uses two new datastrucure: `MultiItemVariationStore`, and `CFF2Index
 
 - `MultiIteVariationStore`: This is a new datastructure. It's a hybrid between
   `ItemVariationStore`, and `TupleVariationStore`, borring ideas (and data-structures)
-  from both.
+  from both. Defined below:
+
+## `MultiItemVariationStore`:
+
+The top-level header of a `MultiItemVariationStore` is:
+```
+struct MultiItemVariationStore
+{
+  uint16 Format; // 1
+  LOffsetTo<VarRegionList> VarRegionList;
+  uint16_t MultiDataListCount
+  Offset32To<MultiVariationData> MultiVariationData;
+};
+```
+
+```
+struct MultiVariationData
+{
+  uint16 Format; // 1
+  uint16 VarRegionCount;
+  uint16 VarRegionIndex[VarRegionCount]
+  CFF2IndexOf<TupleValues>
+};
+```
+Where `TupleValues` is similar to https://learn.microsoft.com/en-us/typography/opentype/spec/otvarcommonformats#packed-deltas with a minor different that
+if two top bits are both 1, then the values are 32bit.
 
 
 ## Processing
