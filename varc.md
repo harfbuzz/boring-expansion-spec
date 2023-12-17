@@ -1,4 +1,4 @@
-# `VARC` tan;e: Variable Composites / Components
+# `VARC` table: Variable Composites / Components
 
 ## Variable Composite Description
 
@@ -95,6 +95,7 @@ struct VarCompositeGlyphRecord
 {
   VarComponentGlyphRecord[] components;
 };
+```
 
 ## Processing
 
