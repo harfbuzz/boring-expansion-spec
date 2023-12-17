@@ -97,6 +97,16 @@ struct VarCompositeGlyphRecord
 };
 ```
 
+This design uses two new datastrucure: `MultiItemVariationStore`, and `CFF2IndexOf`. Let's look at those
+
+- `CFF2IndexOf` is simply `CFFIndex` containing data of a particular type. `CFF2Index` is defined here:
+   https://learn.microsoft.com/en-us/typography/opentype/spec/cff2#5-index-data
+
+- `MultiIteVariationStore`: This is a new datastructure. It's a hybrid between
+  `ItemVariationStore`, and `TupleVariationStore`, borring ideas (and data-structures)
+  from both.
+
+
 ## Processing
 
 Variations of composite glyphs are processed this way: For each composite glyph, a vector of coordinate points is prepared, and its variation applied from the `gvar` table. The coordinate points for the composite glyph are a concatenation of those for each variable component in order. For the purposes of `gvar` delta IUP calculations, each point is considered to be in its own contour.
