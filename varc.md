@@ -129,7 +129,7 @@ struct MultiItemVariationStore
   uint16 Format; // 1
   LOffsetTo<VarRegionList> VarRegionList;
   uint16_t MultiDataListCount
-  Offset32To<MultiVariationData> MultiVariationData;
+  Offset32To<MultiVariationData> MultiVariationData[MultiDataListCount];
 };
 ```
 
