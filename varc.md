@@ -155,4 +155,4 @@ The component location and transform can vary. These variations are stored in th
 
 **Note:** While it is the (undocumented?) behavior of the `glyf` table that glyphs loaded are shifted to align their LSB to that specified in the `hmtx` table, much like regular Composite glyphs, this does not apply to component glyphs being loaded as part of a variable-composite glyph.
 
-**Note:** A static (non-variable) font that uses the `VARC` table, _would not_ have `fvar` / `avar` tables but _would_ have the `gvar` table in a TrueType-flavored font.
+**Note:** A static (non-variable) font that uses the `VARC` table, _would not_ have `fvar` / `avar` tables but _would_ have the `gvar` table in a TrueType-flavored font, or `CFF2` variations in a CFF-flavored font. This is because the components themselves store their variables in the classic way. The exception to this situation is a font with `VARC` table where does NOT vary the component locations and transforms, and does not encode any location for the components either. In practice, such a font would just use the `VARC` table like classic components.
