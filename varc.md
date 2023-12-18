@@ -122,6 +122,14 @@ This design uses two new datastrucure: `MultiItemVariationStore`, and `CFF2Index
 
 ## `MultiItemVariationStore`:
 
+To be moved to [OpenType Font Variations Common Table Formats](https://learn.microsoft.com/en-us/typography/opentype/spec/otvarcommonformats).
+
+A `MultiItemVariationStore` is a hybrid between `ItemVariationStore` and `TupleVariationStore`. Like `ItemVariationStore`, entries are addressed using a 32-bit `VarIdx`, with the top 16 bits called "outer" index, and lower 16 bits called the "inner" index.
+
+Whereas the `ItemVariationStore` stores deltas for a single scalar value for each `VarIdx`, the `MultiItemVariationStore` stores deltas for a tuple for each `VarIdx`.
+
+Compared to `TupleVariationStore`, the `MultiItemVariationStore` is optimized for smaller tuples and allows tuple-sharing, which is important for its efficiency over the `TupleVariationStore`. It also does not have some of the limitations that `TupleVariationStore` has, like the total size of an entry being limited to 64kb.
+
 The top-level header of a `MultiItemVariationStore` is:
 ```
 struct MultiItemVariationStore
@@ -142,8 +150,8 @@ struct MultiVariationData
   CFF2IndexOf<TupleValues>
 };
 ```
-Where `TupleValues` is similar to https://learn.microsoft.com/en-us/typography/opentype/spec/otvarcommonformats#packed-deltas with a minor different that
-if two top bits are both 1, then the values are 32bit.
+Where `TupleValues` is similar to the `gvar` [Packed Deltas](https://learn.microsoft.com/en-us/typography/opentype/spec/otvarcommonformats#packed-deltas) with a minor different that
+if two top bits are both 1, then the values are 32bit. That difference should be incorporated in the Packed Deltas section of `gvar`, and it is backwards-compatible because the two top bits can currently never be on at the same time.
 
 
 ## Processing
