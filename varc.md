@@ -2,7 +2,7 @@
 
 ## Variable Composite Description
 
-A Variable Composite record is a concatenation of Variable Component records.
+A Variable Composite record is a concatenation of Variable Component records. Variable Component records have varying sizes.
 ```
 struct VarCompositeGlyph
 {
@@ -11,6 +11,8 @@ struct VarCompositeGlyph
 ```
 
 ## Variable Component Record
+
+A Variable Component record encodes one component's glyph index, variations location, and transformation in a variable-sized and efficient manner.
 
 ```
 struct VarComponent
@@ -23,22 +25,22 @@ struct VarComponent
 
 | type | name | notes |
 |-|-|-|
-| uint16 | flags | see below |
-| uint8 | numAxes | Number of axes to follow |
-| GlyphID16 or GlyphID24 | gid | This is a GlyphID16 if bit 0 of `flags` is clear, else GlyphID24 |
-| uint8 or uint16 | axisIndices[numAxes] | This is a uint16 if bit 1 of `flags` is set, else a uint8 |
-| F2DOT14 | axisValues[numAxes] | The axis value for each axis |
-| uint32_t | axisValuesVarIndex | Optional, only present if bit 2 of `flags` is set |
-| FWORD | TranslateX | Optional, only present if bit 3 of `flags` is set |
-| FWORD |  TranslateY | Optional, only present if bit 4 of `flags` is set |
-| F4DOT12 | Rotation | Optional, only present if bit 5 of `flags` is set |
-| F6DOT10 | ScaleX | Optional, only present if bit 6 of `flags` is set |
-| F6DOT10 | ScaleY | Optional, only present if bit 7 of `flags` is set |
-| F4DOT12 | SkewX | Optional, only present if bit 8 of `flags` is set |
-| F4DOT12 | SkewY | Optional, only present if bit 9 of `flags` is set |
-| FWORD | TCenterX | Optional, only present if bit 10 of `flags` is set |
-| FWORD |  TCenterY | Optional, only present if bit 11 of `flags` is set |
-| uint32_t | transformVarIndex | Optional, only present if bit 12 of `flags` is set |
+| uint16 | flags | See below. |
+| uint8 | numAxes | Number of axes to follow. |
+| GlyphID16 or GlyphID24 | gid | This is a GlyphID16 if bit 0 of `flags` is clear, else GlyphID24. |
+| uint8 or uint16 | axisIndices[numAxes] | This is a uint16 if bit 1 of `flags` is set, else a uint8. |
+| F2DOT14 | axisValues[numAxes] | The axis value for each axis. |
+| uint32_t | axisValuesVarIndex | Optional, only present if bit 2 of `flags` is set. |
+| FWORD | TranslateX | Optional, only present if bit 3 of `flags` is set. |
+| FWORD |  TranslateY | Optional, only present if bit 4 of `flags` is set. |
+| F4DOT12 | Rotation | Optional, only present if bit 5 of `flags` is set. Clockwise. |
+| F6DOT10 | ScaleX | Optional, only present if bit 6 of `flags` is set. |
+| F6DOT10 | ScaleY | Optional, only present if bit 7 of `flags` is set. |
+| F4DOT12 | SkewX | Optional, only present if bit 8 of `flags` is set. Clockwise. |
+| F4DOT12 | SkewY | Optional, only present if bit 9 of `flags` is set. Clockwise. |
+| FWORD | TCenterX | Optional, only present if bit 10 of `flags` is set. |
+| FWORD |  TCenterY | Optional, only present if bit 11 of `flags` is set. |
+| uint32_t | transformVarIndex | Optional, only present if bit 12 of `flags` is set. |
 
 ### Variable Component Flags
 
