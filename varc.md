@@ -1,5 +1,7 @@
 # `VARC` table: Variable Composites / Components
 
+This table encodes *variable-composite* glyphs in a way that can be combined with any of `glyf`/`gvar` or `CFF2`. Since the primary purpose of variable-composites is to make font files (especially the CJK fonts) smaller, several new data-structures are introduced to achieve more compression compared to an equivalent non-variable-composite font.
+
 ## Variable Composite Description
 
 A Variable Composite record is a concatenation of Variable Component records. Variable Component records have varying sizes.
@@ -161,7 +163,6 @@ if two top bits are both 1, then the values are 32bit. That difference should be
 The component glyphs to be loaded use the coordinate values specified (with any variations applied if present). For any unspecified axis, the value used depends on flag bit 13. If the flag is set, then the normalized value zero is used. If the flag is clear the axis values from current glyph being processed (which itself might recursively come from the font or its own parent glyphs) are used.  For example, if the font variations have `wght`=.25 (normalized), and current glyph being processed is using `wght`=.5 because it was referenced from another VarComposite glyph itself, when referring to a component that does _not_ specify the `wght` axis, if flag bit 13 is set, then the value of `wght`=0 (default) will be used. If flag bit 13 is clear, `wght`=.5 (from current glyph) will be used.
 
 The component location and transform can vary. These variations are stored in the `MultiItemVariationStore` data-structure. The variations for location are referred to by the `axisValuesVarIndex` member of a component if any, and variations for transform are referred to by the `transformVarIndex` if any. For transform variations, only those fields specified and as such encoded as per the flags have variations.
-
 
 **Note:** While it is the (undocumented?) behavior of the `glyf` table that glyphs loaded are shifted to align their LSB to that specified in the `hmtx` table, much like regular Composite glyphs, this does not apply to component glyphs being loaded as part of a variable-composite glyph.
 
