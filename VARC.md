@@ -279,34 +279,20 @@ t = t.skew(-SkewX * math.pi, SkewY * math.pi)
 t = t.translate(-TCenterX, -TCenterY)
 ```
 
-## `VARC` table
+## `VARC` table header
+
+The top-level `VARC` table header is as follows:
 ```c++
 struct VARC
 {
   uint16_t major; // 1
   uint16_t minor; // 0
   Offset32To<Coverage> coverage;
-  Offset32To<MultiItemVariationStore>
+  Offset32To<MultiItemVariationStore> varStore;
+  Offset32To<TupleValues> axisIndicesList;
   Offset32To<CFF2IndexOf<VarCompositeGlyph>> glyphRecords;
 };
 ```
-```c++
-struct VarCompositeGlyphRecord
-{
-  VarComponentGlyphRecord[] components;
-};
-```
-
-This design uses two new datastrucure: `MultiItemVariationStore`, and
-`CFF2IndexOf`. Let's look at those
-
-- `CFF2IndexOf` is simply `CFFIndex` containing data of a particular type.
-  `CFF2Index` is defined here:
-  https://learn.microsoft.com/en-us/typography/opentype/spec/cff2#5-index-data
-
-- `MultiIteVariationStore`: This is a new datastructure. It's a hybrid between
-  `ItemVariationStore`, and `TupleVariationStore`, borring ideas (and
-  data-structures) from both. Defined below:
 
 
 ## Processing
