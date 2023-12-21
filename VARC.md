@@ -299,7 +299,7 @@ struct VARC
 
 The component glyphs to be loaded use the coordinate values specified (with any
 variations applied if present). For any unspecified axis, the value used
-depends on flag bit 13. If the flag is set, then the normalized value zero is
+depends on flag bit 1. If the flag is set, then the normalized value zero is
 used. If the flag is clear the axis values from current glyph being processed
 (which itself might recursively come from the font or its own parent glyphs)
 are used.  For example, if the font variations have `wght`=.25 (normalized),
