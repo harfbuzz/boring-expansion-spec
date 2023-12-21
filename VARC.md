@@ -146,7 +146,7 @@ struct MultiItemVariationStore
 {
   uint16 format; // Set to 1
   LOffsetTo<SparseVariationRegionList> variationRegionListOffset;
-  uint16_t itemVariationDataCount;
+  uint16 itemVariationDataCount;
   Offset32To<MultiItemVariationData> itemVariationDataOffsets[itemVariationDataCount];
 };
 ```
@@ -285,8 +285,8 @@ The top-level `VARC` table header is as follows:
 ```c++
 struct VARC
 {
-  uint16_t major; // 1
-  uint16_t minor; // 0
+  uint16 major; // 1
+  uint16 minor; // 0
   Offset32To<Coverage> coverage;
   Offset32To<MultiItemVariationStore> varStore;
   Offset32To<TupleValues> axisIndicesList;
