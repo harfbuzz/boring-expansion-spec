@@ -2,6 +2,18 @@
 
 This table encodes *variable-composite* glyphs in a way that can be combined with any of `glyf`/`gvar` or `CFF2`. Since the primary purpose of variable-composites is to make font files (especially the CJK fonts) smaller, several new data-structures are introduced to achieve more compression compared to an equivalent non-variable-composite font.
 
+## Data Structures
+
+The following foundational data-structures are used in this able:
+
+- `VarInt32` is a variable-length encoding of `uint32` values, which uses 1 to 5 bytes depending on the magnitude of the value being encoded. It borrows ideas from the UTF-8 encoding, but is more efficient because it does not have some of the random-access properties of UTF-8 encoding.
+
+- `TupleValues` is borrowed from the `TupleVariationStore` [Packed Deltas](https://learn.microsoft.com/en-us/typography/opentype/spec/otvarcommonformats#packed-deltas) with minor modification.
+
+- `CFF2IndexOf` is simply `CFF2Index` containing data of a particular type. `CFF2Index` is defined [here](https://learn.microsoft.com/en-us/typography/opentype/spec/cff2#5-index-data). The purpose of `CFF2IndexOf` is to efficiently store a list of variable-sized data, for example glyph records.
+
+- `MultiIteVariationStore`: This is a new data-structure. It's a hybrid between `ItemVariationStore`, and `TupleVariationStore`, borrowing ideas (and some data-structures) from both and improving upon them for more efficient storage of variations of *tuples* of numbers.
+
 ## Variable Composite Description
 
 A Variable Composite record is a concatenation of Variable Component records. Variable Component records have varying sizes.
