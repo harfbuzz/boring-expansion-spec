@@ -141,25 +141,46 @@ limitations that `TupleVariationStore` has, like the total size of an entry
 being limited to 64kb.
 
 The top-level header of a `MultiItemVariationStore` is:
-```
+```c++
 struct MultiItemVariationStore
 {
   uint16 format; // Set to 1
   LOffsetTo<SparseVariationRegionList> variationRegionListOffset;
-  uint16_t itemVariationDataCount
+  uint16_t itemVariationDataCount;
   Offset32To<MultiItemVariationData> itemVariationDataOffsets[itemVariationDataCount];
 };
 ```
-
-*TODO* Finish.
-
+```c++
+struct SparseVariationRegionList
+{
+  uint16 regionCount;
+  Offset32To<SparseVariationRegion> variationRegionOffsets[regionCount];
+}
 ```
+```c++
+struct SparseVariationRegion
+{
+  uint16 regionAxisCount;
+  SparseRegionAxisCoordinates regionAxes[regionAxisCount];
+};
+```
+```c++
+struct SparseRegionAxisCoordinates
+{
+  uint16 axisIndex;
+  F2DOT14 startCoord;
+  F2DOT14 peakCoord;
+  F2DOT14 endCoord;
+};
+```
+
+```c++
 struct MultiItemVariationData
 {
   uint16 Format; // 1
-  uint16 VarRegionCount;
-  uint16 VarRegionIndex[VarRegionCount]
-  CFF2IndexOf<TupleValues>
+  uint16 regionIndexCount;
+  uint16 regionIndexes[regionIndexCount];
+  CFF2IndexOf<TupleValues> deltaSets;
 };
 ```
 
@@ -167,7 +188,7 @@ struct MultiItemVariationData
 ## Variable Composite Description
 
 A Variable Composite record is a concatenation of Variable Component records. Variable Component records have varying sizes.
-```
+```c++
 struct VarCompositeGlyph
 {
   VarComponent components[];
@@ -178,11 +199,11 @@ struct VarCompositeGlyph
 
 A Variable Component record encodes one component's glyph index, variations location, and transformation in a variable-sized and efficient manner.
 
-```
+```c++
 struct VarComponent
 {
   uint16 flags;
-  _variable_
+  _variable_;
 }
 ```
 
@@ -259,7 +280,7 @@ t = t.translate(-TCenterX, -TCenterY)
 ```
 
 ## `VARC` table
-```
+```c++
 struct VARC
 {
   uint16_t major; // 1
@@ -268,7 +289,8 @@ struct VARC
   Offset32To<MultiItemVariationStore>
   Offset32To<CFF2IndexOf<VarCompositeGlyph>> glyphRecords;
 };
-
+```
+```c++
 struct VarCompositeGlyphRecord
 {
   VarComponentGlyphRecord[] components;
