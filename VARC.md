@@ -305,8 +305,8 @@ used. If the flag is clear the axis values from current glyph being processed
 are used.  For example, if the font variations have `wght`=.25 (normalized),
 and current glyph being processed is using `wght`=.5 because it was referenced
 from another VarComposite glyph itself, when referring to a component that does
-_not_ specify the `wght` axis, if flag bit 13 is set, then the value of
-`wght`=0 (default) will be used. If flag bit 13 is clear, `wght`=.5 (from
+_not_ specify the `wght` axis, if flag bit 1 is set, then the value of
+`wght`=0 (default) will be used. If flag bit 1 is clear, `wght`=.5 (from
 current glyph) will be used.
 
 The component location and transform can vary. These variations are stored in
