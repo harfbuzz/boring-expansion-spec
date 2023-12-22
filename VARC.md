@@ -217,11 +217,11 @@ struct VarComponent
 | VarInt32 | transformVarIndex | Optional, only present if bit 5 of `flags` is set. |
 | FWORD | TranslateX | Optional, only present if bit 6 of `flags` is set. |
 | FWORD |  TranslateY | Optional, only present if bit 7 of `flags` is set. |
-| F4DOT12 | Rotation | Optional, only present if bit 8 of `flags` is set. Clockwise. |
+| F4DOT12 | Rotation | Optional, only present if bit 8 of `flags` is set. Counter-clockwise. |
 | F6DOT10 | ScaleX | Optional, only present if bit 9 of `flags` is set. |
 | F6DOT10 | ScaleY | Optional, only present if bit 10 of `flags` is set. |
-| F4DOT12 | SkewX | Optional, only present if bit 11 of `flags` is set. Clockwise. |
-| F4DOT12 | SkewY | Optional, only present if bit 12 of `flags` is set. Clockwise. |
+| F4DOT12 | SkewX | Optional, only present if bit 11 of `flags` is set. Counter-clockwise. |
+| F4DOT12 | SkewY | Optional, only present if bit 12 of `flags` is set. Counter-clockwise. |
 | FWORD | TCenterX | Optional, only present if bit 13 of `flags` is set. |
 | FWORD |  TCenterY | Optional, only present if bit 14 of `flags` is set. |
 
