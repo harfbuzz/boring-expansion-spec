@@ -285,8 +285,8 @@ The top-level `VARC` table header is as follows:
 ```c++
 struct VARC
 {
-  uint16 major; // 1
-  uint16 minor; // 0
+  uint16 majorVersion; // 1
+  uint16 minorVersion; // 0
   Offset32To<Coverage> coverage;
   Offset32To<MultiItemVariationStore> varStore;
   Offset32To<TupleValues> axisIndicesList;
