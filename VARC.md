@@ -114,7 +114,7 @@ The purpose of `CFF2IndexOf` is to efficiently store a list of variable-sized
 data, for example glyph records, or other data.
 
 Note that the `count` field of CFF2 `Index` structure is `uint32`, unlike the
-count field of CFF Index structure.
+count field of CFF `Index` structure.
 
 ### `MultiItemVariationStore`
 
@@ -140,7 +140,12 @@ efficiency over the `TupleVariationStore`. It also does not have some of the
 limitations that `TupleVariationStore` has, like the total size of an entry
 being limited to 64kb.
 
-The top-level header of a `MultiItemVariationStore` is:
+The following structures form the `MultiItemVariationStore`.  Its processing is
+fairly similar to that of the `ItemVariationStore`, except that the deltas
+encoded for each entry consist of multiple numbers per region. The
+`TupleValues` for each entry is as such the concatenation of the tuple deltas
+per for each region.
+
 ```c++
 struct MultiItemVariationStore
 {
