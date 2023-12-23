@@ -37,10 +37,10 @@ The following foundational data-structures are used in this able:
 To be added to [The OpenType Font File Data
 Types](https://learn.microsoft.com/en-us/typography/opentype/spec/otff#data-types)
 
-A `VarInt32` is a variable-length encoding of a `uint32`. Like the UTF-8
-encoding, it encodes the number of subsequent bytes as top bits of the first
-byte. Unlike UTF-8, the subsequent bytes use the full 8 bits for storage,
-instead of 6 in UTF-8.
+A `VarInt32` is a variable-length encoding of a `uint32`. If the number fits in
+7 bits, then it is encoded as is. Otherwise, it encodes the number of
+subsequent bytes as top bits of the first byte. The subsequent bytes use the
+full 8 bits for storage.
 
 *TODO:* Add table of encoding bytes.
 
