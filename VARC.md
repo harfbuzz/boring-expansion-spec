@@ -191,10 +191,21 @@ struct MultiItemVariationData
 };
 ```
 
+The `deltaSets` in a `MultiItemVariationData` table store the delta-set for a
+single tuple, addressed by the "inner" index of the `VarIdx`, whereas a
+`MultiItemVariationData` table itself represents the data for all values
+sharing the same "outer" index.
+
+The `TupleValues` for each entry are the concatenation of the tuple deltas for
+each region. The length of the tuple is calculate by dividing the number of
+entries in the `TupleValues` structure by the number of regions.
+
 
 ## Variable Composite Description
 
-A Variable Composite record is a concatenation of Variable Component records. Variable Component records have varying sizes.
+A Variable Composite record is a concatenation of Variable Component records.
+Variable Component records have varying sizes.
+
 ```c++
 struct VarCompositeGlyph
 {
@@ -202,9 +213,13 @@ struct VarCompositeGlyph
 };
 ```
 
+When decoding a `VarCompositeGlyph`, the decoder stops when the bytes for the
+glyph are depleted.
+
 ## Variable Component Record
 
-A Variable Component record encodes one component's glyph index, variations location, and transformation in a variable-sized and efficient manner.
+A Variable Component record encodes one component's glyph index, variations
+location, and transformation in a variable-sized and efficient manner.
 
 ```c++
 struct VarComponent
@@ -274,8 +289,13 @@ Transformation fields:
 
 The `TCenterX` and `TCenterY` values represent the “center of transformation”.
 
-Details of how to build a transformation matrix, as pseudo-Python code:
+The rotation and skew parameters are in angles as multiples of Pi.
 
+Two new types, `F4DOT12` and `F6DOT10` need to be added to the [Data
+Types](https://learn.microsoft.com/en-us/typography/opentype/spec/otff#data-types)
+section of the specification.
+
+Details of how to build a transformation matrix, as Python code:
 ```python
 # Using fontTools.misc.transform.Transform
 t = Transform()  # Identity
@@ -300,6 +320,16 @@ struct VARC
   Offset32To<CFF2IndexOf<VarCompositeGlyph>> glyphRecords;
 };
 ```
+
+The `coverage` table enumerates all glyphs that have Variable-Composite records
+in this table. The records are encoded in `glyphRecords` by coverage index as
+usual.
+
+The `varStore` stores the variations of axis-values and transform values as
+referenced in the Variable Component records.
+
+The `axisIndicesList` encodes a list of axis-indices tuples, and is shared by
+the glyphs which address it using an index.
 
 
 ## Processing
