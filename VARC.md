@@ -91,7 +91,7 @@ def _writeVarInt32(v):
 
 `TupleValues` is similar to the `TupleVariationStore` [Packed
 Deltas](https://learn.microsoft.com/en-us/typography/opentype/spec/otvarcommonformats#packed-deltas)
-with a minor modification: if the top two bites of the control byte
+with a minor modification: if the top two bits of the control byte
 (`DELTAS_ARE_ZERO` and `DELTAS_ARE_WORDS`) are both set, then the following
 values are 32-bit. That difference should be incorporated in the Packed Deltas
 section of `TupleVariationStore`, and is backwards-compatible because the two
