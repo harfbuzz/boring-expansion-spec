@@ -132,7 +132,9 @@ index.
 
 Whereas the `ItemVariationStore` stores deltas for a single scalar value for
 each `VarIdx`, the `MultiItemVariationStore` stores deltas for a tuple for each
-`VarIdx`.
+`VarIdx`. Compare to `ItemVariationStore`, the `MultiItemVariationStore` uses a
+sparse encoding of the _active_ axes for each region, which is more efficient
+in fonts with high number of axes.
 
 Compared to `TupleVariationStore`, the `MultiItemVariationStore` is optimized
 for smaller tuples and allows tuple-sharing, which is important for its
