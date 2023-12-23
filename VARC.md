@@ -146,7 +146,7 @@ The following structures form the `MultiItemVariationStore`.  Its processing is
 fairly similar to that of the `ItemVariationStore`, except that the deltas
 encoded for each entry consist of multiple numbers per region. The
 `TupleValues` for each entry is as such the concatenation of the tuple deltas
-per for each region.
+for each region.
 
 ```c++
 struct MultiItemVariationStore
