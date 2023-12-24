@@ -221,52 +221,47 @@ glyph are depleted.
 A Variable Component record encodes one component's glyph index, variations
 location, and transformation in a variable-sized and efficient manner.
 
-```c++
-struct VarComponent
-{
-  uint16 flags;
-  _variable_;
-}
-```
-
 | type | name | notes |
 |-|-|-|
-| uint16 | flags | See below. |
-| GlyphID16 or GlyphID24 | gid | This is a GlyphID16 if bit 2 of `flags` is clear, else GlyphID24. |
-| VarInt32 | axisIndicesIndex | Optional, only present if bit 3 of `flags` is set. |
+| VarInt32 | flags | See below. |
+| GlyphID16 or GlyphID24 | gid | This is a GlyphID16 if `GID_IS_24BIT` bit of `flags` is clear, else GlyphID24. |
+| VarInt32 | axisIndicesIndex | Optional, only present if `HAVE_AXES` bit of `flags` is set. |
 | TupleValues | axisValues | The axis value for each axis, variable sized. |
-| VarInt32 | axisValuesVarIndex | Optional, only present if bit 4 of `flags` is set. |
-| VarInt32 | transformVarIndex | Optional, only present if bit 5 of `flags` is set. |
-| FWORD | TranslateX | Optional, only present if bit 6 of `flags` is set. |
-| FWORD |  TranslateY | Optional, only present if bit 7 of `flags` is set. |
-| F4DOT12 | Rotation | Optional, only present if bit 8 of `flags` is set. Counter-clockwise. |
-| F6DOT10 | ScaleX | Optional, only present if bit 9 of `flags` is set. |
-| F6DOT10 | ScaleY | Optional, only present if bit 10 of `flags` is set. |
-| F4DOT12 | SkewX | Optional, only present if bit 11 of `flags` is set. Counter-clockwise. |
-| F4DOT12 | SkewY | Optional, only present if bit 12 of `flags` is set. Counter-clockwise. |
-| FWORD | TCenterX | Optional, only present if bit 13 of `flags` is set. |
-| FWORD |  TCenterY | Optional, only present if bit 14 of `flags` is set. |
+| VarInt32 | axisValuesVarIndex | Optional, only present if `AXIS_VALUES_HAVE_VARIATION` bit of `flags` is set. |
+| VarInt32 | transformVarIndex | Optional, only present if `TRANSFORM_HAS_VARIATION` bit of `flags` is set. |
+| FWORD | TranslateX | Optional, only present if `HAVE_TRANSLATE_X` bit of `flags` is set. |
+| FWORD |  TranslateY | Optional, only present if `HAVE_TRANSLATE_Y` bit of `flags` is set. |
+| F4DOT12 | Rotation | Optional, only present if `HAVE_ROTATION` bit of `flags` is set. Counter-clockwise. |
+| F6DOT10 | ScaleX | Optional, only present if `HAVE_SCALE_X` bit of `flags` is set. |
+| F6DOT10 | ScaleY | Optional, only present if `HAVE_SCALE_Y` bit of `flags` is set. |
+| F4DOT12 | SkewX | Optional, only present if `HAVE_SKEW_X` bit of `flags` is set. Counter-clockwise. |
+| F4DOT12 | SkewY | Optional, only present if `HAVE_SKEW_Y` bit of `flags` is set. Counter-clockwise. |
+| FWORD | TCenterX | Optional, only present if `HAVE_TCENTER_X` bit of `flags` is set. |
+| FWORD |  TCenterY | Optional, only present if `HAVE_TCENTER_Y` bit of `flags` is set. |
 
 ### Variable Component Flags
 
-| bit number | meaning |
+| bit number | name |
 |-|-|
-| 0 | use my metrics |
-| 1 | reset unspecified axes |
-| 2 | gid is 24 bit |
-| 3 | have axes |
-| 4 | axis values have variation |
-| 5 | transformation has variation |
-| 6 | have TranslateX |
-| 7 | have TranslateY |
-| 8 | have Rotation |
-| 9 | have ScaleX |
-| 10 | have ScaleY |
-| 11 | have SkewX |
-| 12 | have SkewY |
-| 13 | have TCenterX |
-| 14 | have TCenterY |
-| 15 | Reserved. Set to 0 |
+| 0 | `RESET_UNSPECIFIED_AXES` |
+| 1 | `HAVE_AXES` |
+| 2 | `AXIS_VALUES_HAVE_VARIATION` |
+| 3 | `TRANSFORM_HAS_VARIATION` |
+| 4 | `HAVE_TRANSLATE_X` |
+| 5 | `HAVE_TRANSLATE_Y` |
+| 6 | `HAVE_ROTATION` |
+| 7 | `USE_MY_METRICS` |
+| 8 | `HAVE_SCALE_X` |
+| 9 | `HAVE_SCALE_Y` |
+| 10 | `HAVE_TCENTER_X` |
+| 11 | `HAVE_TCENTER_Y` |
+| 12 | `GID_IS_24BIT` |
+| 13 | `HAVE_SKEW_X` |
+| 14 | `HAVE_SKEW_Y` |
+| 15-31 | Reserved. Set to 0 |
+
+The flags are arranged in the order of likely use, to minimize the storage
+bytes of the `flags` field.
 
 ### Variable Component Transformation
 
@@ -335,15 +330,17 @@ the glyphs which address it using an index.
 ## Processing
 
 The component glyphs to be loaded use the coordinate values specified (with any
-variations applied if present). For any unspecified axis, the value used
-depends on flag bit 1. If the flag is set, then the normalized value zero is
+variations applied if present).
+
+For any unspecified axis, the value used depends on flag
+`RESET_UNSPECIFIED_AXES. If the flag is set, then the normalized value zero is
 used. If the flag is clear the axis values from current glyph being processed
 (which itself might recursively come from the font or its own parent glyphs)
 are used.  For example, if the font variations have `wght`=.25 (normalized),
 and current glyph being processed is using `wght`=.5 because it was referenced
 from another VarComposite glyph itself, when referring to a component that does
-_not_ specify the `wght` axis, if flag bit 1 is set, then the value of
-`wght`=0 (default) will be used. If flag bit 1 is clear, `wght`=.5 (from
+_not_ specify the `wght` axis, if the flag bit is set, then the value of
+`wght`=0 (default) will be used. If the flag bit is clear, `wght`=.5 (from
 current glyph) will be used.
 
 The component location and transform can vary. These variations are stored in
