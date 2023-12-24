@@ -223,21 +223,21 @@ location, and transformation in a variable-sized and efficient manner.
 
 | type | name | notes |
 |-|-|-|
-| VarInt32 | flags | See below. |
-| GlyphID16 or GlyphID24 | gid | This is a GlyphID16 if `GID_IS_24BIT` bit of `flags` is clear, else GlyphID24. |
-| VarInt32 | axisIndicesIndex | Optional, only present if `HAVE_AXES` bit of `flags` is set. |
-| TupleValues | axisValues | The axis value for each axis, variable sized. |
-| VarInt32 | axisValuesVarIndex | Optional, only present if `AXIS_VALUES_HAVE_VARIATION` bit of `flags` is set. |
-| VarInt32 | transformVarIndex | Optional, only present if `TRANSFORM_HAS_VARIATION` bit of `flags` is set. |
-| FWORD | TranslateX | Optional, only present if `HAVE_TRANSLATE_X` bit of `flags` is set. |
-| FWORD |  TranslateY | Optional, only present if `HAVE_TRANSLATE_Y` bit of `flags` is set. |
-| F4DOT12 | Rotation | Optional, only present if `HAVE_ROTATION` bit of `flags` is set. Counter-clockwise. |
-| F6DOT10 | ScaleX | Optional, only present if `HAVE_SCALE_X` bit of `flags` is set. |
-| F6DOT10 | ScaleY | Optional, only present if `HAVE_SCALE_Y` bit of `flags` is set. |
-| F4DOT12 | SkewX | Optional, only present if `HAVE_SKEW_X` bit of `flags` is set. Counter-clockwise. |
-| F4DOT12 | SkewY | Optional, only present if `HAVE_SKEW_Y` bit of `flags` is set. Counter-clockwise. |
-| FWORD | TCenterX | Optional, only present if `HAVE_TCENTER_X` bit of `flags` is set. |
-| FWORD |  TCenterY | Optional, only present if `HAVE_TCENTER_Y` bit of `flags` is set. |
+| VarInt32 | `flags` | See below. |
+| GlyphID16 or GlyphID24 | `gid` | This is a GlyphID16 if `GID_IS_24BIT` bit of `flags` is clear, else GlyphID24. |
+| VarInt32 | `axisIndicesIndex` | Optional, only present if `HAVE_AXES` bit of `flags` is set. |
+| TupleValues | `axisValues` | The axis value for each axis, variable sized. |
+| VarInt32 | `axisValuesVarIndex` | Optional, only present if `AXIS_VALUES_HAVE_VARIATION` bit of `flags` is set. |
+| VarInt32 | `transformVarIndex` | Optional, only present if `TRANSFORM_HAS_VARIATION` bit of `flags` is set. |
+| FWORD | `TranslateX` | Optional, only present if `HAVE_TRANSLATE_X` bit of `flags` is set. |
+| FWORD | ` TranslateY` | Optional, only present if `HAVE_TRANSLATE_Y` bit of `flags` is set. |
+| F4DOT12 | `Rotation` | Optional, only present if `HAVE_ROTATION` bit of `flags` is set. Counter-clockwise. |
+| F6DOT10 | `ScaleX` | Optional, only present if `HAVE_SCALE_X` bit of `flags` is set. |
+| F6DOT10 | `ScaleY` | Optional, only present if `HAVE_SCALE_Y` bit of `flags` is set. |
+| F4DOT12 | `SkewX` | Optional, only present if `HAVE_SKEW_X` bit of `flags` is set. Counter-clockwise. |
+| F4DOT12 | `SkewY` | Optional, only present if `HAVE_SKEW_Y` bit of `flags` is set. Counter-clockwise. |
+| FWORD | `TCenterX` | Optional, only present if `HAVE_TCENTER_X` bit of `flags` is set. |
+| FWORD | ` TCenterY` | Optional, only present if `HAVE_TCENTER_Y` bit of `flags` is set. |
 
 ### Variable Component Flags
 
