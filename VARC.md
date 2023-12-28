@@ -350,6 +350,13 @@ variations for transform are referred to by the `transformVarIndex` if any. For
 transform variations, only those fields specified and as such encoded as per
 the flags have variations.
 
+The component then is recursively loaded from the `VARC` table, if it is
+present in this table; otherwise, falls back to `glyf`/`gvar`, `CFF2`, or any
+other mechanism to get raw outlines.  An exception to the recursive rule is
+that if a component refers to the glyphID of the current glyph, instead of
+recursing (which would result in infinite recursion), the glyph outline for the
+component is loaded directly instead, as if the glyphID had no `VARC` entry.
+
 **Note:** While it is the (undocumented?) behavior of the `glyf` table that
 glyphs loaded are shifted to align their LSB to that specified in the `hmtx`
 table, much like regular Composite glyphs, this does not apply to component
