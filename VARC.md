@@ -132,7 +132,7 @@ index.
 
 Whereas the `ItemVariationStore` stores deltas for a single scalar value for
 each `VarIdx`, the `MultiItemVariationStore` stores deltas for a tuple for each
-`VarIdx`. Compare to `ItemVariationStore`, the `MultiItemVariationStore` uses a
+`VarIdx`. Compared to `ItemVariationStore`, the `MultiItemVariationStore` uses a
 sparse encoding of the _active_ axes for each region, which is more efficient
 in fonts with high number of axes.
 
@@ -333,7 +333,7 @@ The component glyphs to be loaded use the coordinate values specified (with any
 variations applied if present).
 
 For any unspecified axis, the value used depends on flag
-`RESET_UNSPECIFIED_AXES. If the flag is set, then the normalized value zero is
+`RESET_UNSPECIFIED_AXES`. If the flag is set, then the normalized value zero is
 used. If the flag is clear the axis values from current glyph being processed
 (which itself might recursively come from the font or its own parent glyphs)
 are used.  For example, if the font variations have `wght`=.25 (normalized),
@@ -366,7 +366,7 @@ glyphs being loaded as part of a variable-composite glyph.
 have `fvar` / `avar` tables but _would_ have the `gvar` table in a
 TrueType-flavored font, or `CFF2` variations in a CFF-flavored font. This is
 because the components themselves store their variables in the classic way. The
-exception to this situation is a font with `VARC` table where does NOT vary the
+exception to this situation is a font with `VARC` table that does NOT vary the
 component locations and transforms, and does not encode any location for the
 components either. In practice, such a font would just use the `VARC` table
-like classic components.
+in the manner of classic components in a `glyf` table.
