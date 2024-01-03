@@ -11,7 +11,7 @@ to an equivalent non-variable-composite font.
 
 The following foundational data-structures are used in this able:
 
-- `VarInt32` is a variable-length encoding of `uint32` values, which uses 1 to
+- `uint32var` is a variable-length encoding of `uint32` values, which uses 1 to
   5 bytes depending on the magnitude of the value being encoded. It borrows
   ideas from the UTF-8 encoding, but is more efficient because it does not have
   some of the random-access properties of UTF-8 encoding.
@@ -32,23 +32,23 @@ The following foundational data-structures are used in this able:
   *tuples* of numbers.
 
 
-### `VarInt32`
+### `uint32var`
 
 To be added to [The OpenType Font File Data
 Types](https://learn.microsoft.com/en-us/typography/opentype/spec/otff#data-types)
 
-A `VarInt32` is a variable-length encoding of a `uint32`. If the number fits in
+A `uint32var` is a variable-length encoding of a `uint32`. If the number fits in
 7 bits, then it is encoded as is. Otherwise, it encodes the number of
 subsequent bytes as top bits of the first byte. The subsequent bytes use the
 full 8 bits for storage.
 
 *TODO:* Add table of encoding bytes.
 
-Here is Python code to read and write `VarInt32` values:
+Here is Python code to read and write `uint32var` values:
 
 ```python
-def _readVarInt32(data, i):
-    """Read a variable-length number from data starting at index i.
+def read_uint32var(data, i):
+    """Read a variable-length uint32 number from data starting at index i.
 
     Return the number and the next index.
     """
@@ -70,8 +70,8 @@ def _readVarInt32(data, i):
         ] << 8 | data[i + 4], i + 5
 ```
 ```python
-def _writeVarInt32(v):
-    """Write a variable-length number.
+def write_uint32var(v):
+    """Write a variable-length uint32 number.
 
     Return the data.
     """
@@ -223,12 +223,12 @@ location, and transformation in a variable-sized and efficient manner.
 
 | type | name | notes |
 |-|-|-|
-| VarInt32 | `flags` | See below. |
+| uint32var | `flags` | See below. |
 | GlyphID16 or GlyphID24 | `gid` | This is a GlyphID16 if `GID_IS_24BIT` bit of `flags` is clear, else GlyphID24. |
-| VarInt32 | `axisIndicesIndex` | Optional, only present if `HAVE_AXES` bit of `flags` is set. |
+| uint32var | `axisIndicesIndex` | Optional, only present if `HAVE_AXES` bit of `flags` is set. |
 | TupleValues | `axisValues` | The axis value for each axis, variable sized. |
-| VarInt32 | `axisValuesVarIndex` | Optional, only present if `AXIS_VALUES_HAVE_VARIATION` bit of `flags` is set. |
-| VarInt32 | `transformVarIndex` | Optional, only present if `TRANSFORM_HAS_VARIATION` bit of `flags` is set. |
+| uint32var | `axisValuesVarIndex` | Optional, only present if `AXIS_VALUES_HAVE_VARIATION` bit of `flags` is set. |
+| uint32var | `transformVarIndex` | Optional, only present if `TRANSFORM_HAS_VARIATION` bit of `flags` is set. |
 | FWORD | `TranslateX` | Optional, only present if `HAVE_TRANSLATE_X` bit of `flags` is set. |
 | FWORD | ` TranslateY` | Optional, only present if `HAVE_TRANSLATE_Y` bit of `flags` is set. |
 | F4DOT12 | `Rotation` | Optional, only present if `HAVE_ROTATION` bit of `flags` is set. Counter-clockwise. |
