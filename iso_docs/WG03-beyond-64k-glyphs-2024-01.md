@@ -22,7 +22,7 @@ Esfahbod (behdad@behdad.org), Laurence Penney (lorp@lorp.org), Liam Quin
 
 # <span id="anchor-1"></span>Introduction
 
-This PDF document was produced on 2<sup>nd</sup> January 2024.
+This PDF document was produced on 7<sup>th</sup> January 2024.
 
 Changes since the October 2023 meeting:
 
@@ -3094,11 +3094,11 @@ Mark-to-Ligature attachment positioning subtable, insert:
 |----------|--------------------|----------------------------------------------------------------------------|
 | Type     | Name               | Description                                                                |
 | uint16   | posFormat          | Format identifier-format = 2                                               |
-| Offset24 | markCoverageOffset | Offset to MarkCoverage table, from beginning of MarkBasePos subtable       |
-| Offset24 | baseCoverageOffset | Offset to BaseCoverage table, from beginning of MarkBasePos subtable       |
+| Offset32 | markCoverageOffset | Offset to MarkCoverage table, from beginning of MarkBasePos subtable       |
+| Offset32 | baseCoverageOffset | Offset to BaseCoverage table, from beginning of MarkBasePos subtable       |
 | uint16   | markClassCount     | Number of classes defined for marks                                        |
-| Offset24 | markArrayOffset    | Offset to MarkArray2 table, from the beginning of the MarkBasePos subtable |
-| Offset24 | baseArrayOffset    | Offset to BaseArray2 table, from the beginning of the MarkBasePos subtable |
+| Offset32 | markArrayOffset    | Offset to MarkArray2 table, from the beginning of the MarkBasePos subtable |
+| Offset32 | baseArrayOffset    | Offset to BaseArray2 table, from the beginning of the MarkBasePos subtable |
 
 The BaseArray table is similarly updated to use 24-bit numbers in Format
 2:
@@ -3440,7 +3440,7 @@ IDs:****
 ****Context positioning subtable ****Format 5: ****Using**** Class-based
 Glyph Contexts****
 
-Format 5 is the same as Format 2, but uses 24-bit offsets to avoid
+Format 5 is the same as Format 2, but uses larger offsets to avoid
 possible overflow.
 
 *ContextPosFormat*5* Subtable *
@@ -4048,7 +4048,7 @@ the Format1 subtable, except for using 24-bit numbers.
 <td>Number of AlternateSet2 tables</td>
 </tr>
 <tr class="odd">
-<td>Offset24</td>
+<td>Offset32</td>
 <td>alternateSetOffsets<br />
 [alternateSetCount]</td>
 <td>Array of offsets to AlternateSet2 tables. Offsets are from beginning
@@ -4991,14 +4991,14 @@ VARC-specific Types
 |                         |                                                                  |
 |-------------------------|------------------------------------------------------------------|
 | Data Type               | Summary                                                          |
-| VarInt32                | Encodes in 32-bit integer (uint32) in a variable number of bytes |
+| uint32var               | Encodes in 32-bit integer (uint32) in a variable number of bytes |
 | TupleValues             | A version of @@Packed Deltas supporting 32-bit values            |
 | CFF2Index               | A variable-sized CFF2-style Index structure                      |
 | MultiItemVariationStore | An efficient store for variations of tuples of numbers           |
 
 The ‘VARC’ table starts with a header.
 
-*VARC table header*
+VARC table header
 
 |          |                 |                                            |
 |----------|-----------------|--------------------------------------------|
@@ -5024,9 +5024,9 @@ one of these TupleValues using the index into the list.
 
 #### New Types
 
-##### VarInt32
+##### uint32var
 
-VarInt32 is an efficient and compact encoding of uint32 values, using
+uint32var is an efficient and compact encoding of uint32 values, using
 from one to five bytes to store a single value.
 
 Values are decoded as follows:
@@ -5053,7 +5053,7 @@ variable-byte numbers. Note that although they were inspired by UTF-8
 encoding, they are not the same, and achieve greater compression in the
 font encoding context.
 
-def \_**readVarInt32**(data, i):
+def \_**readuint32var**(data, i):
 
 """Read a variable-length number from data starting at index i.
 
@@ -5094,7 +5094,7 @@ i + 3
 
 \] \<\< 8 \| data\[i + 4\], i + 5
 
-def **\_writeVarInt32**(v):
+def **\_writeuint32var**(v):
 
 """Write a variable-length number.
 
@@ -5178,7 +5178,7 @@ that the deltas encoded for each entry consist of multiple numbers per
 region. The *TupleValues* for each entry is the concatenation of the
 tuple deltas for each region.
 
-*MultiItemVariationStore*
+MultiItemVariationStore
 
 <table>
 <tbody>
@@ -5245,7 +5245,7 @@ SparseRegionAxisCoordinates
 | F2DOT14 | peakCoord  |             |
 | F2DOT14 | endCoord   |             |
 
-*MultiItemVariationData*
+MultiItemVariationData
 
 |           |                                   |                                       |
 |-----------|-----------------------------------|---------------------------------------|
@@ -5290,12 +5290,12 @@ efficient manner.
 |                        |                    |                                                                                 |
 |------------------------|--------------------|---------------------------------------------------------------------------------|
 | type                   | name               | Description                                                                     |
-| VarInt32               | flags              | See below.                                                                      |
+| uint32var              | flags              | See below.                                                                      |
 | GlyphID16 or GlyphID24 | gid                | This is a GlyphID16 if GID_IS_24BIT bit of flags is clear, else GlyphID24.      |
-| VarInt32               | axisIndicesIndex   | Optional, only present if HAVE_AXES bit of flags is set.                        |
+| uint32var              | axisIndicesIndex   | Optional, only present if HAVE_AXES bit of flags is set.                        |
 | TupleValues            | axisValues         | The axis value for each axis, variable sized.                                   |
-| VarInt32               | axisValuesVarIndex | Optional, only present if AXIS_VALUES_HAVE_VARIATION bit of flags is set.       |
-| VarInt32               | transformVarIndex  | Optional, only present if TRANSFORM_HAS_VARIATION bit of flags is set.          |
+| uint32var              | axisValuesVarIndex | Optional, only present if AXIS_VALUES_HAVE_VARIATION bit of flags is set.       |
+| uint32var              | transformVarIndex  | Optional, only present if TRANSFORM_HAS_VARIATION bit of flags is set.          |
 | FWORD                  | TranslateX         | Optional, only present if HAVE_TRANSLATE_X bit of flags is set.                 |
 | FWORD                  | TranslateY         | Optional, only present if HAVE_TRANSLATE_Y bit of flags is set.                 |
 | F4DOT12                | Rotation           | Optional, only present if HAVE_ROTATION bit of flags is set. Counter-clockwise. |
