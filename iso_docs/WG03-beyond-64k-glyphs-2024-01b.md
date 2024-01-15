@@ -10,8 +10,8 @@
 
 **Milford, Ontario, Canada – January 2024**
 
-**Title: Proposed changes to accommodate larger character sets and to
-add new features**
+**Title: Proposed OFF changes to accommodate larger character sets and
+to add new features**
 
 **Author: Dave Crossland (Google Inc., dcrossland@google.com), Behdad
 Esfahbod (behdad@behdad.org), Laurence Penney (lorp@lorp.org), Liam Quin
@@ -1505,7 +1505,7 @@ In the sample code, add PaintGlyph2 in one place:
 
 <span id="anchor-40"></span>\[deleted from this proposal\]
 
-# BASE table structure
+# <span id="anchor-41"></span>BASE table structure
 
 In 5.3.1 Base Table Structure, in the paragraph just before BaseCoord
 Format 1,
@@ -1547,7 +1547,7 @@ glyph ID)**
 BaseCoordFormat2, but uses a 24-bit glyph ID, for example for use with
 the GLYF table rather than the 16-bit glyf table.****
 
-# <span id="anchor-41"></span>HHEA—Horizontal header \[5.1.4\]
+# <span id="anchor-42"></span>HHEA—Horizontal header \[5.1.4\]
 
 This table is intended for use with the ‘GLYF’ table. The lower-case
 named ‘hhea’ table shall be used in conjunction with the lower-case
@@ -1697,7 +1697,7 @@ value tags, as follows:
 For general information on OFF Font Variations, see [**subclause
 7.1**](#_Font_variations_overview).
 
-# <span id="anchor-42"></span>HMTX<span id="anchor-43"></span><span id="anchor-44"></span><span id="anchor-45"></span><span id="anchor-46"></span><span id="anchor-47"></span><span id="anchor-48"></span><span id="anchor-49"></span>—Horizontal metrics \[insert before 5.1.5 hmtx\]
+# <span id="anchor-43"></span>HMTX<span id="anchor-44"></span><span id="anchor-45"></span><span id="anchor-46"></span><span id="anchor-47"></span><span id="anchor-48"></span><span id="anchor-49"></span><span id="anchor-50"></span>—Horizontal metrics \[insert before 5.1.5 hmtx\]
 
 Glyph metrics used for horizontal text layout include glyph advance
 widths, side bearings and X-direction min and max values (xMin, xMax).
@@ -1831,7 +1831,7 @@ their initial position in the X-direction is calculated as follows:
 If a glyph has no contours, xMax/xMin are not defined. The left side
 bearing indicated in the 'HMTX' table for such glyphs should be zero.
 
-# <span id="anchor-50"></span><span id="anchor-51"></span>VHEA<span id="anchor-52"></span><span id="anchor-53"></span><span id="anchor-54"></span><span id="anchor-55"></span><span id="anchor-56"></span><span id="anchor-57"></span><span id="anchor-58"></span>—Vertical header table \[insert before 5.6.9 ‘vhea’\]
+# <span id="anchor-51"></span><span id="anchor-52"></span>VHEA<span id="anchor-53"></span><span id="anchor-54"></span><span id="anchor-55"></span><span id="anchor-56"></span><span id="anchor-57"></span><span id="anchor-58"></span><span id="anchor-59"></span>—Vertical header table \[insert before 5.6.9 ‘vhea’\]
 
 The vertical header table (tag name: 'VHEA') contains information needed
 for vertical fonts. The glyphs of vertical fonts are written either top
@@ -1841,7 +1841,7 @@ glyphs is given in the vertical metrics table (tag name: 'VMTX')
 described separately. The formats of these tables are similar to those
 for horizontal metrics (HHEA and HMTX).
 
-<span id="anchor-59"></span>@@above paragraph to be used in introduction
+<span id="anchor-60"></span>@@above paragraph to be used in introduction
 of a joint section for both tables.
 
   
@@ -1986,7 +1986,7 @@ LongVerMetrics</td>
 </tbody>
 </table>
 
-<span id="anchor-60"></span>Version 1.1 of the vertical header table
+<span id="anchor-61"></span>Version 1.1 of the vertical header table
 format is the same except for numOfLongVerMetrics using 32-bits:
 
   
@@ -2268,7 +2268,7 @@ horizontal caret for a vertical font.</td>
 </tbody>
 </table>
 
-# <span id="anchor-61"></span>VMTX<span id="anchor-62"></span><span id="anchor-63"></span><span id="anchor-64"></span><span id="anchor-65"></span><span id="anchor-66"></span><span id="anchor-67"></span><span id="anchor-68"></span>—Vertical metric table
+# <span id="anchor-62"></span>VMTX<span id="anchor-63"></span><span id="anchor-64"></span><span id="anchor-65"></span><span id="anchor-66"></span><span id="anchor-67"></span><span id="anchor-68"></span><span id="anchor-69"></span>—Vertical metric table
 
 The vertical metrics table allows you to specify the vertical spacing
 for each glyph in a vertical font. This table consists of either one or
@@ -2402,7 +2402,7 @@ Signed integer in font design units.</td>
 </tbody>
 </table>
 
-# <span id="anchor-69"></span><span id="anchor-70"></span><span id="anchor-71"></span><span id="anchor-72"></span><span id="anchor-73"></span><span id="anchor-74"></span><span id="anchor-75"></span><span id="anchor-76"></span><span id="anchor-77"></span><span id="anchor-78"></span><span id="anchor-79"></span><span id="anchor-80"></span><span id="anchor-81"></span><span id="anchor-82"></span><span id="anchor-83"></span><span id="anchor-84"></span><span id="anchor-85"></span><span id="anchor-86"></span><span id="anchor-87"></span><span id="anchor-88"></span><span id="anchor-89"></span><span id="anchor-90"></span><span id="anchor-91"></span><span id="anchor-92"></span><span id="anchor-93"></span><span id="anchor-94"></span><span id="anchor-95"></span><span id="anchor-96"></span><span id="anchor-97"></span><span id="anchor-98"></span><span id="anchor-99"></span>VORG—Vertical origin table \[5.3.4\]
+# <span id="anchor-70"></span><span id="anchor-71"></span><span id="anchor-72"></span><span id="anchor-73"></span><span id="anchor-74"></span><span id="anchor-75"></span><span id="anchor-76"></span><span id="anchor-77"></span><span id="anchor-78"></span><span id="anchor-79"></span><span id="anchor-80"></span><span id="anchor-81"></span><span id="anchor-82"></span><span id="anchor-83"></span><span id="anchor-84"></span><span id="anchor-85"></span><span id="anchor-86"></span><span id="anchor-87"></span><span id="anchor-88"></span><span id="anchor-89"></span><span id="anchor-90"></span><span id="anchor-91"></span><span id="anchor-92"></span><span id="anchor-93"></span><span id="anchor-94"></span><span id="anchor-95"></span><span id="anchor-96"></span><span id="anchor-97"></span><span id="anchor-98"></span><span id="anchor-99"></span><span id="anchor-100"></span>VORG—Vertical origin table \[5.3.4\]
 
 ### Replace the two tables under Vertical Origin Table Format as follows:
 
@@ -2426,9 +2426,9 @@ elements of the following format:
 | uint16 or uint24 | glyphIndex  | Glyph index. This shall be uint16 if MajorVersion is 1. It shall be uint24 otherise.                         |
 | int16            | vertOriginY | Y coordinate, in the font's design coordinate system, of the vertical origin of glyph with index glyphIndex. |
 
-### <span id="anchor-100"></span>
+### <span id="anchor-101"></span>
 
-# <span id="anchor-101"></span><span id="anchor-102"></span><span id="anchor-103"></span><span id="anchor-104"></span><span id="anchor-105"></span>sbix—Standard bitmap graphics table \[5.5.7\]
+# <span id="anchor-102"></span><span id="anchor-103"></span><span id="anchor-104"></span><span id="anchor-105"></span><span id="anchor-106"></span>sbix—Standard bitmap graphics table \[5.5.7\]
 
 The number of glyphs referenced by the table is the number of glyphs in
 the font as defined earlier. Same applies to non-OpenType tables kerx
@@ -2474,12 +2474,12 @@ table**](#_hmtx_–_Horizontal) for horizontal layout, and the
 [**'**VMTX**' table**](#_vmtx_–_Vertical) for vertical layout, or in
 ‘hmtx’ and ‘vmtx’ for use with the lower-case named ‘glyf’ table.
 
-# <span id="anchor-106"></span>ClassDef and Coverage
+# <span id="anchor-107"></span>ClassDef and Coverage
 
 We add formats 3 and 4 to Coverage \[6.2.6\] and to ClassDev \[6.2.7\]
 to support 24-bit glyphs.
 
-### <span id="anchor-107"></span><span id="anchor-108"></span><span id="anchor-109"></span><span id="anchor-110"></span><span id="anchor-111"></span><span id="anchor-112"></span>Coverage table \[6.2.6\]
+### <span id="anchor-108"></span><span id="anchor-109"></span><span id="anchor-110"></span><span id="anchor-111"></span><span id="anchor-112"></span><span id="anchor-113"></span>Coverage table \[6.2.6\]
 
 Each subtable (except an Extension LookupType subtable) in a lookup
 references a Coverage table (Coverage), which specifies all the glyphs
@@ -2648,7 +2648,7 @@ RangeRecord subtables.
 | uint24 | endGlyphID         | Last glyph ID in the range                |
 | uint24 | startCoverageIndex | Coverage Index of first glyph ID in range |
 
-### <span id="anchor-113"></span><span id="anchor-114"></span><span id="anchor-115"></span><span id="anchor-116"></span><span id="anchor-117"></span>Class definition table
+### <span id="anchor-114"></span><span id="anchor-115"></span><span id="anchor-116"></span><span id="anchor-117"></span><span id="anchor-118"></span>Class definition table
 
 In OFF Layout, index values identify glyphs. For efficiency and ease of
 representation, a font developer can group glyph indices to form glyph
@@ -2819,9 +2819,9 @@ Format 4 is the same as Format 2, but uses 24-bit glyph identifiers.
 | uint24 | endGlyphID   | Last glyph ID in the range         |
 | uint16 | class        | Applied to all glyphs in the range |
 
-# <span id="anchor-118"></span><span id="anchor-119"></span><span id="anchor-120"></span><span id="anchor-121"></span><span id="anchor-122"></span><span id="anchor-123"></span><span id="anchor-124"></span><span id="anchor-125"></span><span id="anchor-126"></span>GDEF—The glyph definition table \[6.3.2\]
+# <span id="anchor-119"></span><span id="anchor-120"></span><span id="anchor-121"></span><span id="anchor-122"></span><span id="anchor-123"></span><span id="anchor-124"></span><span id="anchor-125"></span><span id="anchor-126"></span><span id="anchor-127"></span>GDEF—The glyph definition table \[6.3.2\]
 
-<span id="anchor-127"></span>
+<span id="anchor-128"></span>
 
 The main GDEF struct is augmented with a version 2 to alleviate
 offset-overflows when classDef and other structs grow large:
@@ -2848,12 +2848,12 @@ Header, Version 1.3*, add:**
 | Offset32 | markAttachClassDefOffset2 | Offset to class definition table for mark attachment type, from beginning of GDEF header (may be NULL) |
 | Offset32 | markGlyphSetsDefOffset2   | Offset to the table of mark glyph set definitions, from beginning of GDEF header (may be NULL)         |
 
-<span id="anchor-128"></span>When minorVersion is 4, the offsets whose
+<span id="anchor-129"></span>When minorVersion is 4, the offsets whose
 names end in 2, such as attachListOffset2, are available for use when
 values greater than 65535 are needed. If such an offset is non-zero, the
 corresponding 16-bit offset shall be ignored.
 
-# <span id="anchor-129"></span><span id="anchor-130"></span><span id="anchor-131"></span><span id="anchor-132"></span><span id="anchor-133"></span><span id="anchor-134"></span><span id="anchor-135"></span><span id="anchor-136"></span><span id="anchor-137"></span>GPOS—The glyph positioning table \[6.3.3\]
+# <span id="anchor-130"></span><span id="anchor-131"></span><span id="anchor-132"></span><span id="anchor-133"></span><span id="anchor-134"></span><span id="anchor-135"></span><span id="anchor-136"></span><span id="anchor-137"></span><span id="anchor-138"></span>GPOS—The glyph positioning table \[6.3.3\]
 
 We define version two, to allow for additional glyphs and to avoid
 overflow.
@@ -3907,7 +3907,7 @@ beginning with the second glyph position</td>
 
 ****
 
-# <span id="anchor-138"></span><span id="anchor-139"></span><span id="anchor-140"></span><span id="anchor-141"></span><span id="anchor-142"></span><span id="anchor-143"></span><span id="anchor-144"></span><span id="anchor-145"></span><span id="anchor-146"></span>GSUB—The glyph substitution table \[6.3.4\]
+# <span id="anchor-139"></span><span id="anchor-140"></span><span id="anchor-141"></span><span id="anchor-142"></span><span id="anchor-143"></span><span id="anchor-144"></span><span id="anchor-145"></span><span id="anchor-146"></span><span id="anchor-147"></span>GSUB—The glyph substitution table \[6.3.4\]
 
 **After GSUB Header, Version 1.1 (just before 6.3.4.**3** GSUB lookup
 type descriptions) add:**
@@ -3927,7 +3927,7 @@ type descriptions) add:**
 | Offset32 | featureList2      | Offset to FeatureList table for use when offsets larger than 65535 are needed. |
 | Offset32 | lookupList2       | Offset to LookupList table for use when offsets larger than 65535 are needed.  |
 
-<span id="anchor-147"></span>When minorVersion is 2, the offsets whose
+<span id="anchor-148"></span>When minorVersion is 2, the offsets whose
 names end in 2, such as featureList2, are available for use when values
 greater than 65535 are needed. If such an offset is non-zero, the
 corresponding 16-bit offset shall be ignored.
@@ -4849,10 +4849,10 @@ sequence order.</td>
 </table>
 
 Near the end of
-<span id="anchor-148"></span><span id="anchor-149"></span><span id="anchor-150"></span><span id="anchor-151"></span><span id="anchor-152"></span><span id="anchor-153"></span><span id="anchor-154"></span><span id="anchor-155"></span>**The
+<span id="anchor-149"></span><span id="anchor-150"></span><span id="anchor-151"></span><span id="anchor-152"></span><span id="anchor-153"></span><span id="anchor-154"></span><span id="anchor-155"></span><span id="anchor-156"></span>**The
 Font Collection file structure** \[4.6.2\] we add a paragraph:
 
-### <span id="anchor-156"></span><span id="anchor-157"></span><span id="anchor-158"></span><span id="anchor-159"></span><span id="anchor-160"></span><span id="anchor-161"></span><span id="anchor-162"></span>**The Font Collection file structure** \[4.6.2\]
+### <span id="anchor-157"></span><span id="anchor-158"></span><span id="anchor-159"></span><span id="anchor-160"></span><span id="anchor-161"></span><span id="anchor-162"></span><span id="anchor-163"></span>**The Font Collection file structure** \[4.6.2\]
 
 A font collection file consists of a single TTC header table, one or
 more table directories (each corresponding to a different font
@@ -4909,7 +4909,7 @@ should use the file extension .OTC.
 
 > In 4.6.3 TTC Header, we add new versions:
 
-### <span id="anchor-163"></span><span id="anchor-164"></span><span id="anchor-165"></span><span id="anchor-166"></span><span id="anchor-167"></span><span id="anchor-168"></span><span id="anchor-169"></span><span id="anchor-170"></span>TTC header \[4.6.3\]
+### <span id="anchor-164"></span><span id="anchor-165"></span><span id="anchor-166"></span><span id="anchor-167"></span><span id="anchor-168"></span><span id="anchor-169"></span><span id="anchor-170"></span><span id="anchor-171"></span>TTC header \[4.6.3\]
 
 There are four versions of the TTC header: Version 1.0 has been used for
 TTC files without digital signatures. Version 2.0 can be used for TTC
@@ -4996,7 +4996,7 @@ and an array of offsets to each table directory.
 | uint32   | NumFonts2                            | Number of 24-bit fonts in TTC                                                                     |
 | Offset32 | tableDirectoryOffsets2 \[numFonts2\] | Array of offsets to the TableDirectory for each 24-bit font from the beginning of the file        |
 
-# <span id="anchor-171"></span>VARC—Variable Composite Glyph Descriptions
+# <span id="anchor-172"></span>VARC—Variable Composite Glyph Descriptions
 
 Introduction (not for the spec):
 
@@ -5025,11 +5025,11 @@ glyphs, and were not available to CFF2-based fonts. After discussion,
 and a counter-proposal from Skef Iterum at Adobe Systems, a sample
 implementation of an external table proved more effective.
 
-# <span id="anchor-172"></span>Data Types
+# <span id="anchor-173"></span>Data Types
 
 Update Section 4.3 Data Types, as follows:
 
-## <span id="anchor-173"></span><span id="anchor-174"></span><span id="anchor-175"></span><span id="anchor-176"></span><span id="anchor-177"></span><span id="anchor-178"></span><span id="anchor-179"></span><span id="anchor-180"></span><span id="anchor-181"></span><span id="anchor-182"></span>Data types
+## <span id="anchor-174"></span><span id="anchor-175"></span><span id="anchor-176"></span><span id="anchor-177"></span><span id="anchor-178"></span><span id="anchor-179"></span><span id="anchor-180"></span><span id="anchor-181"></span><span id="anchor-182"></span><span id="anchor-183"></span>Data types
 
 The following data types are used in the OFF font file. All OFF fonts
 use big-endian (network) byte order:
@@ -5044,7 +5044,7 @@ use big-endian (network) byte order:
 | uint24                                 | 24-bit unsigned integer.                                                                                                                        |
 | uint32                                 | 32-bit unsigned integer.                                                                                                                        |
 | int32                                  | 32-bit signed integer.                                                                                                                          |
-| <span id="anchor-183"></span>uint32var | Encodes a 32-bit integer (uint32) in a variable number of bytes.                                                                                |
+| <span id="anchor-184"></span>uint32var | Encodes a 32-bit integer (uint32) in a variable number of bytes.                                                                                |
 | Fixed                                  | 32-bit signed fixed-point number (16.16)                                                                                                        |
 | FWORD                                  | int16 that describes a quantity in font design units.                                                                                           |
 | UFWORD                                 | uint16 that describes a quantity in font design units.                                                                                          |
@@ -5074,7 +5074,7 @@ add the fraction. Examples of 2.14 values are:
 | -0.000061     | 0xffff    | -1      | 16383/16384 |
 | -2.0          | 0x8000    | -2      | 0/16384     |
 
-<span id="anchor-184"></span>The **F4DOT12** and **F6DOT10** formats
+<span id="anchor-185"></span>The **F4DOT12** and **F6DOT10** formats
 work the same way as F2DOT14 but have a larger integer and less
 precision in the unsigned fraction part.
 
@@ -5233,7 +5233,7 @@ non-NULL value is expected.
 
 Replace section 6.2.2 as follows:
 
-### <span id="anchor-185"></span><span id="anchor-186"></span><span id="anchor-187"></span><span id="anchor-188"></span><span id="anchor-189"></span>OFF layout and Font variations \[6.2.2\]
+### <span id="anchor-186"></span><span id="anchor-187"></span><span id="anchor-188"></span><span id="anchor-189"></span><span id="anchor-190"></span>OFF layout and Font variations \[6.2.2\]
 
 OFF Font Variations allow a single font to support many design
 variations along one or more axes of design variation. For example, a
@@ -5412,7 +5412,7 @@ Recommendations for OFF fonts,** add VARC as follows:
 
 ### VARC—Variable Composite Glyph Descriptions \[7.3.9\]
 
-<span id="anchor-190"></span>In the ISO OpenFont Format, composite
+<span id="anchor-191"></span>In the ISO OpenFont Format, composite
 glyphs are made by combining other glyphs. This might be as simple as a
 precombined accented letter such as é or š, or it could be a Chinese Han
 (ideogram) made by combining brush strokes, or it could be an emoji or
@@ -5431,7 +5431,7 @@ glyphs, giving the font designer control over the results of altering
 variable-font axis values. The control possible is similar to that in
 color fonts using COLR v1.
 
-<span id="anchor-191"></span>The following figure illustrates where the
+<span id="anchor-192"></span>The following figure illustrates where the
 VARC table fits in the glyph selection process:
 
 <img src="Pictures/100000010000044A0000039C213AED9E.png"
