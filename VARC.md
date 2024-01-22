@@ -226,7 +226,7 @@ location, and transformation in a variable-sized and efficient manner.
 | uint32var | `flags` | See below. |
 | GlyphID16 or GlyphID24 | `gid` | This is a GlyphID16 if `GID_IS_24BIT` bit of `flags` is clear, else GlyphID24. |
 | uint32var | `axisIndicesIndex` | Optional, only present if `HAVE_AXES` bit of `flags` is set. |
-| TupleValues | `axisValues` | The axis value for each axis, variable sized. |
+| TupleValues | `axisValues` | Optional, only present if `HAVE_AXES` bit of `flags` is set. The axis value for each axis. |
 | uint32var | `axisValuesVarIndex` | Optional, only present if `AXIS_VALUES_HAVE_VARIATION` bit of `flags` is set. |
 | uint32var | `transformVarIndex` | Optional, only present if `TRANSFORM_HAS_VARIATION` bit of `flags` is set. |
 | FWORD | `TranslateX` | Optional, only present if `HAVE_TRANSLATE_X` bit of `flags` is set. |
