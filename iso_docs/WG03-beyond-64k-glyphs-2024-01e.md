@@ -5277,6 +5277,10 @@ and ‘CFF2’ tables. Variable composite glyphs are made up of one or more
 transformed and potentially given different font variation axis values
 before being combined to make up the variable composite glyph.
 
+> <span id="anchor-174"></span>NOTE: The ‘VARC’ table does not affect
+> components of composite glyphs that are contained in ‘glyf’, ‘GLYF’,
+> or other glyph tables.
+
 The ‘VARC’ table is designed to be very space-efficient, so that fonts
 making extensive use of its mechanism can sometimes be stored in
 considerably less file space than without it. To achieve these savings,
@@ -5285,22 +5289,22 @@ structures are defined in section 4.3 Data Structures.
 
 VARC table header
 
-|          |                 |                                                                                        |
-|----------|-----------------|----------------------------------------------------------------------------------------|
-| Type     | Name            | Description                                                                            |
-| uint16   | majorVersion    | Table version. Set to 1.                                                               |
-| uint16   | minorVersion    | Set to zero.                                                                           |
-| Offset32 | coverage        | Offset to Coverage table from start of VARC table header                               |
-| Offset32 | varStore        | Offset to MultiItemVariationStore table from start of VARC table header                |
-| Offset32 | axisIndicesList | Offset to CFF2-style INDEX format array of TupleValues from start of VARC table header |
-| Offset32 | glyphRecords    | Offset to VarCompositeGlyphs from start of VARC table header                           |
+|          |                 |                                                                                                               |
+|----------|-----------------|---------------------------------------------------------------------------------------------------------------|
+| Type     | Name            | Description                                                                                                   |
+| uint16   | majorVersion    | Table version. Set to 1.                                                                                      |
+| uint16   | minorVersion    | Set to zero.                                                                                                  |
+| Offset32 | coverage        | Offset to Coverage table from start of VARC table header                                                      |
+| Offset32 | varStore        | Offset to MultiItemVariationStore table from start of VARC table header                                       |
+| Offset32 | axisIndicesList | Offset to CFF2-style INDEX format array of TupleValues , from start of VARC table header                      |
+| Offset32 | glyphRecords    | Offset to CFF2-style INDEX format array containing VarCompositeGlyph records, from start of VARC table header |
 
-The *coverage* table contains a *glyphRecord* for each glyph for which
-this ‘VARC’ table contains a Variable-Composite record. The glyphRecords
-shall be arranged by coverage index.
+The *coverage* table shall identify by glyphID all glyphs for each glyph
+for which this ‘VARC’ table contains a VarCompositeGlyph record in
+glyphRecords. The glyphRecords shall be arranged by coverage index.
 
 The *varStore* subtable stores the variations of axis values and
-transform values that are references in the individual Variable
+transform values that are referenced in the individual Variable
 Component records.
 
 The *axisIndicesLis*t offset points to a CFF2-style INDEX structure,
@@ -5311,12 +5315,13 @@ TupleValues using the index into the CFF2-style INDEX structure items,
 to specify axes that have variation for that particular
 VariableComponent.
 
-<span id="anchor-174"></span>The number of axisValues becomes known by
+<span id="anchor-175"></span>The number of axisValues becomes known by
 decoding the TupleValues, and that number is used to decode axisValues
 and to decide how many values to take from axisValuesVarIndex.
 
-NOTE The individualt axisValues, while encoded as TupleValues, are
-ultimately F2DOT14 values so must be divided by 16384
+> NOTE <span id="anchor-176"></span>The coverage table shall identify by
+> glyphID all components for each glyph for which this ‘VARC’ table
+> contains a VarCompositeGlyph record in glyphRecords.
 
 ##### Variable Composite Description (VarCompositeGlyph)
 
@@ -5337,8 +5342,7 @@ VarCompositeGlyph
 Variable Component Record
 
 A Variable Component record encodes one component's glyph index,
-variations location, and transformation in a variable-sized and
-efficient manner.
+variation axis values, and transformation in an efficient manner.
 
 <table>
 <tbody>
@@ -5366,8 +5370,8 @@ GlyphID24.</td>
 <tr class="odd">
 <td>TupleValues</td>
 <td>axisValues</td>
-<td>The axis value for each axis, variable sized. Optional, only present
-if HAVE_AXES bit of flags is set.<br />
+<td>The axis value for each axis. Optional, only present if HAVE_AXES
+bit of flags is set.<br />
 </td>
 </tr>
 <tr class="even">
@@ -5464,19 +5468,26 @@ The *TCenterX* and *TCenterY* values represent the “center of
 transformation”.
 
 The rotation and skew parameters are in angles as multiples of Pi.
-<span id="anchor-175"></span>That is, 1.0 of value represents a 180°
+<span id="anchor-177"></span>That is, 1.0 of value represents a 180°
 counter-clockwise rotation or skew.
 
-The following Python example illustrations construction of a
-transformation matrix:
+The following pseudo-code illustrations the construction of a full
+transformation from the individual transform fields:
 
-\# Using fontTools.misc.transform.Transform  
 t = Transform() \# Identity  
 t = t.translate(TranslateX + TCenterX, TranslateY + TCenterY)  
 t = t.rotate(Rotation \* math.pi)  
 t = t.scale(ScaleX, ScaleY)  
 t = t.skew(-SkewX \* math.pi, SkewY \* math.pi)  
 t = t.translate(-TCenterX, -TCenterY)
+
+The transformations shall be performed in the order illustrated:
+translate, rotate, scale, skew, corrective translation.
+
+> <span id="anchor-178"></span>NOTE: Attention must be paid to the sign
+> used for Rotation, SkewX, and SkewY. All three operations are defined
+> as counter-clockwise rotations in this table, while some libraries
+> expect those in different and possibly differing directions.
 
 #### Processing
 
@@ -5506,7 +5517,9 @@ variations are stored in the MultiItemVariationStore data-structure. The
 variations for location are referred to by the axisValuesVarIndex member
 of a component if any, and variations for transform are referred to by
 the transformVarIndex if any. For transform variations, only those
-fields specified and as such encoded as per the flags have variations.
+fields specified and as such encoded as per the flags have variations,
+and they are encoded in the order they appear in the Variable Component
+Record.
 
 Each component is recursively loaded from the VARC table, if it is
 present in this table; if it is not found in VARC, it is loaded from
