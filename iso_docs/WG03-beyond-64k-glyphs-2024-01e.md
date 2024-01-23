@@ -5299,9 +5299,13 @@ VARC table header
 | Offset32 | axisIndicesList | Offset to CFF2-style INDEX format array of TupleValues , from start of VARC table header                      |
 | Offset32 | glyphRecords    | Offset to CFF2-style INDEX format array containing VarCompositeGlyph records, from start of VARC table header |
 
-The *coverage* table shall identify by glyphID all glyphs for each glyph
-for which this ‘VARC’ table contains a VarCompositeGlyph record in
-glyphRecords. The glyphRecords shall be arranged by coverage index.
+<span id="anchor-175"></span>For any given glyphID, the coverage table
+may provide an index into the varCompositeGlyphList INDEX where the
+corresponding VarCompositeGlyph record is stored. If the glyphID is not
+found in the coverage table, there is no VarCompositeGlyph for the given
+glyphID.
+
+The glyphRecords shall be arranged by coverage index.
 
 The *varStore* subtable stores the variations of axis values and
 transform values that are referenced in the individual Variable
@@ -5315,11 +5319,11 @@ TupleValues using the index into the CFF2-style INDEX structure items,
 to specify axes that have variation for that particular
 VariableComponent.
 
-<span id="anchor-175"></span>The number of axisValues becomes known by
+<span id="anchor-176"></span>The number of axisValues becomes known by
 decoding the TupleValues, and that number is used to decode axisValues
 and to decide how many values to take from axisValuesVarIndex.
 
-> NOTE <span id="anchor-176"></span>The coverage table shall identify by
+> NOTE <span id="anchor-177"></span>The coverage table shall identify by
 > glyphID all components for each glyph for which this ‘VARC’ table
 > contains a VarCompositeGlyph record in glyphRecords.
 
@@ -5468,7 +5472,7 @@ The *TCenterX* and *TCenterY* values represent the “center of
 transformation”.
 
 The rotation and skew parameters are in angles as multiples of Pi.
-<span id="anchor-177"></span>That is, 1.0 of value represents a 180°
+<span id="anchor-178"></span>That is, 1.0 of value represents a 180°
 counter-clockwise rotation or skew.
 
 The following pseudo-code illustrations the construction of a full
@@ -5484,7 +5488,7 @@ t = t.translate(-TCenterX, -TCenterY)
 The transformations shall be performed in the order illustrated:
 translate, rotate, scale, skew, corrective translation.
 
-> <span id="anchor-178"></span>NOTE: Attention must be paid to the sign
+> <span id="anchor-179"></span>NOTE: Attention must be paid to the sign
 > used for Rotation, SkewX, and SkewY. All three operations are defined
 > as counter-clockwise rotations in this table, while some libraries
 > expect those in different and possibly differing directions.
