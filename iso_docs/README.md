@@ -12,6 +12,7 @@ After the ad-hoc call (see next paragraph), a new version was prepared
 for submission to the ISO MPEG OFF committee.
 It lacks some of the introductory text, had a DMAP proposal removed, and some offsets fixed.
 In VARC, CFF2Index has been renamed to (CFF2-style) INDEX.
+The documents were updated on 2024-01-23 to reflect feedback during the ISO committee meeting.
 
 The “e” versions are revised based on feedback:
    * [WG03-beyond-64k-glyphs-2024-01e.docx - Microsoft Office file](WG03-beyond-64k-glyphs-2024-01e.docx)
