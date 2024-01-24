@@ -5299,8 +5299,8 @@ VARC table header
 | Offset32 | axisIndicesList       | Offset to CFF2-style INDEX format array of TupleValues , from start of VARC table header                      |
 | Offset32 | varCompositeGlyphList | Offset to CFF2-style INDEX format array containing VarCompositeGlyph records, from start of VARC table header |
 
-<span id="anchor-175"></span>For any given glyphID, the coverage table
-may provide an index into the varCompositeGlyphList INDEX where the
+<span id="anchor-175"></span>For a given glyphID, the coverage table may
+provide an index into the *varCompositeGlyphList* INDEX where the
 corresponding VarCompositeGlyph record is stored. If the glyphID is not
 found in the coverage table, there is no VarCompositeGlyph for the given
 glyphID.
@@ -5317,20 +5317,21 @@ TupleValues using the index into the CFF2-style INDEX structure items,
 to specify axes that have variation for that particular
 VariableComponent.
 
-<span id="anchor-176"></span>The number of axisValues becomes known by
-decoding the TupleValues, and that number is used to decode axisValues
-and to decide how many values to take from axisValuesVarIndex.
+<span id="anchor-176"></span>The number of specified axes becomes known
+by decoding the TupleValues within *axisIndicesList.* That number is
+used to decode *axisValues* and to decide how many values to take from
+*axisValuesVarIndex*.
 
-> NOTE <span id="anchor-177"></span>The coverage table shall identify by
-> glyphID all components for each glyph for which this ‘VARC’ table
-> contains a VarCompositeGlyph record in glyphRecords.
+<span id="anchor-177"></span>NOTE: The integers decoded from axisValues,
+while encoded as integers in the TupleValues, must be divided by 16384
+to arrive at the normalized axis value.
 
 ##### Variable Composite Description (VarCompositeGlyph)
 
 A Variable Composite record is a concatenation of one or more Variable
-Component records.
+Component Records.
 
-Individual Variable Component records have varying sizes. When decoding
+Individual Variable Component Records have varying sizes. When decoding
 a *VarCompositeGlyph*, the decoder stops when it has processed all of
 the bytes for that glyph.
 
@@ -5343,7 +5344,7 @@ VarCompositeGlyph
 
 Variable Component Record
 
-A Variable Component record encodes one component's glyph index,
+A Variable Component Record encodes one component's glyph index,
 variation axis values, and transformation in an efficient manner.
 
 <table>
