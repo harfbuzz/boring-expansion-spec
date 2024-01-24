@@ -5289,23 +5289,21 @@ structures are defined in section 4.3 Data Structures.
 
 VARC table header
 
-|          |                 |                                                                                                               |
-|----------|-----------------|---------------------------------------------------------------------------------------------------------------|
-| Type     | Name            | Description                                                                                                   |
-| uint16   | majorVersion    | Table version. Set to 1.                                                                                      |
-| uint16   | minorVersion    | Set to zero.                                                                                                  |
-| Offset32 | coverage        | Offset to Coverage table from start of VARC table header                                                      |
-| Offset32 | varStore        | Offset to MultiItemVariationStore table from start of VARC table header                                       |
-| Offset32 | axisIndicesList | Offset to CFF2-style INDEX format array of TupleValues , from start of VARC table header                      |
-| Offset32 | glyphRecords    | Offset to CFF2-style INDEX format array containing VarCompositeGlyph records, from start of VARC table header |
+|          |                       |                                                                                                               |
+|----------|-----------------------|---------------------------------------------------------------------------------------------------------------|
+| Type     | Name                  | Description                                                                                                   |
+| uint16   | majorVersion          | Table version. Set to 1.                                                                                      |
+| uint16   | minorVersion          | Set to zero.                                                                                                  |
+| Offset32 | coverage              | Offset to Coverage table from start of VARC table header                                                      |
+| Offset32 | varStore              | Offset to MultiItemVariationStore table from start of VARC table header                                       |
+| Offset32 | axisIndicesList       | Offset to CFF2-style INDEX format array of TupleValues , from start of VARC table header                      |
+| Offset32 | varCompositeGlyphList | Offset to CFF2-style INDEX format array containing VarCompositeGlyph records, from start of VARC table header |
 
 <span id="anchor-175"></span>For any given glyphID, the coverage table
 may provide an index into the varCompositeGlyphList INDEX where the
 corresponding VarCompositeGlyph record is stored. If the glyphID is not
 found in the coverage table, there is no VarCompositeGlyph for the given
 glyphID.
-
-The glyphRecords shall be arranged by coverage index.
 
 The *varStore* subtable stores the variations of axis values and
 transform values that are referenced in the individual Variable
