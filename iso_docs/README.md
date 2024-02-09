@@ -1,10 +1,23 @@
 # Documents submitted to ISO
 
-The documents in this folder were submitted to ISO for duscussion.
+The documents in this folder were submitted to ISO for discussion.
 *they are not final specifications or even working drafts*
 
 The docx (Microsoft Word) files are authoritative;
 other formats are for convenience but were not submitted to ISO.
+
+## 2024-02 (February 2024)
+
+These douments are drafts, not yet formal proposals to ISO:
+
+VARC and other updates incorporates public feedback on the earlier Beyond 64K proposal, which has now been adopted as part of the
+OpenFont Format Working Draft:
+   * [WG03-varc-and-other-updates.pdf - PDF exported from LibreOffice](WG03-varc-and-other-updates.pdf)
+   * [WG03-varc-and-other-updates.odt - LibreOffice file](WG03-varc-and-other-updates.odt)
+
+DMAP was included in an earlier draft of the Beyond 64K proposal, and is now a separate document, to facilitate discussion:
+   * [WG03-dmap-2024-01.pdf - PDF exported from LibreOffice](WG03-dmap-2024-01.pdf)
+   * [WG03-dmap-2024-01.odt - LibreOffice file](WG03-dmap-2024-01.odt)
 
 ## 2024-01 (January 2024)
 
