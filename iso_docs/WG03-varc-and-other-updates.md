@@ -64,16 +64,16 @@ Each DeviceRecord for format 0 looks like this.
 
 <https://github.com/harfbuzz/boring-expansion-spec/issues/132>
 
-In 5.6.4 LTSH—Linear threshold, after “The format for the table is:”,
-change the table as follows:
+In 5.6.4 LTSH—Linear threshold, at the end of the section, add Format 1
+as follows:
 
-The format for the table is:
+Format 1 of the ‘LTSH’ table supports more than 6535 glyphs in a font:
 
 |        |                    |                                                                                                    |
 |--------|--------------------|----------------------------------------------------------------------------------------------------|
 | Type   | Name               | Description                                                                                        |
-| uint16 | version            | Version number (starts at 0).                                                                      |
-| uint16 | numGlyphs          | Number of glyphs (numGlyphs is from the 'MAXP' table if present, otherwise ‘maxp’).                |
+| uint16 | version            | Version number (set to 1).                                                                         |
+| uint24 | numGlyphs          | Number of glyphs (numGlyphs is from the 'MAXP' table if present, otherwise ‘maxp’).                |
 | uint8  | yPels\[numGlyphs\] | The vertical pel height at which the glyph can be assumed to scale linearly. On a per glyph basis. |
 
 # BASE
