@@ -311,7 +311,7 @@ struct VARC
   uint16 minorVersion; // 0
   Offset32To<Coverage> coverage;
   Offset32To<MultiItemVariationStore> varStore;
-  Offset32To<TupleValues> axisIndicesList;
+  Offset32To<CFF2IndexOf<TupleValues>> axisIndicesList;
   Offset32To<CFF2IndexOf<VarCompositeGlyph>> glyphRecords;
 };
 ```
