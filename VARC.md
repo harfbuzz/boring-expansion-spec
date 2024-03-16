@@ -184,7 +184,7 @@ struct SparseRegionAxisCoordinates
 ```c++
 struct MultiItemVariationData
 {
-  uint16 Format; // 1
+  uint8 Format; // 1
   uint16 regionIndexCount;
   uint16 regionIndexes[regionIndexCount];
   CFF2IndexOf<TupleValues> deltaSets;
