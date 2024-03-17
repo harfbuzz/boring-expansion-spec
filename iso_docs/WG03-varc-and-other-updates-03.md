@@ -8,7 +8,7 @@
 
 **ISO/IEC JTC 1/SC 29/WG 3 m** **NNNN**
 
-**The Inn at Bree – March 2024**
+**Mirkwood Service Station – March 2024**
 
 **Title: Updates based on Public Feedback to Changes to the OFF Font
 Format**
@@ -75,8 +75,6 @@ Format 1 of the ‘LTSH’ table supports more than 65535 glyphs in a font:
 | uint16 | version            | Version number (set to 1).                                                                         |
 | uint24 | numGlyphs          | Number of glyphs (numGlyphs is from the 'MAXP' table if present, otherwise ‘maxp’).                |
 | uint8  | yPels\[numGlyphs\] | The vertical pel height at which the glyph can be assumed to scale linearly. On a per glyph basis. |
-
-# JSTF
 
 In 6.3.5.1 JSTF—The justification table, after JsfScriptRecord and
 before Justification script table, insert the following new subsection,
@@ -146,12 +144,8 @@ jstfLangSysTag</td>
 </tbody>
 </table>
 
-**
-
 After **the Extender Glyph table, just before Justification Language
 System table, insert:**
-
-****
 
 **ExtenderGlyph**2* table*
 
@@ -163,6 +157,16 @@ glyphs.**
 | Type   | Name                         | Description                                        |
 | uint16 | glyphCount                   | Number of extender glyphs in this script           |
 | uint24 | extenderGlyphs\[glyphCount\] | Extender glyph IDs – in increasing numerical order |
+
+**In the MultiItemVariationData table**
+
+[****https://github.com/harfbuzz/boring-expansion-spec/commit/3a911400bdd0ab5b9f1816a542a6202d048394f0****](https://github.com/harfbuzz/boring-expansion-spec/commit/3a911400bdd0ab5b9f1816a542a6202d048394f0)
+
+****Change the format from uint16 to uint8.****
+
+****Add a note immediately after the table:****
+
+> ****NOTE 1 The format is encoded as an 8-bit value to save space.****
 
 NOTE: dmap and fvar changes were moved to separate documents.
 
