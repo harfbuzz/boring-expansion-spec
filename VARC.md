@@ -225,6 +225,7 @@ location, and transformation in a variable-sized and efficient manner.
 |-|-|-|
 | uint32var | `flags` | See below. |
 | GlyphID16 or GlyphID24 | `gid` | This is a GlyphID16 if `GID_IS_24BIT` bit of `flags` is clear, else GlyphID24. |
+| uint32var | `conditionSetIndex` | Optional, only present if `HAVE_CONDITION` bit of `flags` is set. |
 | uint32var | `axisIndicesIndex` | Optional, only present if `HAVE_AXES` bit of `flags` is set. |
 | TupleValues | `axisValues` | Optional, only present if `HAVE_AXES` bit of `flags` is set. The axis value for each axis. |
 | uint32var | `axisValuesVarIndex` | Optional, only present if `AXIS_VALUES_HAVE_VARIATION` bit of `flags` is set. |
@@ -251,7 +252,7 @@ location, and transformation in a variable-sized and efficient manner.
 | 4 | `HAVE_TRANSLATE_X` |
 | 5 | `HAVE_TRANSLATE_Y` |
 | 6 | `HAVE_ROTATION` |
-| 7 | `USE_MY_METRICS` |
+| 7 | `HAVE_CONDITION` |
 | 8 | `HAVE_SCALE_X` |
 | 9 | `HAVE_SCALE_Y` |
 | 10 | `HAVE_TCENTER_X` |
@@ -312,9 +313,16 @@ struct VARC
   uint16 minorVersion; // 0
   Offset32To<Coverage> coverage;
   Offset32To<MultiItemVariationStore> varStore;
+  Offset32To<ConditionSetList> conditionSetList;
   Offset32To<CFF2IndexOf<TupleValues>> axisIndicesList;
   Offset32To<CFF2IndexOf<VarCompositeGlyph>> glyphRecords;
 };
+```
+```c++
+struct ConditionSetList
+{
+  Array32Of<Offset32To<ConditionSet>>; // Array of offsets from the beginning of the ConditionSetList table
+}
 ```
 
 The `coverage` table enumerates all glyphs that have Variable-Composite records
@@ -332,6 +340,10 @@ the glyphs which address it using an index.
 
 The component glyphs to be loaded use the coordinate values specified (with any
 variations applied if present).
+
+For each parsed component, if `HAVE_CONDITION` flag is set, then the component
+is displayed only if the referred `ConditionSet` (using `conditionSetIndex`)
+in the top-level `conditionSetList` evaluates to true.
 
 For any unspecified axis, the value used depends on flag
 `RESET_UNSPECIFIED_AXES`. If the flag is set, then the normalized value zero is
