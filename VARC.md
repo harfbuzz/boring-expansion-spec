@@ -238,6 +238,7 @@ location, and transformation in a variable-sized and efficient manner.
 | F4DOT12 | `SkewY` | Optional, only present if `HAVE_SKEW_Y` bit of `flags` is set. Counter-clockwise. |
 | FWORD | `TCenterX` | Optional, only present if `HAVE_TCENTER_X` bit of `flags` is set. |
 | FWORD | ` TCenterY` | Optional, only present if `HAVE_TCENTER_Y` bit of `flags` is set. |
+| uint32var[] | `reserved` | Optional, process and discard one `uint32var` per each set bit in `RESERVED`. |
 
 ### Variable Component Flags
 
@@ -258,7 +259,7 @@ location, and transformation in a variable-sized and efficient manner.
 | 12 | `GID_IS_24BIT` |
 | 13 | `HAVE_SKEW_X` |
 | 14 | `HAVE_SKEW_Y` |
-| 15-31 | Reserved. Set to 0 |
+| 15-31 | `RESERVED`. Set to 0 |
 
 The flags are arranged in the order of likely use, to minimize the storage
 bytes of the `flags` field.
