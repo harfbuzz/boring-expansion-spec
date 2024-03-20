@@ -342,8 +342,8 @@ The component glyphs to be loaded use the coordinate values specified (with any
 variations applied if present).
 
 For each parsed component, if `HAVE_CONDITION` flag is set, then the component
-is displayed only if the referred `ConditionSet` (using `conditionSetIndex`)
-in the top-level `conditionSetList` evaluates to true.
+is loaded but _not_ used (eg. displayed) unless the referred `ConditionSet`
+(using `conditionSetIndex`) in the top-level `conditionSetList` evaluates to true.
 
 For any unspecified axis, the value used depends on flag
 `RESET_UNSPECIFIED_AXES`. If the flag is set, then the normalized value zero is
