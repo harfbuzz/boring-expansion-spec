@@ -168,6 +168,69 @@ glyphs.**
 
 > ****NOTE 1 The format is encoded as an 8-bit value to save space.****
 
+> ****
+
+**In the **Variable Composite Description, add a row to Variable
+Component Record, between glyphID and axisIndicesIndex:**
+
+****uint32var conditionSetIndex Optional, only present if HAVE_CONDITION
+bit of flags is ****set.****
+
+**Add another row at the end of the same table (Variable Component
+Record), after **FWORD **T**C**entery:**
+
+****uint32var reserved\[\] Optional: Process and discard one
+uint****32****var per each set bit in RESERVED****\_MASK****
+
+**After the list of flags and before Variable Component Flags, add,**
+
+****This specification does not define a meaning for any bits in
+RESERVED****\_MASK****, and ****conforming fonts shall therefore set all
+such bits to zero. ****Font processing software that encounters bits in
+RESERVED****\_MASK**** that are set to one shall process them ****in
+turn by reading**** uint32var values, one for each set bit, for
+extension purposes.****
+
+**Again i**n the **Variable Composite Description, **in Variable
+Component Flags, rename item 7 from USE_MY_METRICS to HAVE_CONDITION,
+**and change the last entry (Reserved):**
+
+****6 HAVE_CONDITION****
+
+****. . .****
+
+****15-31 RESERVED****\_MASK****
+
+**To the VARC table header, add a new row **below varStore and above
+axisIndicesList **(not to be confused with axisIndicesIndex!)**
+
+****Offset32 conditionSetList Offset to ****ConditionSetList, from the
+start of VAC table header.****
+
+**Just before Processing of Variable Composite Glyphs, ** add the new
+ConditionSetList type:**
+
+*****ConditionSetList ******table*****
+
+|          |                  |                                                                   |
+|----------|------------------|-------------------------------------------------------------------|
+| Type     | Name             | Description                                                       |
+| Offset32 | ConditionSet\[\] | Array of offsets from the beginning of the ConditionSetList table |
+
+**
+
+*After the first paragraph of Processing of Variable Composite Glyphs
+(The component glyphs to be loaded…) insert the following *(just before
+the paragraph “For any unspecified axis”)**
+
+**For each parsed component, if the HAVE_CONDITION flag is set, th**at**
+component **shall be loaded but not **used (for example, not displayed),
+unless the referenced ConditionSet evaluates to true. The referenced
+ConditionSet is found using conditionSetIndex and consulting the
+top-level condisionSetList.**
+
+**
+
 NOTE: dmap and fvar changes were moved to separate documents.
 
 > ****

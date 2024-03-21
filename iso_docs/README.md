@@ -20,7 +20,8 @@ now part of the ISO OpenFontFormat draft (WD9)
 This incorporates public feedback on the earlier Beyond 64K proposal, which has now been adopted as part of the
 OpenFont Format Working Draft. VARC in particular is a highly compressed encoding for variable components (that is,
 for some of the glyphs in variable fomts that might be from other glyphs,
-but which might need transforming as axis values are changed):
+but which might need transforming as axis values are changed). There is now implementation experience as well
+as feedback.
 
    * [WG03-varc-and-other-updates-03.pdf - PDF exported from LibreOffice](WG03-varc-and-other-updates-03.pdf)
    * [WG03-varc-and-other-updates-03.odt - LibreOffice file](WG03-varc-and-other-updates-03.odt)
