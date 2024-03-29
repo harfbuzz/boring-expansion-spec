@@ -1,5 +1,8 @@
 # `glyf`—Glyf Data Table Format 1: Variable Composites / Components
 
+> [!NOTE]
+> This document is now superceded by [VARC.md](VARC.md)
+
 The glyf data table ([`glyf`](https://docs.microsoft.com/en-us/typography/opentype/spec/glyf)) stores the glyph outline data.  The format number for this table is stored in the [`head`](https://docs.microsoft.com/en-us/typography/opentype/spec/head) table's `glyphDataFormat` field.  The only currently defined format of the `glyf` table is format 0. We propose format 1 of the `glyf` table to add multiple features. See full [proposal](glyf1.md) for all features. In this proposal we cover: _Variable Composites / Components_.
 
 In `glyf` table format 0, there exist two types of glyphs: Simple glyphs which have a `numberOfContours` of >= 0, and Composite glyphs that have a `numberOfContours` of < 0, with a recommended value of -1.
