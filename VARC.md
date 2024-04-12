@@ -339,7 +339,7 @@ the glyphs which address it using an index.
 ## Processing
 
 The component glyphs to be loaded use the coordinate values specified (with any
-variations applied if present). The outline from all components are concatenated
+variations applied if present). The outlines from all components are concatenated
 to form the outline for the main glyph, before any rasterization.
 
 For each parsed component, if `HAVE_CONDITION` flag is set, then the component
