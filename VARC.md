@@ -225,7 +225,7 @@ location, and transformation in a variable-sized and efficient manner.
 |-|-|-|
 | uint32var | `flags` | See below. |
 | GlyphID16 or GlyphID24 | `gid` | This is a GlyphID16 if `GID_IS_24BIT` bit of `flags` is clear, else GlyphID24. |
-| uint32var | `conditionSetIndex` | Optional, only present if `HAVE_CONDITION` bit of `flags` is set. |
+| uint32var | `conditionIndex` | Optional, only present if `HAVE_CONDITION` bit of `flags` is set. |
 | uint32var | `axisIndicesIndex` | Optional, only present if `HAVE_AXES` bit of `flags` is set. |
 | TupleValues | `axisValues` | Optional, only present if `HAVE_AXES` bit of `flags` is set. The axis value for each axis. |
 | uint32var | `axisValuesVarIndex` | Optional, only present if `AXIS_VALUES_HAVE_VARIATION` bit of `flags` is set. |
@@ -313,15 +313,15 @@ struct VARC
   uint16 minorVersion; // 0
   Offset32To<Coverage> coverage;
   Offset32To<MultiItemVariationStore> varStore;
-  Offset32To<ConditionSetList> conditionSetList;
+  Offset32To<ConditionList> conditionList;
   Offset32To<CFF2IndexOf<TupleValues>> axisIndicesList;
   Offset32To<CFF2IndexOf<VarCompositeGlyph>> glyphRecords;
 };
 ```
 ```c++
-struct ConditionSetList
+struct ConditionList
 {
-  Array32Of<Offset32To<ConditionSet>>; // Array of offsets from the beginning of the ConditionSetList table
+  Array32Of<Offset32To<Condition>>; // Array of offsets from the beginning of the ConditionList table
 }
 ```
 
@@ -343,8 +343,8 @@ variations applied if present). The outlines from all components are concatenate
 to form the outline for the main glyph, before any rasterization.
 
 For each parsed component, if `HAVE_CONDITION` flag is set, then the component
-is loaded but _not_ used (eg. displayed) unless the referred `ConditionSet`
-(using `conditionSetIndex`) in the top-level `conditionSetList` evaluates to true.
+is loaded but _not_ used (eg. not displayed) unless the referred `Condition`
+(using `conditionIndex`) in the top-level `conditionList` evaluates to true.
 
 For any unspecified axis, the value used depends on flag
 `RESET_UNSPECIFIED_AXES`. If the flag is set, then the normalized value zero is
