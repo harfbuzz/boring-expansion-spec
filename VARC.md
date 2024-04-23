@@ -345,6 +345,9 @@ to form the outline for the main glyph, before any rasterization.
 For each parsed component, if `HAVE_CONDITION` flag is set, then the component
 is loaded but _not_ used (eg. not displayed) unless the referred `Condition`
 (using `conditionIndex`) in the top-level `conditionList` evaluates to true.
+For `Condition` types that require a variation-store, the `MultiItemVariationStore`
+`varStore` shall be used to get deltas for an outer/inner variation numbers,
+with a tuple as appropriate.
 
 For any unspecified axis, the value used depends on flag
 `RESET_UNSPECIFIED_AXES`. If the flag is set, then the normalized value zero is
