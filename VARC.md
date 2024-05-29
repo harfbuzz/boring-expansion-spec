@@ -350,14 +350,15 @@ For `Condition` types that require a variation-store, the `MultiItemVariationSto
 with a tuple as appropriate.
 
 For any unspecified axis, the value used depends on flag
-`RESET_UNSPECIFIED_AXES`. If the flag is set, then the normalized value zero is
-used. If the flag is clear the axis values from current glyph being processed
+`RESET_UNSPECIFIED_AXES`. If the flag is set, then the normalized values from
+font's current variation settings is used.
+If the flag is clear the axis values from current glyph being processed
 (which itself might recursively come from the font or its own parent glyphs)
 are used.  For example, if the font variations have `wght`=.25 (normalized),
 and current glyph being processed is using `wght`=.5 because it was referenced
 from another VarComposite glyph itself, when referring to a component that does
 _not_ specify the `wght` axis, if the flag bit is set, then the value of
-`wght`=0 (default) will be used. If the flag bit is clear, `wght`=.5 (from
+`wght`=.25 (from font) will be used. If the flag bit is clear, `wght`=.5 (from
 current glyph) will be used.
 
 The component location and transform can vary. These variations are stored in
