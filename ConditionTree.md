@@ -1,4 +1,4 @@
-The following new Condition types are added:
+The following new Condition types are added, which enable encoding a tree representing a boolean expression:
 ```
 struct ConditionAnd
 {
@@ -18,5 +18,15 @@ struct ConditionNegate
 {
   uint16 format; // 5
   Offset24To<Condition> condition;
+};
+```
+
+While not directly relevant to representing condition trees, the following Condition type is also added:
+```
+struct ConditionValue
+{
+  uint16 format; // 2
+  int16 defaultValue;
+  VarIdx varIdx;
 };
 ```
