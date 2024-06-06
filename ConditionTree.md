@@ -30,3 +30,4 @@ struct ConditionValue
   VarIdx varIdx;
 };
 ```
+Here, the condition evaluates to true if and only if `defaultValue` plus the evaluation of `varIdx` in the respective variation-store for current font coordinates is a positive number.
