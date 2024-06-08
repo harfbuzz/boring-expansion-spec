@@ -152,7 +152,7 @@ for each region.
 struct MultiItemVariationStore
 {
   uint16 format; // Set to 1
-  LOffsetTo<SparseVariationRegionList> variationRegionListOffset;
+  Offset32To<SparseVariationRegionList> variationRegionListOffset;
   uint16 itemVariationDataCount;
   Offset32To<MultiItemVariationData> itemVariationDataOffsets[itemVariationDataCount];
 };
