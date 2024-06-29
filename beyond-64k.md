@@ -471,7 +471,7 @@ struct ChainContextFormat5 {
   Array16Of<Offset24To<ClassRuleSet>> ruleSets;
 };
 ```
-The `RuleSet` and `ChainRuleSet` are _not_ extended, because they are class-based, not glyph-based, so no extension is necessary.
+The `ClassRuleSet` and `ChainClassRuleSet` are _not_ extended, because they are class-based, not glyph-based, so no extension is necessary.
 
 Format 3 (Coverage-based format) is _not_ extended, because it only encodes one rule, so overflows are unlikely.
 
