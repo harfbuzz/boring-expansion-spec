@@ -6,6 +6,35 @@ The documents in this folder were submitted to ISO for discussion.
 The docx (Microsoft Word) files are authoritative;
 other formats are for convenience but were not submitted to ISO.
 
+## 2024-10-31 (October 2024)
+
+The draft has been in ballot for several months. Some changes were
+submitted at the start of that period, and in October some comments
+were submitted via national bodies in the UK, Canada, USA. The comments
+were sent in multiple batches because the different national bodies had
+different meeting dates and we weren’t quite ready in time for the first
+one. The comments document here contains all of the comments except
+one, which just said that we supported the changes.
+
+### Comments
+
+A formal submission to the ISO MPEG meeting listed all of the comments
+on the Committee Draft, which was publicly available:
+
+   * [m70320-kemer.odt - LibreOffice file](m70320-kemer.odt)
+   * [m70320-kemer.docx - Microsoft Word file](m70320-kemer.docx)
+   * [m70320-kemer.pdf - PDF file](m70320-kemer.pdf)
+
+### Minor changes
+
+These were submitted directly to the editor; they relate to a
+working draft that may not itself be public, but are included here
+in the spirit of being open.
+
+   * [changes2.odt - LibreOffice file](changes2.odt)
+   * [changes.odt - LibreOffice file](changes.odt)
+   * [changes.docx - Microsoft Word file](changes.docx)
+
 ## 2024-04-15 (April 2024)
 
 Three documents formally submitted to ISO for inclusion in OpenFontFormat, each in four formats:
