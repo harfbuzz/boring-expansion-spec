@@ -2,7 +2,7 @@
 
 The axis variations table (`avar`) is an optional table used in variable fonts. Version 1 of `avar` modifies aspects of how a design varies for different instances along a particular design-variation axis. It does this by piecewise linear remapping on a per-axis basis, with certain restrictions. See the [OpenType specification](https://docs.microsoft.com/en-us/typography/opentype/spec/avar) for details.
 
-Version 2, as proposed here, enables flexible axis remapping where each design-variation axis is modified according to the coordinates of multiple design-variation axes. In order to combine the effects of multiple input values, `avar` version 2 uses the OpenType variation mechanism itself to determine interpolated delta values and add them to design-variation axis coordinates.
+Version 2, as proposed here, enables more flexible axis remapping where each design-variation axis is modified according to the coordinates of multiple design-variation axes. In order to combine the effects of multiple input values, `avar` version 2 uses the OpenType Variations mechanism itself to determine interpolated delta values and add them to design-variation axis coordinates.
 
 The efficiency of `avar` version 2 enables fonts that:
 
@@ -30,27 +30,36 @@ Use cases include:
 
 The table format for `avar` version 2 is the same as `avar` version 1, appended with offsets to two extra structures, `axisIndexMap` and `varStore`, and with the data for those structures.
 
-`axisIndexMap` is a *DeltaSetIndexMap* structure that maps the axis indices implied in `fvar` to indices used in `varStore`. The outer index identifies an *ItemVariationData* structure in `varStore`. The inner index identifies a *deltaSet* within an *ItemVariationData*.
+`axisIndexMap` is a *DeltaSetIndexMap* structure that maps the axis indices implied in `fvar` to indices used in `varStore`. In the mapping, the index of each mapping entry is the axis index; the outer index identifies an *ItemVariationData* structure in `varStore`; the inner index identifies a *deltaSet* within an *ItemVariationData*. If either outer or inner index is 0xffff, then that axis’s value is ignored by the `avar` version 2 process. The number of mapping entries may be smaller than the number of axes in 'fvar', in which case remaining axes are ignored.
 
 `varStore` is an *ItemVariationStore* structure that points to a *VariationRegions* array and a list of *ItemVariationData* structures. Each *ItemVariationData* specifies a subset of *VariationRegions* and an array of *deltaSets*. Each *deltaSet* specifies a delta value for each region.
 
-Delta values are typically in (but not limited to) the range [-1.0, 1.0].
-
-Delta values are stored as if they were signed integers by multiplying their true value by 16384. Thus 1.0 is stored as 16384; -1.0 is stored as -16384.
+Delta values are typically in the range [-1.0, 1.0] but are not strictly limited to that range. Delta values are stored as if they were signed integers by multiplying their true value by 16384. Thus 1.0 is stored as 16384; -1.0 is stored as -16384.
 
 The *DeltaSetIndexMap* and *ItemVariationStore* formats are given in [OpenType Font Variations Common Table Formats](https://docs.microsoft.com/en-us/typography/opentype/spec/otvarcommonformats).
 
 # Processing
 
-Processing of axis values in an `avar` version 2 table happens in 3 stages for a given instance:
+Processing of axis values in an `avar` version 2 table happens in 3 stages for an instance determined by a set of user coordinates:
 
-1. Initial normalization to convert user coordinates of each axis to initial normalized coordinates in the range [-1.0, 1.0].
-2. Remap initial normalized coordinates of each axis via the *axisSegmentMap*s of `avar` version 1, providing intermediate coordinates also in the range [-1.0, 1.0].
-3. Calculate interpolated deltas for each axis via `avar` version 2 and add them to intermediate coordinates, providing final coordinates that are clamped to the range [-1,1].
+1. Convert user coordinates of each axis to initial normalized coordinates in the range [-1.0, 1.0]. (This step always happens in OpenType Variations.)
+2. Remap initial normalized coordinates of each axis via the *axisSegmentMap*s, providing intermediate coordinates also in the range [-1.0, 1.0]. (This step is the usual `avar` version 1 remapping.)
+3. Calculate interpolated deltas for each axis and add them to intermediate coordinates, providing final coordinates that are clamped to the range [-1.0, 1.0].
 
-In more detail, step 3 proceeds as follows. Considering the coordinates provided by step 2, a scalar is determined for each *variationRegion* by the usual variation interpolation algorithm. Then, the *deltaSet*s of each *ItemVariationData* are processed such that each delta value is multiplied by its associated scalar. Summing those products gives an interpolated delta to add to a particular axis coordinate, the axis index being defined in `axisIndexMap`. After the summing operations for all *ItemVariationData* structures is complete, axis values are clamped to to the range [-1.0, 1.0], giving final axis coordinates.
+In more detail, step 3 proceeds as follows, using existing methods of processing *ItemVariationStore* structures:
 
-The final axis coordinates obtained by step 3 are subsequently used in the standard variation process described in [Algorithm for Interpolation of Instance Values](https://docs.microsoft.com/en-us/typography/opentype/spec/otvaroverview#algorithm-for-interpolation-of-instance-values), applying to all `gvar` data and all `ItemVariationStore` data elsewhere in the font.
+* Considering the coordinates provided by step 2, calculate a scalar for each *variationRegion* in the *ItemVariationStore* by the usual variation interpolation algorithm.
+* For each axis:
+  * Look up its outer and inner indices in `axisIndexMap`.
+  * The outer value identifies an *ItemVariationData*.
+  * The inner value identifies a *deltaSet* within the *ItemVariationData*.
+  * The *ItemVariationData* contains an array of *variationRegion* indices, implying an array of indices to scalars.
+  * Multiply each scalar by the delta value at the same index, yielding an array of products. (We can do this since the array of region indices has the same length as the *deltaSet*.)
+  * Take the sum of those products to obtain the interpolated delta value.
+  * Add the interpolated delta value to the axis’s intermediate coordinate from step 2.
+  * Clamp the result to the range [-1.0, 1.0], providing the final normalized coordinate for the axis.
+
+The set of final axis coordinates obtained by step 3 is subsequently used in the standard variation process described in [Algorithm for Interpolation of Instance Values](https://docs.microsoft.com/en-us/typography/opentype/spec/otvaroverview#algorithm-for-interpolation-of-instance-values), applying to all `gvar` data and all *ItemVariationStore* data elsewhere in the font.
 
 The following algorithm implements step 3 above, producing the final normalized axis coordinates:
 
@@ -148,14 +157,14 @@ The `avar` table version 2 provides a method to deploy a purely parametric font 
 
 # Inverse avar processing
 
-Normally it is not possible for an application to obtain normalized axis values directly, these remaining private to the font engine. In fonts with an `avar` version 2 table, however, it can be useful to know the axis values that would invoke a given instance if the font engine did not support `avar` version 2. Use cases include:
+In fonts with an `avar` version 2 table, it can be useful to know the axis values that would invoke a given instance if the font engine did not support `avar` version 2. Use cases include:
 
 * informing users of the effective settings of parametric axes;
 * providing a polyfill for `avar` version 2.
 
-The solution is for the application itself to implement the `avar` algorithms, both version 1 and version 2. This requires not only access to the binary `avar` table, but also knowledge of the font’s axis extents as defined in the `fvar` table. Once an application has a complete set of final normalized values as defined above, the inverse of the `avar` version 1 algorithm can be applied to obtain user coordinates for all axes. (Care must be taken to avoid a divide-by-zero error in implementing an inverse `avar` version 1 mapping, in the case where consecutive `toCoordinate` values are identical.)
+Normally it is not possible for an application to obtain normalized axis values directly, these remaining private to the font engine. A solution is for the application itself to implement the `avar` algorithms, both version 1 and version 2. This requires not only access to the binary `avar` table, but also knowledge of the font’s axis extents as defined in the `fvar` table. Once an application has a complete set of final normalized values as defined above, the inverse of the `avar` version 1 algorithm can be applied to obtain user coordinates for all axes. (Care must be taken to avoid a divide-by-zero error in implementing an inverse `avar` version 1 mapping, in cases where consecutive *toCoordinate* values are identical.)
 
-Almost all fonts can provide a valid set of user axis coordinates for a given set of final normalized axis coordinates in this way. Exceptions are those fonts that encode deltas in a region that is not accessible without `avar` version 2, namely those fonts where the `fvar` definition of an axis normally precludes an active negative region or a active positive region by having its default equal to its minimum or its maximum respectively. Such cases are expected to be rare.
+Almost all fonts can provide a valid set of user axis coordinates for a given set of final normalized axis coordinates in this way. Exceptions are those fonts that encode deltas in a region that is not accessible without `avar` version 2, namely those fonts where the `fvar` definition of an axis normally precludes an active negative region or an active positive region by having its default equal to its minimum or its maximum respectively. Such cases are expected to be rare.
 
 
 # Recommendations and notes
@@ -164,12 +173,15 @@ Almost all fonts can provide a valid set of user axis coordinates for a given se
 
 Since many `avar` version 2 fonts have axes not not intended for manual adjustment, it is recommended that such axes set the “hidden” flag in `VariationAxisRecord` of the [`fvar`](https://docs.microsoft.com/en-us/typography/opentype/spec/fvar) table.
 
-## Efficient axisIdxMap and ItemVariationData construction
+## Efficient ItemVariationStore construction
 
-In order to reduce proliferation of zero deltas, it is recommended to store in `axisIndexMap` only those axes that are remapped by `avar` version 2. For the same reason, if there are multiple different types of axis mapping affecting different sets of axes, consider using multiple `ItemVariationData` structures.
+For axes that do not have `avar` version 2 adjustments, either use the special value 0xffff for both outer and inner indices in `axisIndexMap` or reorder the axes such that the non-participating axes are at the end and `axisIndexMap` can have fewer entries.
+
+To reduce proliferation of zero deltas, consider grouping axes in terms of the axes they depend upon. Each group can be represented by its own *ItemVariationData* structure, thus using smaller *deltaSet*s that do not refer to irrelevant axes.
 
 ## Other notes
+
 * The set of axes involved in adjusting the coordinate for a given axis may include the axis itself.
 
-* It is expected that implementations that handle only `avar` version 1 will ignore the entire table by rejecting the `majorVersion` value.
+* It is expected that implementations that handle only `avar` version 1 will ignore the entire table by rejecting the *majorVersion* value.
 
