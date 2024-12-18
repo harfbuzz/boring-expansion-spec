@@ -6,6 +6,17 @@ The documents in this folder were submitted to ISO for discussion.
 The docx (Microsoft Word) files are authoritative;
 other formats are for convenience but were not submitted to ISO.
 
+## 2024-12-18
+
+We noticed that large fonts caused overflow in the GlyphVariationData header,
+so dataOffset has to be changed from Offset16 to Offset24.
+
+This not been formally submitted to ISO at the time of writing,
+but will form a DIS ballot comment when the current draft is voted on.
+
+   * [comment-2024-12-10.odt - LibreOffice file](comment-2024-12-10.odt)
+   * [comment-2024-12-10.odt - PDF file](comment-2024-12-10.pdf)
+
 ## 2024-10-31 (October 2024)
 
 The draft has been in ballot for several months. Some changes were
