@@ -16,7 +16,7 @@
    * [test fonts](https://github.com/googlefonts/smarties/tree/main/fonts)
 1. Enhance core variation capability
    1. Improve support for user-facing vs internal axis distinction and the mapping between them
-      * [why?](#4i-user-facing-vs-internal-axes)
+      * [why?](#4i-user-facing-vs-internal-axes) + [full explanation website] (https://googlefonts.github.io/how2avar2)
       * [spec proposal](./avar2.md)
       * [test fonts](https://drive.google.com/drive/folders/1OjZFadiSKwzPnGWWCmNwscJN8bsjfqR0)
    1. Explicitly support non-linear interpolation
@@ -70,6 +70,10 @@ To assemble a set of non-orthogonal user facing axes from a set of orthogonal ax
 non-linear many:many mapping. `avar` provides a piecewise linear mapping from an input position
 on a single axes to a different position on that axes. This is inadequate; a new and more powerful
 mapping mechanism is required.
+
+* [googlefonts.github.io/how2avar2](https://googlefonts.github.io/how2avar2)
+* [github.com/lorp/samsa](https://github.com/lorp/samsa)
+* [github.com/lorp/fencer](https://github.com/lorp/fencer)
 
 #### 4.ii Explicitly support non-linear interpolation
 
