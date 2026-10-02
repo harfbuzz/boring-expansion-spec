@@ -160,7 +160,7 @@ struct MultiItemVariationStore
 ```c++
 struct SparseVariationRegionList
 {
-  uint16 regionCount;
+  uint32 regionCount;
   Offset32To<SparseVariationRegion> variationRegionOffsets[regionCount];
 }
 ```
@@ -168,7 +168,7 @@ struct SparseVariationRegionList
 struct SparseVariationRegion
 {
   uint16 regionAxisCount;
-  SparseRegionAxisCoordinates regionAxes[regionAxisCount];
+  Offset32To<SparseRegionAxisCoordinates> regionAxes[regionAxisCount];
 };
 ```
 ```c++
@@ -187,11 +187,11 @@ struct MultiItemVariationData
   uint8 Format; // 1
   uint16 regionIndexCount;
   uint16 regionIndexes[regionIndexCount];
-  CFF2IndexOf<TupleValues> deltaSets;
+  Offset32To<CFF2IndexOf<TupleValues>> deltaSets;
 };
 ```
 
-The `deltaSets` in a `MultiItemVariationData` table store the delta-set for a
+The INDEX addressed by `deltaSets` stores the delta-set for a
 single tuple, addressed by the "inner" index of the `VarIdx`, whereas a
 `MultiItemVariationData` table itself represents the data for all values
 sharing the same "outer" index.
