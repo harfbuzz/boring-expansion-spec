@@ -92,6 +92,8 @@ Upgrade the variation stores to only consume bytes for axes that influence the r
 
 ## ISO Submissions
 
+* [DMAP lookup fallback clarification](./DMAP.md)
+
 * WG03_otf-improvements ([docx](iso_docs/WG03_otf-improvements.docx?raw=true), [pdf](iso_docs/WG03_otf-improvements.pdf?raw=true))
    * MPEG document identifier: m62947, submitted April 2023
    * Initial submission to spur ISO discussion
