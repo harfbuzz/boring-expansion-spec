@@ -159,7 +159,10 @@ Source: [issue #176](https://github.com/harfbuzz/boring-expansion-spec/issues/17
 
 An offset array needs an explicit length. Neither the VARC header nor the
 length of the enclosing VARC table determines the number of entries in this
-subtable.
+subtable. Without this correction, a VARC table containing a ConditionList
+cannot be parsed or used safely according to the published definition:
+readers cannot determine the bounds of the offset array or validate a
+component's conditionIndex against the number of available conditions.
 
 The original VARC definition uses `Array32Of<Offset32To<Condition>>`: a uint32
 count followed by that many Offset32 entries. The count was omitted during
