@@ -49,10 +49,19 @@ Source: [pull request #179](https://github.com/harfbuzz/boring-expansion-spec/pu
 ### Rationale
 
 DMAP allows a font in a collection to override selected entries in a shared
-character map. A mapping to glyph ID 0 needs to have the same fallback behavior
-as an absent mapping; otherwise it can conceal a usable mapping in `cmap`.
-This applies both to ordinary character mappings and to non-default UVS
-mappings in formats 14 and 15.
+character map. In `cmap`, a mapping to glyph ID 0 already means that the
+character is not covered. **5.1.2.1, Table overview**, explicitly states:
+
+> Regardless of the encoding scheme, character codes that do not correspond
+> to any glyph in the font should be mapped to glyph index 0. The glyph at
+> this location shall be a special glyph representing a missing character,
+> commonly known as .notdef.
+
+DMAP uses the same subtable formats as cmap, so interpreting a mapping to
+glyph ID 0 as a miss follows this existing meaning. It needs to have the same
+fallback behavior as an absent mapping; otherwise it can conceal a usable
+mapping in `cmap`. This applies both to ordinary character mappings and to
+non-default UVS mappings in formats 14 and 15.
 
 A match in a default UVS range is different: it successfully selects ordinary
 character mapping for the base character. That ordinary lookup consults DMAP
