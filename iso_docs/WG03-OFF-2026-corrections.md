@@ -6,7 +6,7 @@
 
 **Status:** Draft contribution
 
-**Date:** 10 October 2026
+**Date:** 11 October 2026
 
 ## Introduction
 
@@ -14,8 +14,9 @@ The primary purpose of the proposed changes and corrections is to provide
 additional information and clarify technical details for implementers of Open
 Font Format (OFF). The changes address DMAP lookup rules, flag numbering in
 the glyph variation headers, the ConditionList array count, sparse-region
-offset bases, component glyph origins, and processing of malformed variation
-regions.
+offset bases, component glyph origins, processing of malformed variation
+regions, and the distinction between default user-scale axis values and final
+normalized coordinates.
 
 The DMAP clarification follows the existing meaning of glyph index 0 in the
 'cmap' table overview (5.1.2.1): the character is not covered, and glyph index 0
@@ -23,6 +24,12 @@ represents the missing character, .notdef. Restoring the ConditionList count is
 necessary for safe parsing and use of a VARC table containing that structure;
 without it, readers cannot determine the array bounds or validate condition
 indices.
+
+The normalization changes distinguish the unvaried location, at which all final
+normalized coordinates are zero, from the default user-scale axis values, which
+can be remapped to a different location by 'avar' version 2. They specify that
+ordinary variation deltas do not apply at the unvaried location, while preserving
+axis remapping and VARC processing at that location.
 
 All subclause references below refer to ISO/IEC 14496-22:2026.
 
@@ -164,3 +171,112 @@ SparseRegionAxisCoordinates definition, insert the following paragraph:
 > malformed-data processing provisions in 7.1.7 apply to the startCoordinate,
 > peakCoordinate, and endCoordinate fields. A zero peakCoordinate gives a
 > per-axis scalar of 1.
+
+## 7. Default axis values and zero normalized coordinates
+
+In subclause **7.1.1, General**, replace the paragraph beginning “A variable
+font has a default instance, with axis parameter values set to the defaults”
+with:
+
+> A variable font has a default instance with user-scale coordinates set to
+> the default values defined for each axis in the 'fvar' table. The font
+> provides unvaried values for data items such as glyph outline points and
+> metrics. Whether variation deltas are applied to those values depends on
+> the final normalized coordinates after any 'avar' processing, as specified
+> in 7.1.7. The default user-scale axis values can result in nonzero final
+> normalized coordinates when an 'avar' version 2 table is present. The
+> default instance can therefore require variation processing.
+
+In subclause **7.1.2, Terminology**, replace NOTE 3 under the definition of
+Design-variation space with:
+
+> NOTE 3 A variation space can have one or more axes. In a variable font,
+> the variation space is bounded by the minimum and maximum user-scale
+> values specified in the 'fvar' table. The zero origin in user-scale
+> coordinates has no special significance. The zero origin in final
+> normalized coordinates identifies the unvaried location for glyph and
+> metric data, subject to the VARC exception in 7.1.7. The default user-scale
+> axis values do not necessarily select that location when 'avar' version 2
+> is used.
+
+In subclause **7.1.3, Variation space, default instances and adjustment
+deltas**, replace the paragraph beginning “The variable font has a default
+instance, which corresponds to the position in the variation space” with:
+
+> The variable font has a default instance whose user-scale coordinates are
+> the default values for each axis specified in the 'fvar' table. The font
+> also contains unvaried values for data items, such as the grid coordinates
+> of outline points in the 'glyf' table. These values are used without
+> variation adjustments when the final normalized coordinates are zero for
+> all axes, subject to the exceptions in 7.1.7. If 'avar' version 2 processing
+> maps the default user-scale coordinates to nonzero final normalized
+> coordinates, variation adjustments can apply to the default instance.
+
+In subclause **7.1.4, Coordinate scales and normalization**, replace the
+paragraph beginning “The normalization transformation uses a default
+transformation followed by a secondary modification” with:
+
+> The normalization transformation first applies the default transformation
+> and then applies any mappings defined in the 'avar' table. The segment maps
+> do not affect the mapping of minimum, default, and maximum user-scale
+> values to -1, 0, and 1; they affect only the mapping of intervening values.
+> In 'avar' version 2, additional coordinate adjustments are then computed
+> using an ItemVariationStore, as specified in 7.3.1.3. These adjustments can
+> change the coordinates produced by the segment maps, including coordinates
+> of -1, 0, or 1. In particular, default user-scale axis values can result in
+> nonzero final normalized coordinates.
+
+In the same subclause, after the sentence “See 7.3.1 for details on the
+structures mentioned above”, insert the following paragraph:
+
+> For an 'avar' version 2 table, the values produced by the segment-mapping
+> algorithm above are intermediate normalized coordinates. The additional
+> processing specified in 7.3.1.3 shall be performed to obtain the final
+> normalized coordinates. This processing shall not be omitted solely because
+> all intermediate normalized coordinates are zero.
+
+In subclause **7.1.7, Algorithm for interpolation of instance values**,
+insert the following as the first two paragraphs:
+
+> When the normalized coordinates used to evaluate variation data are zero
+> for all axes, variation deltas shall not be applied to glyph outlines,
+> metrics, or other font data. The unvaried values shall be used. This
+> zero-coordinate rule applies to the final normalized coordinates after
+> all applicable 'avar' processing. It applies even when encoded variation
+> data include regions with no active axes. An implementation may omit
+> evaluation of variation deltas in this case.
+>
+> The zero-coordinate rule does not apply to computation of axis-coordinate
+> adjustments in 'avar' version 2 or to VARC processing, including evaluation
+> of its MultiItemVariationStore. When VARC supplies different normalized
+> coordinates for a component, the rule applies to the component's ordinary
+> outline and metric variation data using that component's coordinates.
+
+In the same subclause, immediately before the sentence introducing the
+interpolation pseudocode, insert the following paragraph:
+
+> If the zero-coordinate rule applies, interpolatedValue shall be set to
+> defaultValue and the interpolation algorithm below shall be bypassed.
+
+In subclause **7.3.1.3, Processing**, after step 3 of the normalization
+process and before “In more detail, step 3 proceeds as follows”, insert the
+following paragraph:
+
+> When itemVariationStoreOffset is nonzero, the ItemVariationStore in an
+> 'avar' version 2 table shall be processed even when all intermediate
+> coordinates obtained in step 2 are zero. A region with no active axes has
+> an overall scalar of 1 and can therefore supply a constant coordinate
+> adjustment. As a result, default user-scale axis values can map to nonzero
+> final normalized coordinates. The zero-coordinate rule in 7.1.7 is applied
+> to subsequent font-data variation processing using the final coordinates
+> obtained in step 3.
+
+In subclause **7.3.10.5, Processing of Variable Composite Glyphs**, insert
+the following as the second paragraph:
+
+> VARC processing shall be performed even when all normalized font
+> coordinates are zero. This includes evaluation of conditions and variation
+> adjustments to component axis values and transforms. When a component
+> outline is loaded from 'glyf', GLYF, or CFF2, the zero-coordinate rule in
+> 7.1.7 is applied using the component's normalized coordinates, which can
+> differ from the normalized font coordinates.
