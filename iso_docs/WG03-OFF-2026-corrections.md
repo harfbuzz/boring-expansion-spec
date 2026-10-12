@@ -6,7 +6,7 @@
 
 **Status:** Draft contribution
 
-**Date:** 11 October 2026
+**Date:** 12 October 2026
 
 ## Introduction
 
@@ -15,8 +15,8 @@ additional information and clarify technical details for implementers of Open
 Font Format (OFF). The changes address DMAP lookup rules, flag numbering in
 the glyph variation headers, the ConditionList array count, sparse-region
 offset bases, component glyph origins, processing of malformed variation
-regions, and the distinction between default user-scale axis values and final
-normalized coordinates.
+regions, the distinction between default user-scale axis values and final
+normalized coordinates, and the source of variation data for MATH values.
 
 The DMAP clarification follows the existing meaning of glyph index 0 in the
 'cmap' table overview (5.1.2.1): the character is not covered, and glyph index 0
@@ -458,3 +458,68 @@ the following as the second paragraph:
 > component's effective normalized coordinates after application of its
 > axis values and axis-value deltas. These coordinates can differ from the
 > normalized font coordinates.
+
+## 8. Variation data for MATH values
+
+In subclause **6.3.6.2.1, Shared formats: MathValueRecord, Coverage table**,
+replace the paragraph beginning “A MathValueRecord may also specify an
+offset to a device table” with:
+
+> A MathValueRecord may specify an offset to a Device table that provides
+> corrections at particular display resolutions in a non-variable font,
+> or, in a variable font, to a VariationIndex table that references
+> variation adjustments to the value field. The Device and VariationIndex
+> formats are specified in 6.2.9. For a Device table, correction values can
+> be provided for multiple PPEM sizes, with different formats available
+> for efficient representation.
+> When a Device table is used in a MathValueRecord, format 1 is recommended.
+>
+> A VariationIndex table referenced by a MathValueRecord shall reference
+> the ItemVariationStore in the GDEF table, identified by itemVarStoreOffset
+> in the GDEF header. Its deltaSetOuterIndex and deltaSetInnerIndex fields
+> identify the delta set used to compute the variation adjustment. The
+> adjustment shall be computed as specified in 7.1.7 and added to the value
+> field in font design units before scaling.
+
+In the MathValueRecord definition in the same subclause, replace the
+description of `Offset16 deviceOffset` with:
+
+> Offset to a Device table or, in a variable font, a VariationIndex table,
+> measured from the beginning of the parent table. May be NULL. The
+> suggested format for a Device table is 1.
+
+In subclause **6.2.2, OFF Layout and Font variations**, make the following
+replacements:
+
+- Replace each occurrence of “GPOS, BASE, JSTF or GDEF” with “GPOS, BASE,
+  JSTF, GDEF or MATH”.
+- Replace “GPOS, JSTF or GDEF” with “GPOS, JSTF, GDEF or MATH”.
+
+In subclause **6.2.9, Device and VariationIndex tables**, make the following
+replacements:
+
+- Replace “GPOS, JSTF, GDEF or BASE” with “GPOS, JSTF, GDEF, BASE or MATH”.
+- Replace “GPOS, BASE, JSTF, and GDEF” with “GPOS, BASE, JSTF, GDEF, and MATH”.
+- Replace “GPOS, JSTF, or GDEF” with “GPOS, JSTF, GDEF, or MATH”.
+- Replace “GPOS, JSTF, GDEF and BASE” with “GPOS, JSTF, GDEF, BASE and MATH”.
+
+In subclause **6.3.2.1, Overview**, make the following replacements in
+the order given:
+
+- Replace each occurrence of “GDEF, GPOS or JSTF” with “GDEF, GPOS, JSTF or
+  MATH”.
+- Replace “GDEF, GPOS and JSTF” with “GDEF, GPOS, JSTF and MATH”.
+- Replace “GPOS or JSTF” with “GPOS, JSTF or MATH”.
+
+In subclause **6.3.2.2.7, Item variation store table**, in the paragraph
+beginning “As needed, an item variation store within the GDEF table”, replace
+“GPOS or JSTF” with “GPOS, JSTF or MATH”.
+
+In subclause **7.1.6, Variation data tables and miscellaneous requirements**,
+in the paragraph beginning “If a font has OFF Layout tables”, replace
+“‘GDEF’, ‘GPOS’, ‘GSUB’ or ‘JSTF’” with “‘GDEF’, ‘GPOS’, ‘GSUB’, ‘JSTF’ or
+‘MATH’”.
+
+In subclause **7.2.1, Overview**, in the list item beginning “Deltas for
+anchor positions in ‘GPOS’ lookups”, replace “‘GDEF’, ‘GPOS’, ‘GSUB’ or
+‘JSTF’” with “‘GDEF’, ‘GPOS’, ‘GSUB’, ‘JSTF’ or ‘MATH’”.
